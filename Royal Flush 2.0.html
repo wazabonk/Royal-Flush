@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Royal Flush · Premium Poker</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+@property --a { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+
+:root{
+  --gold:#e9c46a; --gold-2:#b8860b; --felt:#0b5a3c; --felt-d:#052e1f;
+  --glass:rgba(255,255,255,.07); --red:#d7263d;
+  --cw0:clamp(44px,min(6.8vw,10.5vh),80px);
+  --cw:var(--cw0); --ch:calc(var(--cw)*1.4);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{
+  font-family:'Inter',system-ui,sans-serif; color:#f4efe2; overflow-x:hidden;
+  background:
+    radial-gradient(1200px 700px at 50% -10%, #1b2440 0%, transparent 60%),
+    radial-gradient(900px 600px at 100% 100%, #2a1030 0%, transparent 55%),
+    #07080d;
+  background-attachment:fixed;
+  display:flex; flex-direction:column; align-items:center;
+}
+body::before{
+  content:""; position:fixed; inset:-30%;
+  background:conic-gradient(from var(--a) at 50% 50%, transparent 0 70%, rgba(233,196,106,.07) 80%, transparent 90%);
+  animation:spin 24s linear infinite; pointer-events:none;
+}
+@keyframes spin{to{--a:360deg}}
+
+/* ---------- HUD ---------- */
+.hud{width:min(1100px,96vw);display:flex;justify-content:space-between;align-items:center;padding:14px 6px;z-index:2}
+.logo{font-family:'Cinzel',serif;font-weight:900;letter-spacing:.22em;font-size:clamp(14px,2.2vw,22px);
+  background:linear-gradient(90deg,#fff6d6,var(--gold),#fff6d6,var(--gold-2));background-size:300% 100%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 6s linear infinite}
+@keyframes shine{to{background-position:300% 0}}
+.blinds{font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.7;
+  padding:7px 14px;border-radius:99px;background:var(--glass);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(10px)}
+
+/* ---------- TABLE ---------- */
+.table{position:relative;width:min(1040px,96vw);height:clamp(540px,74vh,690px);margin:4px 0;perspective:1600px;flex:none}
+.rim{position:absolute;inset:0;border-radius:999px;padding:14px;
+  background:conic-gradient(from var(--a),#6d4a0b,var(--gold),#fff4c7,var(--gold-2),#6d4a0b,var(--gold),#6d4a0b);
+  animation:spin 10s linear infinite;
+  box-shadow:0 40px 80px rgba(0,0,0,.65),0 0 80px rgba(233,196,106,.12),inset 0 0 20px rgba(0,0,0,.6);
+  transform:rotateX(10deg);transform-origin:50% 100%}
+.felt{position:relative;width:100%;height:100%;border-radius:999px;overflow:hidden;
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(255,255,255,.14), transparent 55%),
+    radial-gradient(ellipse at 50% 50%, var(--felt) 0%, var(--felt-d) 100%);
+  box-shadow:inset 0 0 90px rgba(0,0,0,.75),inset 0 0 0 3px rgba(0,0,0,.35)}
+.felt::before{content:"";position:absolute;inset:0;opacity:.35;mix-blend-mode:overlay;
+  background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.05) 0 1px,transparent 1px 3px)}
+.felt::after{content:"ROYAL FLUSH";position:absolute;left:50%;top:58%;transform:translate(-50%,-50%);
+  font-family:'Cinzel',serif;font-weight:900;font-size:clamp(28px,6vw,70px);letter-spacing:.3em;
+  color:rgba(233,196,106,.06);white-space:nowrap;pointer-events:none}
+
+/* ---------- SEATS ---------- */
+.seat{position:absolute;display:flex;flex-direction:column;align-items:center;gap:6px;z-index:3;transition:opacity .5s,filter .5s}
+.s0{left:50%;bottom:3%;transform:translateX(-50%)}
+.s1{left:9%;top:52%;transform:translate(-50%,-50%)}
+.s2{left:25%;top:20%;transform:translate(-50%,-50%)}
+.s3{left:75%;top:20%;transform:translate(-50%,-50%)}
+.s4{left:91%;top:52%;transform:translate(-50%,-50%)}
+.hand{display:flex;gap:8px;height:var(--ch)}
+.hand.mini{--cw:calc(var(--cw0)*.62);--ch:calc(var(--cw)*1.4);gap:5px}
+.seat.folded .hand{opacity:.22;filter:grayscale(1);transform:translateY(8px) scale(.92);transition:.6s}
+.seat.folded .plate{opacity:.55}
+.seat.out{opacity:.22;filter:grayscale(1)}
+.plate{display:flex;align-items:center;gap:10px;padding:6px 14px 6px 6px;border-radius:99px;min-width:150px;
+  background:linear-gradient(180deg,rgba(0,0,0,.65),rgba(0,0,0,.4));border:1px solid rgba(255,255,255,.12);
+  backdrop-filter:blur(12px);box-shadow:0 10px 30px rgba(0,0,0,.5);position:relative;transition:box-shadow .4s,opacity .5s}
+.avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-size:18px;position:relative;flex:none;color:#2a1c00;
+  background:radial-gradient(circle at 30% 30%,#fff3c4,var(--gold) 55%,var(--gold-2))}
+.avatar::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:2px solid var(--gold);opacity:0}
+.seat.active .avatar::after{animation:pulse 1.2s ease-out infinite}
+.seat.active .plate{box-shadow:0 0 0 1px var(--gold),0 0 30px rgba(233,196,106,.45)}
+@keyframes pulse{0%{transform:scale(.9);opacity:.9}100%{transform:scale(1.6);opacity:0}}
+.pname{font-size:10px;letter-spacing:.14em;text-transform:uppercase;opacity:.7}
+.row{display:flex;align-items:center;gap:6px}
+.pstack{font-family:'Cinzel',serif;font-weight:700;font-size:15px;color:var(--gold);font-variant-numeric:tabular-nums}
+.act{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:99px;white-space:nowrap;
+  background:rgba(233,196,106,.16);color:var(--gold);border:1px solid rgba(233,196,106,.4);animation:pop .35s cubic-bezier(.2,1.6,.4,1)}
+.act:empty{display:none}
+.act.dim{color:#ff9a9a;background:rgba(255,80,80,.12);border-color:rgba(255,120,120,.35)}
+.dealer{position:absolute;right:-6px;top:-6px;width:20px;height:20px;border-radius:50%;background:#fff;color:#111;font-size:10px;font-weight:700;
+  display:none;place-items:center;box-shadow:0 2px 8px rgba(0,0,0,.5);font-style:normal}
+.seat.isdealer .dealer{display:grid}
+.tag{position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:10px;letter-spacing:.2em;padding:2px 10px;border-radius:99px;
+  background:linear-gradient(90deg,#fff2bf,var(--gold));color:#1a1405;font-weight:700;opacity:0;transition:.3s;white-space:nowrap}
+.seat.win .tag{opacity:1}
+.seat.win .plate{box-shadow:0 0 0 2px var(--gold),0 0 50px rgba(233,196,106,.8);animation:winGlow 1s ease-in-out infinite alternate}
+@keyframes winGlow{to{box-shadow:0 0 0 2px #fff4c7,0 0 80px rgba(233,196,106,1)}}
+
+/* ---------- CHIPS & STACKS ---------- */
+.chip{width:22px;height:22px;border-radius:50%;flex:none;
+  background:repeating-conic-gradient(#fff 0 12deg,var(--c,#c1121f) 12deg 30deg);
+  box-shadow:0 2px 0 rgba(0,0,0,.4),0 0 0 2px var(--c,#c1121f) inset;position:relative}
+.chip::after{content:"";position:absolute;inset:5px;border-radius:50%;background:var(--c,#c1121f);box-shadow:0 0 0 1.5px rgba(255,255,255,.7)}
+.stacks{display:flex;align-items:flex-end;gap:2px;min-height:30px}
+.stack{position:relative;width:28px;height:28px;margin:0 2px}
+.tk{position:absolute;left:0;bottom:calc(var(--i)*4px);width:28px;height:28px;border-radius:50%;
+  background:repeating-conic-gradient(#fff 0 14deg,var(--c) 14deg 30deg);
+  box-shadow:0 2px 0 rgba(0,0,0,.6),0 0 0 1px rgba(0,0,0,.35)}
+.tk::after{content:"";position:absolute;inset:6px;border-radius:50%;background:var(--c);box-shadow:0 0 0 1.5px rgba(255,255,255,.75)}
+.tk.fresh{animation:tkdrop .45s cubic-bezier(.3,1.4,.5,1)}
+.pop .tk{animation:tkdrop .5s backwards;animation-delay:calc(var(--i)*40ms)}
+@keyframes tkdrop{0%{transform:translateY(-70px) scale(1.3);opacity:0}60%{transform:translateY(3px);opacity:1}100%{transform:none;opacity:1}}
+
+.bet{position:absolute;display:none;align-items:flex-end;gap:8px;font-weight:600;font-size:12px;z-index:3;transform:translate(-50%,-50%);
+  padding:5px 10px;border-radius:16px;background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.1)}
+.bet span{font-variant-numeric:tabular-nums;color:var(--gold);align-self:center}
+.bet.show{display:flex;animation:pop .45s cubic-bezier(.2,1.6,.4,1)}
+@keyframes pop{0%{scale:.2;opacity:0}100%{scale:1;opacity:1}}
+
+.drop{position:absolute;left:69%;top:77%;width:150px;height:92px;transform:translate(-50%,-50%);z-index:4;
+  border:2px dashed rgba(233,196,106,.55);border-radius:50%;display:grid;place-items:center;
+  opacity:0;pointer-events:none;transition:opacity .4s,background .3s,scale .3s}
+.drop.live{opacity:1;animation:dz 2s ease-in-out infinite}
+.drop.hot{background:rgba(233,196,106,.22);scale:1.1;animation:none}
+@keyframes dz{50%{box-shadow:0 0 30px rgba(233,196,106,.35);border-color:rgba(233,196,106,.9)}}
+.drop em{font-style:normal;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(233,196,106,.8)}
+.drop.has em{display:none}
+.pile{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.pamt{font-size:11px;font-weight:600;letter-spacing:.08em;color:var(--gold);white-space:nowrap}
+
+/* center */
+.center{position:absolute;left:50%;top:47%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:12px;z-index:2}
+.community{display:flex;gap:8px;height:var(--ch);min-width:calc(var(--cw)*5 + 32px);justify-content:center}
+.pot{position:relative;display:flex;align-items:center;gap:10px;font-family:'Cinzel',serif;font-weight:700;padding:6px 18px;border-radius:99px;
+  background:rgba(0,0,0,.5);border:1px solid rgba(233,196,106,.35);backdrop-filter:blur(8px)}
+.pot small{font-family:'Inter';font-size:10px;letter-spacing:.2em;opacity:.6}
+.pot b{color:var(--gold);font-size:20px;font-variant-numeric:tabular-nums}
+.pot.bump{animation:bump .4s}
+@keyframes bump{50%{transform:scale(1.12)}}
+.potstacks{position:absolute;left:calc(100% + 14px);bottom:2px;display:flex;align-items:flex-end}
+.fly{position:fixed;z-index:50;pointer-events:none}
+
+/* ---------- DEALER (CROUPIER) ---------- */
+.croupier{position:absolute;left:50%;top:2%;translate:-50% 0;width:104px;z-index:2;display:flex;flex-direction:column;align-items:center}
+.cp-body{position:relative;width:104px;height:132px;animation:bob 4s ease-in-out infinite;scale:.85;transform-origin:top center}
+@keyframes bob{50%{transform:translateY(-3px)}}
+.cp-head{position:absolute;left:50%;top:0;width:50px;height:56px;margin-left:-25px;border-radius:46% 46% 50% 50%;z-index:3;
+  background:radial-gradient(circle at 35% 30%,#ffe3c6,#e0a97c 72%);box-shadow:inset -4px -6px 10px rgba(0,0,0,.22),0 4px 10px rgba(0,0,0,.4)}
+.hair{position:absolute;left:-2px;right:-2px;top:-5px;height:26px;border-radius:50% 50% 38% 38%;background:linear-gradient(#2b2118,#14100c)}
+.eye{position:absolute;top:28px;width:6px;height:7px;border-radius:50%;background:#1b1209;animation:blink 5s infinite}
+.eye.l{left:14px}.eye.r{right:14px}
+@keyframes blink{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
+.stache{position:absolute;left:50%;top:38px;width:22px;height:6px;margin-left:-11px;border-radius:50%;background:#1b1209}
+.mouth{position:absolute;left:50%;top:45px;width:12px;height:5px;margin-left:-6px;border-bottom:2px solid #7a3b2a;border-radius:0 0 50% 50%}
+.cp-torso{position:absolute;left:50%;top:52px;width:92px;height:80px;margin-left:-46px;border-radius:32px 32px 8px 8px;overflow:hidden;z-index:2;
+  background:linear-gradient(#2a2a33,#0d0d12);box-shadow:0 8px 20px rgba(0,0,0,.5)}
+.shirt{position:absolute;left:50%;top:0;width:36px;height:62px;margin-left:-18px;background:#f7f1e3;clip-path:polygon(0 0,100% 0,50% 100%)}
+.bow{position:absolute;left:50%;top:7px;width:22px;height:11px;margin-left:-11px;z-index:2;background:var(--red);
+  clip-path:polygon(0 0,45% 50%,0 100%,100% 100%,55% 50%,100% 0)}
+.btn{position:absolute;left:50%;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--gold)}
+.cp-arm{position:absolute;right:-4px;top:64px;width:16px;height:46px;border-radius:9px;z-index:4;
+  background:linear-gradient(#2a2a33,#0d0d12);transform-origin:50% 6px;transform:rotate(-18deg)}
+.cp-arm::before{content:"";position:absolute;left:0;right:0;bottom:2px;height:6px;background:#f7f1e3;border-radius:2px}
+.cp-arm::after{content:"";position:absolute;left:1px;bottom:-10px;width:14px;height:14px;border-radius:50%;background:#e8b78c}
+.cp-arm.swing{animation:swing .5s cubic-bezier(.3,.8,.4,1)}
+@keyframes swing{0%{transform:rotate(-18deg)}40%{transform:rotate(-88deg)}100%{transform:rotate(-18deg)}}
+.cp-name{margin-top:-14px;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);opacity:.85;white-space:nowrap}
+.bubble{position:absolute;right:calc(100% + 8px);top:14px;transform:scale(.8);transform-origin:right center;opacity:0;white-space:nowrap;
+  padding:6px 12px;border-radius:12px;font-size:11px;font-weight:600;color:#1a1405;z-index:6;
+  background:linear-gradient(180deg,#fff6d6,var(--gold));box-shadow:0 6px 18px rgba(0,0,0,.5);transition:.3s cubic-bezier(.2,1.4,.4,1);pointer-events:none}
+.bubble::after{content:"";position:absolute;left:100%;top:50%;margin-top:-5px;border:5px solid transparent;border-left-color:var(--gold)}
+.bubble.show{opacity:1;transform:scale(1)}
+
+.deckpos{position:absolute;left:58%;top:6%;z-index:2;scale:.8;transform-origin:left top}
+#deck .back{box-shadow:1px 1px 0 #1b0838,2px 2px 0 #2a0a4f,3px 3px 0 #1b0838,4px 4px 0 #2a0a4f,5px 5px 0 #1b0838,7px 9px 14px rgba(0,0,0,.6)}
+.deckpos.shuffle{animation:shuf .25s 4}
+@keyframes shuf{0%,100%{transform:translateX(0) rotate(0)}25%{transform:translateX(-8px) rotate(-5deg)}75%{transform:translateX(8px) rotate(5deg)}}
+
+/* ---------- CARDS ---------- */
+.card{width:var(--cw);height:var(--ch);perspective:900px;position:relative}
+.inner{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.3,1.3,.4,1)}
+.card.up .inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;border-radius:9px;backface-visibility:hidden;box-shadow:0 10px 24px rgba(0,0,0,.55),0 2px 4px rgba(0,0,0,.4)}
+.back{
+  background:
+    repeating-linear-gradient(45deg,rgba(255,255,255,.1) 0 2px,transparent 2px 8px),
+    repeating-linear-gradient(-45deg,rgba(255,255,255,.1) 0 2px,transparent 2px 8px),
+    linear-gradient(135deg,#7b1e3a,#2a0a4f);
+  border:2px solid #f3ead2;
+  outline:1px solid rgba(233,196,106,.9);outline-offset:-6px}
+.back::after{content:"♠";position:absolute;inset:0;display:grid;place-items:center;font-size:calc(var(--cw)*.5);color:rgba(233,196,106,.85)}
+.front{transform:rotateY(180deg);background:linear-gradient(160deg,#fff,#f1ead8);color:#111;
+  display:flex;flex-direction:column;justify-content:space-between;padding:5px 6px;font-weight:700}
+.front.red{color:var(--red)}
+.front .c{font-family:'Cinzel',serif;font-size:calc(var(--cw)*.28);line-height:1;display:flex;flex-direction:column;align-items:center;width:max-content}
+.front .c.r{align-self:flex-end;transform:rotate(180deg)}
+.front .big{position:absolute;inset:0;display:grid;place-items:center;font-size:calc(var(--cw)*.6);opacity:.9}
+.front::after{content:"";position:absolute;inset:0;border-radius:9px;
+  background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.7) 50%,transparent 70%);background-size:250% 100%;background-position:150% 0;pointer-events:none}
+.card.up .front::after{animation:glint 1.2s .5s ease-out}
+@keyframes glint{to{background-position:-50% 0}}
+.card.hl .front{box-shadow:0 0 0 3px var(--gold),0 0 30px rgba(233,196,106,.9)}
+
+/* ---------- CONTROLS ---------- */
+.controls{width:min(1000px,96vw);padding:14px;margin:6px 0 18px;border-radius:24px;z-index:5;
+  display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:center;
+  background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02));
+  border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(18px);box-shadow:0 20px 50px rgba(0,0,0,.5)}
+.status{flex:1 1 100%;text-align:center;font-size:13px;letter-spacing:.08em;opacity:.8;min-height:18px}
+button{font:inherit;cursor:pointer;border:0;color:#fff;position:relative;overflow:hidden;
+  padding:13px 26px;border-radius:14px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:12px;
+  background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.16);
+  transition:transform .2s,box-shadow .3s,opacity .3s}
+button::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.35) 50%,transparent 65%);
+  transform:translateX(-120%);transition:transform .7s}
+button:hover:not(:disabled){transform:translateY(-3px);box-shadow:0 10px 24px rgba(0,0,0,.5)}
+button:hover:not(:disabled)::after{transform:translateX(120%)}
+button:active:not(:disabled){transform:translateY(0) scale(.97)}
+button:disabled{opacity:.3;cursor:not-allowed}
+.fold{background:linear-gradient(180deg,#5a1822,#2d0a10)}
+.call{background:linear-gradient(180deg,#1d6b52,#0c3a2c)}
+.raise,.primary{color:#241a02;background:linear-gradient(180deg,#fff0b3,var(--gold) 60%,var(--gold-2));border:1px solid #fff6d6;
+  box-shadow:0 0 24px rgba(233,196,106,.35)}
+.raise-box{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center}
+.quick{padding:8px 12px;font-size:10px;border-radius:10px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:170px;height:6px;border-radius:9px;background:rgba(255,255,255,.15);outline:0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;
+  background:radial-gradient(circle at 30% 30%,#fff6d6,var(--gold));box-shadow:0 0 14px rgba(233,196,106,.8);cursor:grab}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border:0;border-radius:50%;background:var(--gold)}
+.hidden{display:none!important}
+
+.tray{flex:1 1 100%;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;transition:opacity .3s}
+.tray.off{opacity:.3;pointer-events:none}
+.trayl{font-size:10px;letter-spacing:.2em;text-transform:uppercase;opacity:.6}
+.tok{width:54px;height:54px;border-radius:50%;position:relative;display:grid;place-items:center;cursor:grab;
+  touch-action:none;user-select:none;-webkit-user-select:none;
+  background:repeating-conic-gradient(#fff 0 14deg,var(--c) 14deg 30deg);
+  box-shadow:0 5px 0 rgba(0,0,0,.5),0 10px 18px rgba(0,0,0,.45);transition:transform .25s cubic-bezier(.3,1.5,.5,1)}
+.tok::before{content:"";position:absolute;inset:7px;border-radius:50%;background:var(--c);border:2px dashed rgba(255,255,255,.75)}
+.tok b{position:relative;z-index:1;font-family:'Cinzel',serif;font-size:14px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.8)}
+.tray .tok:hover{transform:translateY(-6px) rotate(10deg)}
+.tray .tok:active{cursor:grabbing}
+
+.toast{position:fixed;left:50%;top:44%;transform:translate(-50%,-50%);z-index:60;pointer-events:none;
+  font-family:'Cinzel',serif;font-weight:900;font-size:clamp(22px,5vw,46px);letter-spacing:.14em;text-align:center;
+  background:linear-gradient(90deg,#fff6d6,var(--gold),#fff6d6);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 6px 24px rgba(0,0,0,.8));opacity:0}
+.toast.go{animation:toast 2s cubic-bezier(.2,.9,.3,1) forwards}
+@keyframes toast{0%{opacity:0;transform:translate(-50%,-30%) scale(.7);letter-spacing:.5em}
+  15%{opacity:1;transform:translate(-50%,-50%) scale(1);letter-spacing:.14em}
+  80%{opacity:1}100%{opacity:0;transform:translate(-50%,-70%) scale(1.05)}}
+
+@media (max-width:900px){
+  .croupier{display:none}
+  .deckpos{left:47%}
+  .potstacks{display:none}
+  .plate{min-width:0;padding:4px 10px 4px 4px;gap:6px}
+  .avatar{width:28px;height:28px;font-size:14px}.pstack{font-size:13px}.pname{font-size:9px}
+  .hand.mini{--cw:calc(var(--cw0)*.5)}
+}
+@media (max-width:640px){
+  .table{height:640px}.rim{border-radius:48px;padding:8px}.felt{border-radius:40px}
+  .s1{left:14%;top:56%}.s4{left:86%;top:56%}.s2{left:27%;top:17%}.s3{left:73%;top:17%}
+  .act{display:none}
+  input[type=range]{width:120px}
+  .drop{left:74%;top:79%;width:110px;height:76px}
+  .tok{width:46px;height:46px}.tok b{font-size:12px}
+}
+</style>
+</head>
+<body>
+
+<header class="hud">
+  <div class="logo">ROYAL FLUSH</div>
+  <div class="blinds">5-Max · Blinds 10 / 20</div>
+</header>
+
+<section class="table">
+  <div class="rim"><div class="felt" id="felt">
+
+    <div class="croupier">
+      <div class="bubble" id="bubble">Place your bets</div>
+      <div class="cp-body">
+        <div class="cp-head"><i class="hair"></i><i class="eye l"></i><i class="eye r"></i><i class="stache"></i><i class="mouth"></i></div>
+        <div class="cp-torso"><i class="shirt"></i><i class="bow"></i><i class="btn" style="top:44px"></i><i class="btn" style="top:58px"></i></div>
+        <div class="cp-arm" id="cparm"></div>
+      </div>
+      <div class="cp-name">Marcel · Dealer</div>
+    </div>
+
+    <div class="deckpos" id="deckpos">
+      <div class="card" id="deck"><div class="inner"><div class="face back"></div></div></div>
+    </div>
+
+    <div class="center">
+      <div class="community" id="community"></div>
+      <div class="pot" id="pot"><small>POT</small><i class="chip" style="--c:#1d3557"></i><b id="potv">0</b>
+        <div class="potstacks pop" id="potstacks"></div></div>
+    </div>
+
+    <div class="drop" id="drop"><em>Drop chips</em><div class="pile" id="pile"></div></div>
+
+    <!-- seats and bets are generated by JS -->
+  </div></div>
+</section>
+
+<section class="controls">
+  <div class="status" id="status">Welcome to the table. Press Deal.</div>
+  <div id="actions" class="hidden" style="display:contents">
+    <div class="tray" id="tray">
+      <span class="trayl">Drag or tap chips onto the table</span>
+      <div class="tok" data-v="10"  style="--c:#2a6fdb"><b>10</b></div>
+      <div class="tok" data-v="50"  style="--c:#c1121f"><b>50</b></div>
+      <div class="tok" data-v="100" style="--c:#1b1b1f"><b>100</b></div>
+      <div class="tok" data-v="500" style="--c:#7b2cbf"><b>500</b></div>
+    </div>
+    <button class="fold" id="bFold">Fold</button>
+    <button class="call" id="bCall">Check</button>
+    <div class="raise-box">
+      <button class="quick" id="qReset">Reset</button>
+      <button class="quick" id="qMin">Min</button>
+      <button class="quick" id="qHalf">½ Pot</button>
+      <button class="quick" id="qPot">Pot</button>
+      <button class="quick" id="qAll">All-in</button>
+      <input type="range" id="slider" min="0" max="100" value="0" step="10">
+      <button class="raise" id="bRaise">Raise 40</button>
+    </div>
+  </div>
+  <button class="primary" id="bDeal">Deal</button>
+</section>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ config & helpers ============ */
+const $ = s => document.querySelector(s);
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const SUITS = ['♠','♥','♦','♣'], RANKS = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
+const HAND_NAMES = ['High Card','a Pair','Two Pair','Three of a Kind','a Straight','a Flush','a Full House','Four of a Kind','a Straight Flush'];
+const HAND_SHORT = ['High Card','Pair','Two Pair','Trips','Straight','Flush','Full House','Quads','Str. Flush'];
+const N = 5, SB = 10, BB = 20, START = 1000;
+const DEN = [{v:500,c:'#7b2cbf'},{v:100,c:'#1b1b1f'},{v:50,c:'#c1121f'},{v:10,c:'#2a6fdb'}];
+const BOTS = [
+  {name:'You',icon:'♞'},
+  {name:'Viktor',icon:'♛',agg:1.2,tight:.04},
+  {name:'Mina',icon:'♜',agg:.75,tight:-.03},
+  {name:'Dante',icon:'♝',agg:1.35,tight:.1},
+  {name:'Sable',icon:'♚',agg:1,tight:0}
+];
+const NAME = i => BOTS[i].name;
+const BETPOS = [[36,84],[24,52],[36,31],[64,31],[76,52]];   // [left%, top%] of each seat's bet stack
+const arr = (v) => Array(N).fill(v);
+
+const S = { stack:arr(START), bet:arr(0), total:arr(0), folded:arr(false), inHand:arr(true), acted:arr(false),
+            hole:[], els:[], comm:[], commEls:[], deck:[], pot:0, dealer:N-1, turn:-1, street:0,
+            lastRaise:BB, over:true, raiseOn:false, reset:false };
+
+function newDeck(){
+  const d=[]; for(let s=0;s<4;s++) for(let v=0;v<13;v++) d.push({s:SUITS[s],v:v+2,r:RANKS[v]});
+  for(let i=d.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[d[i],d[j]]=[d[j],d[i]]}
+  return d;
+}
+
+/* ============ hand evaluator ============ */
+function score5(c){
+  const v=c.map(x=>x.v).sort((a,b)=>b-a);
+  const flush=c.every(x=>x.s===c[0].s);
+  let st=0;
+  if(new Set(v).size===5){ if(v[0]-v[4]===4) st=v[0]; else if(v.join()==='14,5,4,3,2') st=5; }
+  const cnt={}; v.forEach(x=>cnt[x]=(cnt[x]||0)+1);
+  const g=Object.entries(cnt).map(([k,n])=>[+k,n]).sort((a,b)=>b[1]-a[1]||b[0]-a[0]);
+  let cat,k;
+  if(st&&flush){cat=8;k=[st]}
+  else if(g[0][1]===4){cat=7;k=[g[0][0],g[1][0]]}
+  else if(g[0][1]===3&&g[1][1]===2){cat=6;k=[g[0][0],g[1][0]]}
+  else if(flush){cat=5;k=v}
+  else if(st){cat=4;k=[st]}
+  else if(g[0][1]===3){cat=3;k=g.map(x=>x[0])}
+  else if(g[0][1]===2&&g[1][1]===2){cat=2;k=g.map(x=>x[0])}
+  else if(g[0][1]===2){cat=1;k=g.map(x=>x[0])}
+  else{cat=0;k=v}
+  return {cat, score:k.concat([0,0,0,0,0]).slice(0,5).reduce((a,x)=>a*15+x,cat)};
+}
+function best(cards){
+  let b=null;
+  for(let i=0;i<cards.length;i++)for(let j=i+1;j<cards.length;j++){
+    const five=cards.filter((_,x)=>x!==i&&x!==j);
+    const r=score5(five); if(!b||r.score>b.score){b=r;b.five=five}
+  }
+  return b;
+}
+
+/* ============ table state helpers ============ */
+const cur = () => Math.max(...S.bet);
+const alive = () => [...Array(N).keys()].filter(i=>S.inHand[i]&&!S.folded[i]);
+const able = () => alive().filter(i=>S.stack[i]>0);
+function nextIn(i){ for(let k=1;k<=N;k++){const j=(i+k)%N; if(S.inHand[j]) return j} return i }
+function needs(i){
+  if(!S.inHand[i]||S.folded[i]||S.stack[i]<=0) return false;
+  if(able().length<=1 && S.bet[i]>=cur()) return false;
+  return S.bet[i]<cur() || !S.acted[i];
+}
+function findNext(from){ for(let k=0;k<N;k++){const i=(from+k)%N; if(needs(i)) return i} return -1 }
+function post(p,amt){ amt=Math.min(amt,S.stack[p]); S.stack[p]-=amt; S.bet[p]+=amt; S.total[p]+=amt; S.pot+=amt; return amt }
+const minRaiseTo = p => Math.min(S.stack[p]+S.bet[p], cur()+S.lastRaise);
+const canRaise = p => S.stack[p]>cur()-S.bet[p] && able().some(i=>i!==p);
+
+/* ============ dealer (croupier) ============ */
+const bubble=$('#bubble'); let bubbleT;
+function say(t){ bubble.textContent=t; bubble.classList.add('show'); clearTimeout(bubbleT); bubbleT=setTimeout(()=>bubble.classList.remove('show'),2400) }
+function swing(){ const a=$('#cparm'); a.classList.remove('swing'); void a.offsetWidth; a.classList.add('swing') }
+
+/* ============ chip stacks ============ */
+function stackHTML(amount,fresh){
+  let left=amount,out='';
+  for(const d of DEN){
+    const n=Math.floor(left/d.v); left-=n*d.v; if(!n) continue;
+    const show=Math.min(n,9);
+    out+='<div class="stack">'+Array.from({length:show},(_,i)=>
+      `<i class="tk${fresh===d.v&&i===show-1?' fresh':''}" style="--c:${d.c};--i:${i}"></i>`).join('')+'</div>';
+  }
+  return out;
+}
+
+/* ============ seats ============ */
+function buildSeats(){
+  const felt=$('#felt');
+  for(let i=0;i<N;i++){
+    felt.insertAdjacentHTML('beforeend',`
+      <div class="seat s${i}" id="seat${i}">
+        <div class="plate">
+          <div class="avatar">${BOTS[i].icon}<i class="dealer">D</i></div>
+          <div><div class="pname">${BOTS[i].name}</div>
+            <div class="row"><span class="pstack" id="stack${i}">${START}</span><span class="act" id="act${i}"></span></div></div>
+          <span class="tag">WINNER</span>
+        </div>
+        <div class="hand ${i?'mini':''}" id="hand${i}"></div>
+      </div>
+      <div class="bet" id="bet${i}" style="left:${BETPOS[i][0]}%;top:${BETPOS[i][1]}%"><div class="stacks pop"></div><span>0</span></div>`);
+  }
+}
+const seatEl=i=>$('#seat'+i);
+function setAct(i,t){
+  const e=$('#act'+i); e.textContent=t; e.className='act'+(/^(Fold|Out)/.test(t)?' dim':'');
+  if(t){e.style.animation='none';void e.offsetWidth;e.style.animation=''}
+}
+
+/* ============ rendering ============ */
+function cardEl(c){
+  const el=document.createElement('div'); el.className='card';
+  const red=(c.s==='♥'||c.s==='♦')?'red':'';
+  el.innerHTML=`<div class="inner"><div class="face back"></div>
+    <div class="face front ${red}">
+      <div class="c"><span>${c.r}</span><span>${c.s}</span></div>
+      <div class="big">${c.s}</div>
+      <div class="c r"><span>${c.r}</span><span>${c.s}</span></div>
+    </div></div>`;
+  return el;
+}
+function dealCard(parent,c,delay=0,faceUp=false){
+  const el=cardEl(c); el.dataset.k=c.r+c.s; parent.appendChild(el);
+  const from=$('#deck').getBoundingClientRect(), to=el.getBoundingClientRect();
+  const dx=from.left-to.left, dy=from.top-to.top;
+  el.animate([
+    {transform:`translate(${dx}px,${dy}px) rotate(-25deg) scale(.7)`,opacity:0},
+    {opacity:1,offset:.15},
+    {transform:'translate(0,0) rotate(0) scale(1)',opacity:1}
+  ],{duration:650,delay,easing:'cubic-bezier(.2,.9,.3,1.05)',fill:'backwards'});
+  setTimeout(swing,delay);
+  if(faceUp) setTimeout(()=>el.classList.add('up'),delay+500);
+  return el;
+}
+function render(){
+  const pv=$('#potv');
+  if(+pv.textContent!==S.pot){
+    pv.textContent=S.pot;$('#pot').classList.remove('bump');void $('#pot').offsetWidth;$('#pot').classList.add('bump');
+  }
+  const ps=$('#potstacks');
+  if(ps.dataset.v!==String(S.pot)){ ps.dataset.v=S.pot; ps.innerHTML=stackHTML(S.pot) }
+  for(let p=0;p<N;p++){
+    $('#stack'+p).textContent=S.stack[p];
+    const b=$('#bet'+p), prev=+b.dataset.v||0;
+    b.querySelector('span').textContent=S.bet[p];
+    if(prev!==S.bet[p]){ b.querySelector('.stacks').innerHTML=stackHTML(S.bet[p]); b.classList.remove('show'); void b.offsetWidth }
+    b.classList.toggle('show',S.bet[p]>0);
+    b.dataset.v=S.bet[p];
+    seatEl(p).classList.toggle('isdealer',S.dealer===p&&S.inHand[p]);
+    seatEl(p).classList.toggle('active',!S.over&&S.turn===p);
+  }
+}
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.remove('go');void e.offsetWidth;e.classList.add('go')}
+const status=t=>$('#status').textContent=t;
+
+function flyChips(fromEl,toEl,n=8){
+  const a=fromEl.getBoundingClientRect(), b=toEl.getBoundingClientRect();
+  for(let i=0;i<n;i++){
+    const c=document.createElement('i'); c.className='chip fly';
+    c.style.setProperty('--c',['#c1121f','#2a9d8f','#1d3557','#e9c46a'][i%4]);
+    c.style.left=a.left+a.width/2+'px'; c.style.top=a.top+a.height/2+'px'; document.body.appendChild(c);
+    c.animate([
+      {transform:'translate(0,0) scale(.6)',opacity:0},
+      {transform:`translate(${(Math.random()-.5)*60}px,${-30-Math.random()*50}px) scale(1.1)`,opacity:1,offset:.3},
+      {transform:`translate(${b.left-a.left+b.width/2-a.width/2}px,${b.top-a.top+b.height/2-a.height/2}px) scale(.9)`,opacity:1}
+    ],{duration:900,delay:i*70,easing:'cubic-bezier(.5,0,.2,1)',fill:'both'}).onfinish=()=>c.remove();
+  }
+}
+
+/* ============ game flow ============ */
+async function startHand(){
+  if(S.reset){
+    S.stack=arr(START); S.reset=false; S.dealer=N-1;
+    for(let i=0;i<N;i++){seatEl(i).classList.remove('out');}
+  }
+  for(let i=0;i<N;i++){ $('#hand'+i).innerHTML=''; seatEl(i).classList.remove('win','folded'); setAct(i,'') }
+  $('#community').innerHTML='';
+  Object.assign(S,{
+    inHand:S.stack.map(s=>s>0), deck:newDeck(), pot:0, bet:arr(0), total:arr(0), folded:arr(false), acted:arr(false),
+    street:0, comm:[], hole:Array.from({length:N},()=>[]), els:Array.from({length:N},()=>[]), commEls:[],
+    over:false, raiseOn:false, lastRaise:BB, turn:-1
+  });
+  S.dealer=nextIn(S.dealer);
+  const heads=S.inHand.filter(Boolean).length===2;
+  const sb=heads?S.dealer:nextIn(S.dealer), bb=nextIn(sb);
+  $('#bDeal').classList.add('hidden');
+  render();
+  say('Shuffling…'); status('Marcel shuffles the deck…');
+  const dp=$('#deckpos'); dp.classList.add('shuffle'); await sleep(1100); dp.classList.remove('shuffle');
+  post(sb,SB); post(bb,BB);
+  setAct(sb,'SB '+S.bet[sb]); setAct(bb,'BB '+S.bet[bb]); render();
+  say('Blinds are in. Dealing!'); status('Dealing…');
+  const ord=[]; for(let j=1;j<=N;j++){const x=(S.dealer+j)%N; if(S.inHand[x]) ord.push(x)}
+  let d=0;
+  for(let r=0;r<2;r++) for(const p of ord){
+    const c=S.deck.pop(); S.hole[p].push(c);
+    S.els[p].push(dealCard($('#hand'+p),c,d*150,p===0)); d++;
+  }
+  await sleep(d*150+800);
+  loop(nextIn(bb));
+}
+
+function loop(from){
+  if(S.over) return;
+  const p=findNext(from);
+  if(p===-1) return endRound();
+  S.turn=p; render();
+  if(p===0) showActions(); else botTurn(p);
+}
+
+async function act(p,type,to){
+  hideActions();
+  const toCall=cur()-S.bet[p];
+  let line='';
+  if(type==='fold'){
+    S.folded[p]=true; seatEl(p).classList.add('folded'); setAct(p,'Fold'); line=NAME(p)+' folds';
+  }else if(type==='call'){
+    post(p,toCall);
+    const t=toCall===0?'Check':(S.stack[p]===0?'All-in '+S.bet[p]:'Call '+S.bet[p]);
+    setAct(p,t); line=NAME(p)+(toCall===0?' checks':(S.stack[p]===0?' is all-in':' calls'));
+  }else{
+    const prev=cur(); post(p,to-S.bet[p]);
+    const inc=S.bet[p]-prev; if(inc>=S.lastRaise) S.lastRaise=inc;
+    for(let i=0;i<N;i++) if(i!==p) S.acted[i]=false;
+    setAct(p,(S.stack[p]===0?'All-in ':'Raise ')+S.bet[p]);
+    line=`${NAME(p)} ${S.stack[p]===0?'goes all-in':'raises'} to ${S.bet[p]}`;
+  }
+  S.acted[p]=true; render(); status(line+'.'); say(line);
+  await sleep(S.folded[0]||p===0?500:750);
+  const al=alive();
+  if(al.length===1) return finishFold(al[0]);
+  loop((p+1)%N);
+}
+
+function refund(){
+  let top=-1,ti=-1,sec=0;
+  S.bet.forEach((b,i)=>{ if(b>top){sec=Math.max(top,0);top=b;ti=i} else if(b>sec) sec=b });
+  if(top>sec){ const r=top-sec; S.stack[ti]+=r; S.bet[ti]-=r; S.total[ti]-=r; S.pot-=r }
+}
+
+async function endRound(){
+  refund();
+  S.bet=arr(0); S.acted=arr(false); S.lastRaise=BB; S.turn=-1;
+  for(let i=0;i<N;i++) if(S.inHand[i]&&!S.folded[i]) setAct(i,S.stack[i]===0?'All-in':'');
+  render();
+  S.street++;
+  if(S.street>3) return showdown();
+  const n=S.street===1?3:1, names=['','FLOP','TURN','RIVER'];
+  toast(names[S.street]); say(names[S.street][0]+names[S.street].slice(1).toLowerCase()+'!');
+  S.deck.pop();
+  for(let i=0;i<n;i++){
+    const c=S.deck.pop(); S.comm.push(c);
+    S.commEls.push(dealCard($('#community'),c,i*220,true));
+  }
+  await sleep(900+n*220);
+  loop(nextIn(S.dealer));
+}
+
+/* side pots */
+function distribute(ev){
+  const win=arr(0);
+  const lv=[...new Set(S.total.filter(t=>t>0))].sort((a,b)=>a-b);
+  let prev=0,carry=0;
+  for(const L of lv){
+    let slice=carry; carry=0;
+    for(let i=0;i<N;i++) slice+=Math.min(S.total[i],L)-Math.min(S.total[i],prev);
+    prev=L;
+    const el=alive().filter(i=>S.total[i]>=L);
+    if(!el.length){carry=slice;continue}
+    const top=Math.max(...el.map(i=>ev[i].score)), w=el.filter(i=>ev[i].score===top);
+    const share=Math.floor(slice/w.length/10)*10;
+    w.forEach(i=>win[i]+=share);
+    win[w[0]]+=slice-share*w.length;
+  }
+  if(carry) win[alive()[0]]+=carry;
+  return win;
+}
+
+async function showdown(){
+  S.over=true; render(); say('Show your cards!');
+  const al=alive();
+  al.forEach((i,k)=>{ if(i) setTimeout(()=>S.els[i].forEach(e=>e.classList.add('up')),k*250) });
+  await sleep(900+al.length*250);
+  const ev={}; al.forEach(i=>{ev[i]=best(S.hole[i].concat(S.comm)); setAct(i,HAND_SHORT[ev[i].cat])});
+  payout(distribute(ev),ev);
+}
+function finishFold(w){
+  S.over=true; refund();
+  const win=arr(0); win[w]=S.pot;
+  payout(win,null);
+}
+
+async function payout(win,ev){
+  S.over=true; S.turn=-1; hideActions(); render();
+  const winners=[...Array(N).keys()].filter(i=>win[i]>0);
+  const total=S.pot;
+  winners.forEach(i=>{ S.stack[i]+=win[i]; seatEl(i).classList.add('win'); flyChips($('#pot'),seatEl(i).querySelector('.plate'),7) });
+  S.pot=0; S.total=arr(0); S.bet=arr(0);
+  await sleep(350); render();
+  const top=winners.reduce((a,b)=>win[b]>win[a]?b:a,winners[0]);
+  if(ev&&ev[top]){
+    const keys=new Set(ev[top].five.map(c=>c.r+c.s));
+    document.querySelectorAll('.card[data-k]').forEach(e=>{ if(keys.has(e.dataset.k)) e.classList.add('hl') });
+  }
+  const parts=winners.map(i=>`${NAME(i)} win${i?'s':''} ${win[i]}`+(ev&&ev[i]?` with ${HAND_NAMES[ev[i].cat]}`:''));
+  status(parts.join(' · '));
+  say(top===0?'Congratulations!':NAME(top)+' takes the pot');
+  toast(top===0?'YOU WIN':NAME(top).toUpperCase()+' WINS');
+  // eliminations
+  for(let i=0;i<N;i++) if(S.stack[i]<=0){ seatEl(i).classList.add('out'); setAct(i,'Out') }
+  const d=$('#bDeal');
+  if(S.stack[0]<=0){ S.reset=true; d.textContent='Busted · New Game'; await sleep(1800); status('You are out of chips.') }
+  else if(S.stack.slice(1).every(s=>s<=0)){ S.reset=true; d.textContent='Champion! New Game'; await sleep(1800); toast('CHAMPION'); status('You cleared the table!') }
+  else d.textContent='Deal Next Hand';
+  d.classList.remove('hidden');
+}
+
+/* ============ bots ============ */
+function strength(p){
+  const h=S.hole[p];
+  if(!S.comm.length){
+    const hi=Math.max(h[0].v,h[1].v), lo=Math.min(h[0].v,h[1].v);
+    return Math.min(1,(hi+lo)/32 + (hi===lo?.3:0) + (h[0].s===h[1].s?.05:0) + (hi-lo<=2?.04:0));
+  }
+  const r=best(h.concat(S.comm));
+  return [.2,.45,.65,.78,.85,.9,.95,.98,1][r.cat] + (r.cat===1?Math.random()*.08:0);
+}
+async function botTurn(p){
+  status(`${NAME(p)} is thinking…`);
+  await sleep(S.folded[0]?350:800+Math.random()*900);
+  if(S.over||S.turn!==p) return;
+  const B=BOTS[p], toCall=cur()-S.bet[p], opps=alive().length-1;
+  const s=strength(p)+(Math.random()-.5)*.2-(opps-1)*.025-B.tight;
+  const odds=toCall/(S.pot+toCall||1);
+  const sizeTo=f=>Math.min(S.stack[p]+S.bet[p],Math.max(minRaiseTo(p),Math.round((cur()+S.pot*f)/10)*10));
+  const rz=canRaise(p);
+  if(toCall===0){
+    if(rz&&((s>.62&&Math.random()<.65*B.agg)||Math.random()<.06)) return act(p,'raise',sizeTo(.4+Math.random()*.5));
+    return act(p,'call');
+  }
+  if(toCall>=S.stack[p]&&s<.7&&Math.random()>.15) return act(p,'fold');
+  if(s<odds*.9&&Math.random()>.1) return act(p,'fold');
+  if(rz&&s>.8&&Math.random()<.4*B.agg) return act(p,'raise',sizeTo(.7+Math.random()*.6));
+  return act(p,'call');
+}
+
+/* ============ player controls ============ */
+const slider=$('#slider');
+function renderPile(fresh){
+  const amt=S.raiseOn?(+slider.value-S.bet[0]):0;
+  $('#pile').innerHTML=amt>0?`<div class="stacks">${stackHTML(amt,fresh)}</div><span class="pamt">Raise to ${slider.value}</span>`:'';
+  $('#drop').classList.toggle('has',amt>0);
+}
+function showActions(){
+  $('#actions').classList.remove('hidden');
+  const toCall=cur()-S.bet[0];
+  $('#bCall').textContent=toCall>0?`Call ${Math.min(toCall,S.stack[0])}`:'Check';
+  $('#bFold').disabled=toCall===0;
+  const ok=canRaise(0);
+  [slider,$('#bRaise'),$('#qMin'),$('#qHalf'),$('#qPot'),$('#qAll'),$('#qReset')].forEach(e=>e.disabled=!ok);
+  $('#tray').classList.toggle('off',!ok);
+  S.raiseOn=false;
+  if(ok){
+    const mx=S.stack[0]+S.bet[0], mn=Math.min(minRaiseTo(0),mx);
+    slider.min=mn; slider.max=mx; slider.step=10; slider.value=mn; updRaise();
+  } else $('#bRaise').textContent='Raise';
+  renderPile();
+  $('#drop').classList.toggle('live',ok);
+  status('Your move.'); say('Your action');
+}
+function hideActions(){
+  $('#actions').classList.add('hidden');
+  $('#drop').classList.remove('live','hot');
+  S.raiseOn=false; renderPile();
+}
+function updRaise(){ $('#bRaise').textContent=(+slider.value>=+slider.max?'All-in ':'Raise to ')+slider.value }
+const setR=(v,exact)=>{
+  if(!exact) v=Math.round(v/10)*10;
+  slider.value=Math.max(+slider.min,Math.min(+slider.max,v));
+  S.raiseOn=true; updRaise(); renderPile();
+};
+function addChip(v){
+  if(S.over||S.turn!==0||slider.disabled||$('#actions').classList.contains('hidden')) return;
+  const base=S.raiseOn?+slider.value:cur();
+  slider.value=Math.max(+slider.min,Math.min(+slider.max,base+v));
+  S.raiseOn=true; updRaise(); renderPile(v);
+}
+function throwChip(el,v){
+  if(slider.disabled) return;
+  const a=el.getBoundingClientRect(), b=$('#drop').getBoundingClientRect();
+  const g=el.cloneNode(true); g.className='tok fly';
+  g.style.left=a.left+'px'; g.style.top=a.top+'px'; g.style.width=a.width+'px'; g.style.height=a.height+'px';
+  document.body.appendChild(g);
+  const dx=b.left+b.width/2-a.left-a.width/2, dy=b.top+b.height/2-a.top-a.height/2;
+  g.animate([
+    {transform:'translate(0,0) scale(1) rotate(0)'},
+    {transform:`translate(${dx*.5}px,${dy*.5-70}px) scale(1.2) rotate(180deg)`,offset:.5},
+    {transform:`translate(${dx}px,${dy}px) scale(.6) rotate(360deg)`}
+  ],{duration:520,easing:'cubic-bezier(.4,0,.3,1)'}).onfinish=()=>{g.remove();addChip(v)};
+}
+document.querySelectorAll('#tray .tok').forEach(t=>{
+  t.addEventListener('pointerdown',e=>{
+    e.preventDefault();
+    const v=+t.dataset.v, sx=e.clientX, sy=e.clientY, col=t.style.getPropertyValue('--c');
+    let g=null, moved=false;
+    const r=$('#drop').getBoundingClientRect();
+    const over=m=>m.clientX>r.left-50&&m.clientX<r.right+50&&m.clientY>r.top-50&&m.clientY<r.bottom+50;
+    const mv=m=>{
+      if(!moved&&Math.hypot(m.clientX-sx,m.clientY-sy)>6){
+        moved=true; g=t.cloneNode(true); g.className='tok fly';
+        g.style.cssText=`width:${t.offsetWidth}px;height:${t.offsetHeight}px;--c:${col}`;
+        document.body.appendChild(g);
+      }
+      if(g){
+        g.style.left=m.clientX+'px'; g.style.top=m.clientY+'px';
+        g.style.transform='translate(-50%,-50%) scale(1.15) rotate(12deg)';
+        $('#drop').classList.toggle('hot',over(m));
+      }
+    };
+    const up=u=>{
+      removeEventListener('pointermove',mv); removeEventListener('pointerup',up);
+      $('#drop').classList.remove('hot');
+      if(g){ g.remove(); if(over(u)) addChip(v); }
+      else throwChip(t,v);
+    };
+    addEventListener('pointermove',mv); addEventListener('pointerup',up);
+  });
+});
+
+slider.oninput=()=>{S.raiseOn=true;updRaise();renderPile()};
+$('#bFold').onclick=()=>act(0,'fold');
+$('#bCall').onclick=()=>act(0,'call');
+$('#bRaise').onclick=()=>act(0,'raise',+slider.value);
+$('#qReset').onclick=()=>{S.raiseOn=false;slider.value=slider.min;updRaise();renderPile()};
+$('#qMin').onclick=()=>setR(+slider.min,true);
+$('#qHalf').onclick=()=>setR(cur()+S.pot*.5);
+$('#qPot').onclick=()=>setR(cur()+S.pot);
+$('#qAll').onclick=()=>setR(+slider.max,true);
+$('#bDeal').onclick=startHand;
+
+buildSeats();
+render();
+</script>
+  <style>
+.hud{gap:8px}
+.tools{display:flex;gap:8px;align-items:center}
+.tbtn{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:99px;font-size:11px;letter-spacing:.1em}
+.tbtn svg{flex:none}
+.tbtn .dot{width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.5}
+.tbtn.on{color:#241a02;background:linear-gradient(180deg,#fff0b3,var(--gold) 60%,var(--gold-2));border-color:#fff6d6}
+.tbtn.on .dot{opacity:1;box-shadow:0 0 8px #fff}
+
+.rf-modal{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:14px;background:rgba(3,5,10,.7);
+  backdrop-filter:blur(10px);opacity:0;pointer-events:none;transition:opacity .35s}
+.rf-modal.open{opacity:1;pointer-events:auto}
+.rf-panel{width:min(640px,100%);max-height:88vh;display:flex;flex-direction:column;border-radius:26px;overflow:hidden;
+  background:linear-gradient(180deg,rgba(28,32,46,.97),rgba(10,12,20,.98));border:1px solid rgba(233,196,106,.35);
+  box-shadow:0 40px 100px rgba(0,0,0,.7),0 0 60px rgba(233,196,106,.12);
+  transform:translateY(24px) scale(.96);transition:transform .45s cubic-bezier(.2,1.2,.4,1)}
+.rf-modal.open .rf-panel{transform:none}
+.rf-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 8px}
+.rf-head h2{font-family:'Cinzel',serif;font-size:20px;letter-spacing:.16em;color:var(--gold)}
+.rf-x{padding:6px 14px;border-radius:99px;font-size:20px;line-height:1}
+.rf-tabs{display:flex;gap:6px;padding:6px 20px 12px;border-bottom:1px solid rgba(255,255,255,.08);flex-wrap:wrap}
+.rf-tab{padding:9px 14px;font-size:11px;border-radius:99px}
+.rf-tab.on{color:#241a02;background:linear-gradient(180deg,#fff0b3,var(--gold) 60%,var(--gold-2));border-color:#fff6d6}
+.rf-body{overflow:auto;padding:14px 20px 22px;-webkit-overflow-scrolling:touch}
+.rf-pane{display:none}.rf-pane.on{display:block}
+.rf-note{font-size:12px;opacity:.7;margin-bottom:12px;line-height:1.5}
+.rf-h3{font-family:'Cinzel',serif;letter-spacing:.14em;font-size:13px;color:var(--gold);margin:18px 0 8px}
+
+.rk{display:flex;gap:12px;padding:12px;margin-bottom:10px;border-radius:16px;position:relative;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);animation:rkin .5s both;animation-delay:calc(var(--i)*45ms)}
+@keyframes rkin{from{opacity:0;transform:translateY(14px)}}
+.rk::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:3px;background:rgba(233,196,106,var(--s))}
+.rk-n{font-family:'Cinzel',serif;font-weight:900;font-size:18px;color:var(--gold);width:22px;flex:none;text-align:center;padding-top:2px}
+.rk-t{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.rk-t b{font-size:14px}
+.rk-t em{font-style:normal;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);opacity:.8}
+.rk-c{display:flex;gap:5px;margin:8px 0 6px}
+.rk p{font-size:12px;opacity:.75;line-height:1.45}
+.rk.mine{border-color:var(--gold);background:rgba(233,196,106,.1);box-shadow:0 0 0 1px var(--gold),0 0 30px rgba(233,196,106,.35)}
+.rk.mine::after{content:"YOUR HAND";position:absolute;right:12px;top:10px;font-size:9px;letter-spacing:.15em;font-weight:700;
+  color:#241a02;background:var(--gold);padding:2px 8px;border-radius:99px}
+.mc{width:32px;height:44px;border-radius:6px;background:linear-gradient(160deg,#fff,#efe7d2);color:#111;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;font-weight:700;line-height:1.05;box-shadow:0 3px 8px rgba(0,0,0,.45)}
+.mc b{font-family:'Cinzel',serif;font-size:14px}.mc i{font-style:normal;font-size:15px}
+.mc.r{color:var(--red)}.mc.x{opacity:.38;filter:grayscale(.6)}
+
+.steps{list-style:none;counter-reset:s}
+.steps li{counter-increment:s;position:relative;padding:12px 12px 12px 50px;margin-bottom:8px;border-radius:14px;
+  background:rgba(255,255,255,.04);font-size:13px;line-height:1.5}
+.steps li::before{content:counter(s);position:absolute;left:12px;top:11px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;
+  font-family:'Cinzel',serif;font-weight:700;color:#241a02;background:linear-gradient(180deg,#fff0b3,var(--gold))}
+.steps b,.gl b{color:var(--gold)}
+.gl{display:grid;gap:8px}
+.gl div{padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.04);font-size:13px;line-height:1.45}
+
+.coach{flex:1 1 100%;display:none;padding:12px 16px;border-radius:16px;
+  background:linear-gradient(135deg,rgba(233,196,106,.14),rgba(255,255,255,.03));border:1px solid rgba(233,196,106,.3);animation:rkin .4s}
+.coach.on{display:block}
+.co-top{display:flex;justify-content:space-between;align-items:center;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.co-link{padding:5px 11px;font-size:10px;border-radius:99px}
+.co-hand{font-family:'Cinzel',serif;font-weight:700;font-size:18px;margin:4px 0 8px}
+.co-bar{height:7px;border-radius:99px;overflow:hidden;display:flex;justify-content:flex-end;
+  background:linear-gradient(90deg,#d7263d,#e9c46a 55%,#2fbf8f)}
+.co-bar i{display:block;height:100%;width:100%;background:rgba(10,12,18,.9);transition:width .7s cubic-bezier(.2,.9,.3,1)}
+.co-tip{font-size:12.5px;line-height:1.5;opacity:.85;margin-top:8px}
+
+.rf-welcome{position:fixed;left:50%;bottom:22px;transform:translate(-50%,160%);z-index:90;width:min(430px,94vw);padding:16px 18px;border-radius:20px;
+  background:linear-gradient(180deg,rgba(28,32,46,.97),rgba(10,12,20,.98));border:1px solid rgba(233,196,106,.4);
+  box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 40px rgba(233,196,106,.15);transition:transform .6s cubic-bezier(.2,1.2,.4,1)}
+.rf-welcome.show{transform:translate(-50%,0)}
+.rf-welcome h4{font-family:'Cinzel',serif;color:var(--gold);letter-spacing:.12em;margin-bottom:4px}
+.rf-welcome p{font-size:12.5px;opacity:.8;line-height:1.5;margin-bottom:12px}
+.rf-welcome .btns{display:flex;gap:8px;flex-wrap:wrap}
+.rf-welcome button{padding:10px 16px;font-size:11px}
+
+@media (max-width:700px){.blinds{display:none}.tbtn .lbl{display:none}.tbtn{padding:9px 11px}}
+@media (max-width:640px){.rf-panel{max-height:92vh;border-radius:20px}}
+</style>
+  <script>
+/* ===== ROYAL FLUSH · SOUND ENGINE (synthesized, no audio files) ===== */
+const sfx=(()=>{
+  let ctx,master,verb,nbuf,on=true;
+  try{on=localStorage.getItem('rf_snd')!=='off'}catch(e){}
+  const R=(a,b)=>a+Math.random()*(b-a);
+
+  function init(){
+    if(ctx) return true;
+    const AC=window.AudioContext||window.webkitAudioContext; if(!AC) return false;
+    ctx=new AC();
+    const comp=ctx.createDynamicsCompressor(); comp.threshold.value=-18; comp.ratio.value=4;
+    master=ctx.createGain(); master.gain.value=.9; master.connect(comp); comp.connect(ctx.destination);
+    const len=ctx.sampleRate*.8|0, ir=ctx.createBuffer(2,len,ctx.sampleRate);
+    for(let c=0;c<2;c++){const d=ir.getChannelData(c);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.5)}
+    const cv=ctx.createConvolver(); cv.buffer=ir;
+    const wg=ctx.createGain(); wg.gain.value=.22; cv.connect(wg); wg.connect(master); verb=cv;
+    nbuf=ctx.createBuffer(1,ctx.sampleRate,ctx.sampleRate);
+    const nd=nbuf.getChannelData(0); for(let i=0;i<nd.length;i++) nd[i]=Math.random()*2-1;
+    return true;
+  }
+  const now=()=>ctx.currentTime+.01;
+  const send=(n,w)=>{ n.connect(master); if(w){const g=ctx.createGain();g.gain.value=w;n.connect(g);g.connect(verb)} };
+
+  function noise(t,d,o={}){
+    const s=ctx.createBufferSource(); s.buffer=nbuf;
+    const f=ctx.createBiquadFilter(); f.type=o.type||'bandpass'; f.Q.value=o.q||1;
+    f.frequency.setValueAtTime(o.f||2000,t); if(o.f2) f.frequency.exponentialRampToValueAtTime(o.f2,t+d);
+    const g=ctx.createGain(), a=o.a||.003;
+    g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(o.v||.3,t+a); g.gain.exponentialRampToValueAtTime(.0001,t+d);
+    s.connect(f); f.connect(g); send(g,o.w==null?.3:o.w);
+    s.start(t,R(0,.6),d+.05);
+  }
+  function tone(t,fr,d,o={}){
+    const os=ctx.createOscillator(); os.type=o.type||'sine';
+    os.frequency.setValueAtTime(fr,t); if(o.f2) os.frequency.exponentialRampToValueAtTime(o.f2,t+d);
+    const g=ctx.createGain(), a=o.a||.003;
+    g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(o.v||.2,t+a); g.gain.exponentialRampToValueAtTime(.0001,t+d);
+    os.connect(g); send(g,o.w==null?.3:o.w); os.start(t); os.stop(t+d+.05);
+  }
+  /* one ceramic chip "clack" */
+  const clack=(t,v=1)=>{
+    tone(t,R(2300,3000),.07,{type:'triangle',v:.16*v,w:.25});
+    tone(t,R(3600,4600),.045,{v:.09*v,w:.2});
+    tone(t,R(850,1100),.05,{v:.1*v,w:.1});
+    noise(t,.03,{f:R(5000,7500),q:.8,v:.22*v,w:.15});
+  };
+
+  const SND={
+    deal(){const t=now();
+      noise(t,.1,{f:2200,f2:6500,q:.9,v:.32,a:.006});
+      noise(t+.015,.05,{type:'highpass',f:6000,v:.1});
+      tone(t+.075,130,.07,{f2:70,v:.12,w:.1})},
+    flip(){const t=now();
+      noise(t,.045,{f:4200,q:2,v:.24});
+      noise(t+.06,.05,{f:3000,q:2,v:.2})},
+    chip(n=1){const t=now();let x=0;
+      for(let i=0;i<n;i++){x+=i?R(.035,.075):0;clack(t+x,R(.7,1))}},
+    sweep(){const t=now();
+      noise(t,.55,{type:'lowpass',f:1400,f2:300,q:.6,v:.12});
+      for(let i=0;i<9;i++) clack(t+i*.06+R(0,.03),R(.4,.8))},
+    shuffle(){const t=now();
+      for(let i=0;i<30;i++) noise(t+i*.026+R(0,.01),.03,{f:R(2500,4200),q:1.6,v:.2,w:.2});
+      noise(t+.85,.18,{f:1800,f2:900,q:.6,v:.18});
+      for(let i=0;i<14;i++) noise(t+.9+i*.022,.03,{f:R(2500,4200),q:1.6,v:.16,w:.2})},
+    check(){const t=now();
+      [0,.15].forEach((d,i)=>{
+        tone(t+d,i?170:210,.13,{f2:90,v:.45,w:.15});
+        noise(t+d,.05,{type:'lowpass',f:1800,v:.3,w:.1});
+      })},
+    fold(){const t=now();
+      noise(t,.3,{f:3800,f2:800,q:.7,v:.26});
+      tone(t+.28,110,.08,{f2:60,v:.1,w:.1})},
+    turn(){const t=now();
+      tone(t,880,.7,{v:.1,w:.6});
+      tone(t,1320,.5,{v:.05,w:.6});
+      tone(t+.01,1760,.3,{v:.025,w:.6})},
+    allin(){const t=now();
+      tone(t,90,.5,{f2:45,v:.4,w:.2});
+      noise(t,.35,{type:'lowpass',f:900,f2:200,v:.15});
+      for(let i=0;i<12;i++) clack(t+.05+i*.045,R(.5,1))},
+    street(){const t=now();
+      noise(t,.35,{f:700,f2:3500,q:.6,v:.1,a:.12,w:.5})},
+    win(){const t=now();
+      [523.25,659.25,783.99,1046.5,1318.5].forEach((f,i)=>{
+        tone(t+i*.11,f,.9,{type:'triangle',v:.12,w:.6});
+        tone(t+i*.11,f*2,.6,{v:.04,w:.6});
+      });
+      for(let i=0;i<10;i++) clack(t+.4+i*.07,R(.5,1))},
+    lose(){const t=now();
+      tone(t,311,.5,{type:'triangle',f2:262,v:.1,w:.5});
+      tone(t+.22,233,.7,{type:'triangle',f2:196,v:.1,w:.5})},
+    click(){const t=now();noise(t,.02,{f:5200,q:1.5,v:.08,w:0})}
+  };
+
+  const api={};
+  for(const k in SND) api[k]=(...a)=>{
+    if(!on||!init()) return;
+    if(ctx.state==='suspended') ctx.resume();
+    try{SND[k](...a)}catch(e){}
+  };
+  api.unlock=()=>{ if(init()&&ctx.state==='suspended') ctx.resume() };
+  api.toggle=()=>{ on=!on; try{localStorage.setItem('rf_snd',on?'on':'off')}catch(e){} return on };
+  api.isOn=()=>on;
+  return api;
+})();
+
+/* ===== hook the sounds into the game ===== */
+(function(){
+  const _deal=dealCard;
+  dealCard=function(parent,c,delay=0,faceUp=false){
+    const el=_deal(parent,c,delay,faceUp);
+    setTimeout(sfx.deal,delay+30);
+    if(faceUp) setTimeout(sfx.flip,delay+520);
+    return el;
+  };
+
+  const _act=act;
+  act=function(p,type,to){
+    const toCall=cur()-S.bet[p];
+    if(type==='fold') sfx.fold();
+    else if(type==='call'){ toCall===0?sfx.check():sfx.chip(Math.min(6,1+Math.ceil(toCall/60))) }
+    else { (to>=S.stack[p]+S.bet[p])?sfx.allin():sfx.chip(Math.min(8,2+Math.ceil((to-S.bet[p])/80))) }
+    return _act(p,type,to);
+  };
+
+  const _show=showActions;
+  showActions=function(){ sfx.turn(); return _show.apply(this,arguments) };
+
+  const _add=addChip;
+  addChip=function(v){
+    if(!(S.over||S.turn!==0||slider.disabled||$('#actions').classList.contains('hidden'))) sfx.chip(1);
+    return _add(v);
+  };
+
+  const _sd=showdown;
+  showdown=function(){
+    alive().forEach((i,k)=>{ if(i) setTimeout(sfx.flip,k*250+80) });
+    return _sd();
+  };
+
+  const _fly=flyChips;
+  flyChips=function(a,b,n){ sfx.sweep(); return _fly(a,b,n) };
+
+  const _toast=toast;
+  toast=function(t){
+    if(t==='YOU WIN'||t==='CHAMPION') sfx.win();
+    else if(/ WINS$/.test(t)) sfx.lose();
+    else if(t==='FLOP'||t==='TURN'||t==='RIVER') sfx.street();
+    return _toast(t);
+  };
+
+  const _sh=startHand;
+  startHand=function(){ sfx.unlock(); sfx.shuffle(); return _sh(); };
+  $('#bDeal').onclick=startHand;   /* re-bind: the old handler pointed at the original function */
+
+  document.addEventListener('pointerdown',e=>{
+    sfx.unlock();
+    if(e.target.closest&&e.target.closest('button')) sfx.click();
+  },{passive:true});
+})();
+</script>
+  <script>
+/* ===== ROYAL FLUSH · BEGINNER GUIDE + COACH ===== */
+(function(){
+  const RN={2:'Two',3:'Three',4:'Four',5:'Five',6:'Six',7:'Seven',8:'Eight',9:'Nine',10:'Ten',11:'Jack',12:'Queen',13:'King',14:'Ace'};
+  const PL=v=>v===6?'Sixes':(RN[v]||'?')+'s';
+  const store=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+  const read=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
+  const snd=typeof sfx!=='undefined'?sfx:null;
+  let BEG=read('rf_beg')==='on';
+
+  /* a = how many cards actually make the hand; the rest only break ties */
+  const HANDS=[
+    {n:'Royal Flush',r:'Almost never',a:5,c:['A♠','K♠','Q♠','J♠','10♠'],d:'Ace, King, Queen, Jack and Ten, all in the same suit. The best hand in poker.'},
+    {n:'Straight Flush',r:'Extremely rare',a:5,c:['9♥','8♥','7♥','6♥','5♥'],d:'Five cards in a row, all in the same suit.'},
+    {n:'Four of a Kind',r:'Very rare',a:4,c:['8♠','8♥','8♦','8♣','K♠'],d:'Four cards of the same rank. The fifth card is only a tie-breaker.'},
+    {n:'Full House',r:'Rare',a:5,c:['Q♠','Q♥','Q♦','7♣','7♠'],d:'Three of a kind plus a pair.'},
+    {n:'Flush',r:'Rare',a:5,c:['A♦','J♦','8♦','5♦','2♦'],d:'Any five cards of the same suit, not in order.'},
+    {n:'Straight',r:'Uncommon',a:5,c:['10♣','9♦','8♠','7♥','6♣'],d:'Five cards in a row, any suits. The Ace can be high or low.'},
+    {n:'Three of a Kind',r:'Uncommon',a:3,c:['5♠','5♥','5♦','K♣','9♠'],d:'Three cards of the same rank.'},
+    {n:'Two Pair',r:'Fairly common',a:4,c:['J♠','J♦','4♣','4♥','A♠'],d:'Two different pairs.'},
+    {n:'One Pair',r:'Common',a:2,c:['10♥','10♣','A♦','7♠','3♣'],d:'Two cards of the same rank.'},
+    {n:'High Card',r:'Very common',a:1,c:['A♠','J♦','8♣','5♥','2♠'],d:'No combination at all. Your single highest card plays.'}
+  ];
+  const mini=(s,on)=>{const su=s.slice(-1),r=s.slice(0,-1),red=su==='♥'||su==='♦';
+    return `<span class="mc${red?' r':''}${on?'':' x'}"><b>${r}</b><i>${su}</i></span>`};
+  const ICON={
+    help:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7M12 17h.01"/></svg>',
+    on:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>',
+    off:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m16 9 5 6M21 9l-5 6"/></svg>'
+  };
+
+  /* ---------- modal ---------- */
+  const rows=HANDS.map((h,i)=>`<div class="rk" data-i="${i}" style="--i:${i};--s:${(1-i/10).toFixed(2)}">
+      <span class="rk-n">${i+1}</span>
+      <div><div class="rk-t"><b>${h.n}</b><em>${h.r}</em></div>
+      <div class="rk-c">${h.c.map((c,k)=>mini(c,k<h.a)).join('')}</div><p>${h.d}</p></div></div>`).join('');
+  const m=document.createElement('div'); m.className='rf-modal';
+  m.innerHTML=`<div class="rf-panel" role="dialog" aria-label="Poker guide">
+    <div class="rf-head"><h2>Poker Guide</h2><button class="rf-x" aria-label="Close">×</button></div>
+    <div class="rf-tabs">
+      <button class="rf-tab on">Hand ranks</button><button class="rf-tab">How to play</button><button class="rf-tab">Glossary</button>
+    </div>
+    <div class="rf-body">
+      <div class="rf-pane on">
+        <p class="rf-note">Strongest at the top. Greyed-out cards don't count: they only break ties. Suits never rank higher than each other.</p>${rows}
+      </div>
+      <div class="rf-pane">
+        <ol class="steps">
+          <li><b>The goal.</b> Win chips. You win a hand by having the best 5-card hand at the end, or by making everyone else fold.</li>
+          <li><b>Your cards.</b> You get 2 private cards. 5 shared cards are dealt face-up in the middle. Your hand is the best 5 cards out of those 7.</li>
+          <li><b>Betting rounds.</b> Pre-flop (only your 2 cards), Flop (3 shared cards), Turn (4th), River (5th), then the Showdown where hands are shown.</li>
+          <li><b>On your turn.</b> Fold = give up the hand. Check = pass when nobody has bet. Call = match the bet. Raise = bet more. All-in = bet every chip.</li>
+          <li><b>Using chips.</b> Drag chips onto the dashed circle (or just tap them) to build a raise, then press Raise.</li>
+          <li><b>Ties.</b> The higher cards win. If two hands are exactly equal, the pot is split.</li>
+        </ol>
+        <div class="rf-h3">BEGINNER TIPS</div>
+        <ol class="steps">
+          <li>Pairs, Aces, and two high cards (like A-K) are strong starting hands.</li>
+          <li>Folding weak hands against a big raise is smart, not a loss.</li>
+          <li>Don't chase: hands that are "almost" a flush or straight miss most of the time.</li>
+          <li>Look at the table: if 3 shared cards have the same suit, someone may already have a flush.</li>
+        </ol>
+      </div>
+      <div class="rf-pane"><div class="gl">
+        <div><b>Hole cards.</b> Your 2 private cards.</div>
+        <div><b>Flop / Turn / River.</b> The 3, 4th and 5th shared cards.</div>
+        <div><b>Blinds.</b> Small forced bets (10 and 20) that start the pot every hand.</div>
+        <div><b>Pot.</b> All the chips bet so far in this hand.</div>
+        <div><b>Check.</b> Pass without betting, when there is nothing to call.</div>
+        <div><b>Call.</b> Put in the same amount as the current bet.</div>
+        <div><b>Raise.</b> Increase the bet. Everyone else must match it or fold.</div>
+        <div><b>Fold.</b> Throw away your hand and lose what you already bet.</div>
+        <div><b>All-in.</b> Bet all your remaining chips.</div>
+        <div><b>Side pot.</b> When someone is all-in, extra bets from others go in a separate pot they can't win.</div>
+        <div><b>Kicker.</b> Your highest leftover card, used to break ties between similar hands.</div>
+        <div><b>Showdown.</b> The end of the hand, when remaining players show their cards.</div>
+      </div></div>
+    </div></div>`;
+  document.body.appendChild(m);
+
+  const tabs=[...m.querySelectorAll('.rf-tab')], panes=[...m.querySelectorAll('.rf-pane')];
+  const setTab=i=>{tabs.forEach((t,k)=>t.classList.toggle('on',k===i));panes.forEach((p,k)=>p.classList.toggle('on',k===i))};
+  tabs.forEach((t,i)=>t.onclick=()=>setTab(i));
+  const close=()=>m.classList.remove('open');
+  m.querySelector('.rf-x').onclick=close;
+  m.addEventListener('pointerdown',e=>{if(e.target===m)close()});
+  addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+
+  /* ---------- coach analysis ---------- */
+  const TIPS=[
+    'Only a high card. Be careful: bet small, or fold to big bets.',
+    'A pair is decent. Fine to call small bets, but be careful of big raises.',
+    'Two pair is a strong hand. Bet or raise to get value.',
+    'Three of a kind is very strong. Raise!',
+    'A straight is very strong. Raise, but watch out for flushes.',
+    'A flush is very strong. Raise!',
+    'A full house is a monster hand. Get chips in!',
+    'Four of a kind is nearly unbeatable!',
+    'A straight flush is nearly unbeatable!'
+  ];
+  const PCT=[.15,.32,.5,.64,.74,.82,.9,.97,1];
+  const ROW=[9,8,7,6,5,4,3,2];
+
+  function analyse(){
+    const h=S.hole&&S.hole[0];
+    if(!h||h.length<2) return {name:S.over?'Press Deal to start':'Dealing…',pct:0,row:-1,tip:'The coach explains your hand as soon as the cards are dealt.'};
+    if(S.folded[0]) return {name:'You folded',pct:0,row:-1,tip:'Watch the rest of the round. Folding weak hands is a smart move, not a loss.'};
+    const b=S.comm||[];
+    if(!b.length){
+      const a=h[0],c=h[1],hi=Math.max(a.v,c.v),lo=Math.min(a.v,c.v),su=a.s===c.s,gap=hi-lo;
+      const pct=Math.min(1,(hi+lo)/32+(hi===lo?.3:0)+(su?.05:0)+(gap<=2?.04:0));
+      let name,tip;
+      if(hi===lo){name='Pocket '+PL(hi);tip=hi>=10?'A high pair is a premium start. Raise!':'You already have a pair. A solid start: call or raise.'}
+      else if(lo>=10){name=RN[hi]+'-'+RN[lo]+(su?' (suited)':'');tip='Two high cards. A strong start, worth playing.'}
+      else if(hi===14){name='Ace-'+RN[lo]+(su?' (suited)':'');tip=lo>=8?'An Ace with a decent partner. Playable.':'An Ace with a weak partner. Careful with big bets.'}
+      else if(su&&gap<=3){name=RN[hi]+'-'+RN[lo]+' (suited)';tip='Same suit and close together: it could become a flush or straight, but it is weak for now.'}
+      else {name=RN[hi]+'-'+RN[lo]+(su?' (suited)':'');tip='A weak starting hand. Fine to fold to a big raise.'}
+      return {name,pct,row:-1,tip};
+    }
+    const all=h.concat(b), r=best(all), cat=r.cat, v=r.five.map(x=>x.v);
+    const cnt={}; v.forEach(x=>cnt[x]=(cnt[x]||0)+1);
+    const g=Object.entries(cnt).map(([k,n])=>[+k,n]).sort((p,q)=>q[1]-p[1]||q[0]-p[0]);
+    const hi=Math.max(...v), sh=(v.includes(14)&&v.includes(2))?5:hi;
+    let name;
+    switch(cat){
+      case 8: name=(sh===14)?'Royal Flush':'Straight Flush, '+RN[sh]+' high';break;
+      case 7: name='Four '+PL(g[0][0]);break;
+      case 6: name='Full House, '+PL(g[0][0])+' full of '+PL(g[1][0]);break;
+      case 5: name='Flush, '+RN[hi]+' high';break;
+      case 4: name='Straight, '+RN[sh]+' high';break;
+      case 3: name='Three '+PL(g[0][0]);break;
+      case 2: name='Two Pair, '+PL(g[0][0])+' and '+PL(g[1][0]);break;
+      case 1: name='Pair of '+PL(g[0][0]);break;
+      default: name='High Card, '+RN[hi];
+    }
+    const row=cat===8?(sh===14?0:1):ROW[cat];
+    let tip=TIPS[cat], pct=PCT[cat];
+    const onBoard=!r.five.some(x=>h.includes(x));
+    if(onBoard&&cat<8){
+      tip='The best five cards are all on the table, so anyone can have this. Your own cards add nothing right now.';
+      pct=Math.min(pct,.2);
+    }else if(cat<4&&b.length<5){
+      const sc={}; all.forEach(x=>sc[x.s]=(sc[x.s]||0)+1);
+      const fs=Object.keys(sc).find(s=>sc[s]===4&&h.some(x=>x.s===s));
+      const vs=new Set(all.map(x=>x.v)); if(vs.has(14)) vs.add(1);
+      let sd=false;
+      for(let s=1;s<=10;s++){
+        let n=0; for(let k=0;k<5;k++) if(vs.has(s+k)) n++;
+        if(n===4&&h.some(x=>[x.v,x.v===14?1:-1].some(y=>y>=s&&y<s+5))) sd=true;
+      }
+      if(fs) tip+=' You hold 4 cards of one suit ('+fs+'): one more makes a flush!';
+      if(sd) tip+=' You are one card away from a straight.';
+    }
+    return {name,pct,row,tip};
+  }
+
+  /* ---------- coach panel ---------- */
+  const co=document.createElement('div'); co.className='coach'; co.id='coach';
+  co.innerHTML='<div class="co-top"><span>Beginner coach</span><button class="co-link" id="coRanks">Hand ranks</button></div>'+
+    '<div class="co-hand" id="coHand"></div><div class="co-bar"><i id="coFill"></i></div><div class="co-tip" id="coTip"></div>';
+  document.querySelector('.controls').prepend(co);
+  const coach=()=>{
+    co.classList.toggle('on',BEG);
+    if(!BEG) return;
+    const a=analyse();
+    $('#coHand').textContent=a.name;
+    $('#coFill').style.width=(100-a.pct*100)+'%';
+    $('#coTip').textContent=a.tip;
+  };
+  const _r=render;
+  render=function(){ const x=_r.apply(this,arguments); try{coach()}catch(e){} return x };
+
+  /* ---------- header buttons ---------- */
+  const hud=document.querySelector('.hud'), tools=document.createElement('div'); tools.className='tools';
+  tools.innerHTML='<button class="tbtn" id="tCoach"><i class="dot"></i><span>Coach</span></button>'+
+    '<button class="tbtn" id="tGuide">'+ICON.help+'<span class="lbl">Guide</span></button>'+
+    (snd?'<button class="tbtn" id="tSnd">'+(snd.isOn()?ICON.on:ICON.off)+'<span class="lbl">Sound</span></button>':'');
+  hud.insertBefore(tools,hud.querySelector('.blinds'));
+
+  const setBeg=v=>{BEG=v;store('rf_beg',v?'on':'off');$('#tCoach').classList.toggle('on',v);coach()};
+  setBeg(BEG);
+  function openGuide(tab){
+    m.querySelectorAll('.rk').forEach(r=>{r.classList.remove('mine');r.style.animation='none';void r.offsetWidth;r.style.animation=''});
+    if(BEG){const a=analyse();if(a.row>=0)m.querySelector('.rk[data-i="'+a.row+'"]').classList.add('mine')}
+    setTab(tab||0); m.classList.add('open');
+  }
+  $('#tCoach').onclick=()=>setBeg(!BEG);
+  $('#tGuide').onclick=()=>openGuide(0);
+  $('#coRanks').onclick=()=>openGuide(0);
+  if(snd) $('#tSnd').onclick=()=>{
+    const on=snd.toggle();
+    $('#tSnd').innerHTML=(on?ICON.on:ICON.off)+'<span class="lbl">Sound</span>';
+    if(on) snd.chip(2);
+  };
+
+  /* ---------- first-visit welcome ---------- */
+  if(read('rf_seen')!=='1'){
+    const w=document.createElement('div'); w.className='rf-welcome';
+    w.innerHTML='<h4>New to poker?</h4><p>Turn on the Coach to see what your hand is worth in real time, or open the guide to learn which hands beat which.</p>'+
+      '<div class="btns"><button class="primary" id="wYes">Teach me</button><button id="wGuide">Hand ranks</button><button id="wNo">I know poker</button></div>';
+    document.body.appendChild(w);
+    setTimeout(()=>w.classList.add('show'),1200);
+    const done=()=>{w.classList.remove('show');store('rf_seen','1');setTimeout(()=>w.remove(),700)};
+    w.querySelector('#wYes').onclick=()=>{setBeg(true);done()};
+    w.querySelector('#wGuide').onclick=()=>{setBeg(true);done();openGuide(0)};
+    w.querySelector('#wNo').onclick=done;
+  }
+})();
+</script>
+
+<style>
+/* ===== ROYAL FLUSH CAREER EXPANSION ===== */
+.career-btn{padding:8px 13px;border-radius:99px;font-size:11px;letter-spacing:.1em;color:#241a02;
+  background:linear-gradient(180deg,#fff0b3,var(--gold) 60%,var(--gold-2));border:1px solid #fff6d6}
+.career-modal{position:fixed;inset:0;z-index:120;display:grid;place-items:center;padding:14px;
+  background:rgba(3,5,10,.78);backdrop-filter:blur(12px);opacity:0;pointer-events:none;transition:opacity .3s}
+.career-modal.open{opacity:1;pointer-events:auto}
+.career-panel{width:min(760px,100%);max-height:90vh;overflow:auto;border-radius:24px;
+  background:linear-gradient(155deg,#1c2030,#090b12 75%);border:1px solid rgba(233,196,106,.4);
+  box-shadow:0 35px 100px #000b,0 0 50px #e9c46a18;padding:22px}
+.career-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
+.career-head h2{font:900 22px 'Cinzel',serif;letter-spacing:.13em;color:var(--gold)}
+.career-close{padding:5px 13px;font-size:20px}
+.career-profile{display:flex;align-items:center;gap:16px;padding:16px;border-radius:18px;
+  background:linear-gradient(120deg,#e9c46a20,#ffffff08);border:1px solid #e9c46a45;margin-bottom:14px}
+.career-medal{width:58px;height:58px;flex:none;border-radius:50%;display:grid;place-items:center;
+  font:900 25px 'Cinzel',serif;color:#241a02;background:radial-gradient(circle at 30% 25%,#fff6d6,var(--gold) 65%,#8b6200);
+  box-shadow:0 0 24px #e9c46a55}
+.career-rank{font:700 17px 'Cinzel',serif;color:#fff2c5}
+.career-sub{font-size:11px;opacity:.65;margin-top:4px;letter-spacing:.08em}
+.career-xp{height:8px;border-radius:99px;background:#ffffff18;overflow:hidden;margin-top:11px}
+.career-xp i{display:block;height:100%;width:0;background:linear-gradient(90deg,#b8860b,#fff0b3);transition:width .5s}
+.career-xplabel{display:flex;justify-content:space-between;font-size:10px;opacity:.7;margin-top:5px}
+.career-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:12px 0 18px}
+.career-stat{padding:13px 10px;border-radius:14px;background:#ffffff08;border:1px solid #ffffff12}
+.career-stat b{display:block;font:700 22px 'Cinzel',serif;color:var(--gold);font-variant-numeric:tabular-nums}
+.career-stat span{font-size:9px;letter-spacing:.1em;text-transform:uppercase;opacity:.6}
+.career-section{font:700 12px 'Cinzel',serif;letter-spacing:.16em;color:var(--gold);margin:18px 0 10px}
+.career-achievements{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.career-ach{display:flex;align-items:center;gap:10px;padding:11px;border-radius:13px;
+  background:#ffffff06;border:1px solid #ffffff10;opacity:.38;filter:grayscale(1)}
+.career-ach.unlocked{opacity:1;filter:none;border-color:#e9c46a55;background:#e9c46a12}
+.career-ach-icon{font-size:23px;width:30px;text-align:center}
+.career-ach b{display:block;font-size:11px;color:#fff0c2}
+.career-ach small{display:block;font-size:10px;opacity:.65;margin-top:3px;line-height:1.35}
+.career-toast{position:fixed;z-index:150;left:50%;top:18px;transform:translate(-50%,-150%);
+  padding:12px 18px;border-radius:14px;background:linear-gradient(120deg,#fff0b3,#e9c46a);
+  color:#241a02;box-shadow:0 12px 40px #0009;transition:transform .45s cubic-bezier(.2,1.3,.4,1);
+  text-align:center;min-width:230px;pointer-events:none}
+.career-toast.show{transform:translate(-50%,0)}
+.career-toast b{display:block;font:900 12px 'Cinzel',serif;letter-spacing:.1em}
+.career-toast span{font-size:11px}
+@media(max-width:560px){
+  .career-panel{padding:16px;border-radius:18px}
+  .career-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .career-achievements{grid-template-columns:1fr}
+  .career-profile{align-items:flex-start}
+}
+</style>
+
+<script>
+/* ===== ROYAL FLUSH · CAREER, LEVELS & ACHIEVEMENTS ===== */
+(function(){
+  const KEY='rf_career_v1';
+  const fresh=()=>({
+    xp:0,handsPlayed:0,handsWon:0,tournaments:0,tournamentWins:0,
+    biggestPot:0,totalChipsWon:0,folds:0,raises:0,allIns:0,
+    royalFlushes:0,categoryWins:{},unlocked:[],currentTournament:false
+  });
+  const load=()=>{
+    try{
+      const raw=JSON.parse(localStorage.getItem(KEY)||'null');
+      return raw&&typeof raw==='object'?{...fresh(),...raw}:fresh();
+    }catch(e){return fresh()}
+  };
+  let C=load();
+  const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(C))}catch(e){}};
+  const level=()=>1+Math.floor(C.xp/250);
+  const rank=()=>{
+    const names=['Rookie','Regular','Card Shark','High Roller','Table Boss','Poker Legend'];
+    return names[Math.min(names.length-1,Math.floor((level()-1)/3))];
+  };
+  const ACH=[
+    ['first','🂡','First Win','Win your first poker hand.',()=>C.handsWon>=1],
+    ['ten','🎯','Getting Serious','Win 10 hands.',()=>C.handsWon>=10],
+    ['grinder','⏳','The Grinder','Play 50 hands.',()=>C.handsPlayed>=50],
+    ['bigpot','💰','Big Pot','Win a pot worth at least 1,000 chips.',()=>C.biggestPot>=1000],
+    ['champ','🏆','Table Champion','Win your first full tournament.',()=>C.tournamentWins>=1],
+    ['royal','👑','Royal Flush','Make a Royal Flush.',()=>C.royalFlushes>=1],
+    ['highroller','💎','High Roller','Win 10,000 chips in total.',()=>C.totalChipsWon>=10000],
+    ['veteran','♠️','Veteran','Play 200 hands.',()=>C.handsPlayed>=200]
+  ];
+  const notify=(title,desc)=>{
+    let el=document.querySelector('.career-toast');
+    if(!el){el=document.createElement('div');el.className='career-toast';document.body.appendChild(el)}
+    el.innerHTML='<b>'+title+'</b><span>'+desc+'</span>';
+    el.classList.remove('show');void el.offsetWidth;el.classList.add('show');
+    clearTimeout(el._timer);el._timer=setTimeout(()=>el.classList.remove('show'),3200);
+    if(typeof sfx!=='undefined'&&sfx.isOn()) sfx.win();
+  };
+  const checkAchievements=()=>{
+    for(const a of ACH){
+      if(!C.unlocked.includes(a[0])&&a[3]()){
+        C.unlocked.push(a[0]);notify('ACHIEVEMENT UNLOCKED',a[2]+' · '+a[1]);
+      }
+    }
+    save();
+  };
+  const award=(n,reason)=>{
+    C.xp+=n;save();
+    if(n>0&&reason) notify('+'+n+' XP',reason);
+  };
+
+  /* Career button and dashboard */
+  const hud=document.querySelector('.hud');
+  const btn=document.createElement('button');
+  btn.className='career-btn';btn.type='button';btn.textContent='♛ Career';
+  hud.appendChild(btn);
+  const modal=document.createElement('div');modal.className='career-modal';
+  modal.innerHTML=`
+    <section class="career-panel" role="dialog" aria-label="Poker career">
+      <div class="career-head"><h2>ROYAL FLUSH CAREER</h2><button class="career-close" aria-label="Close">×</button></div>
+      <div class="career-profile">
+        <div class="career-medal" id="careerLevel">1</div>
+        <div style="flex:1;min-width:0">
+          <div class="career-rank" id="careerRank">Rookie</div>
+          <div class="career-sub" id="careerXpText">0 XP · LEVEL 1</div>
+          <div class="career-xp"><i id="careerXpBar"></i></div>
+          <div class="career-xplabel"><span id="careerXpNow">0 XP</span><span id="careerXpNext">250 XP to next level</span></div>
+        </div>
+      </div>
+      <div class="career-grid">
+        <div class="career-stat"><b id="csHands">0</b><span>Hands played</span></div>
+        <div class="career-stat"><b id="csWon">0</b><span>Hands won</span></div>
+        <div class="career-stat"><b id="csTournaments">0</b><span>Tournaments</span></div>
+        <div class="career-stat"><b id="csTitles">0</b><span>Championships</span></div>
+        <div class="career-stat"><b id="csPot">0</b><span>Biggest pot</span></div>
+        <div class="career-stat"><b id="csChips">0</b><span>Chips won</span></div>
+        <div class="career-stat"><b id="csRaises">0</b><span>Raises</span></div>
+        <div class="career-stat"><b id="csAllins">0</b><span>All-ins</span></div>
+      </div>
+      <div class="career-section">ACHIEVEMENTS</div>
+      <div class="career-achievements" id="careerAchievements"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:18px">
+        <span style="font-size:10px;opacity:.5">Progress is saved on this device.</span>
+        <button class="quick" id="careerReset">Reset career</button>
+      </div>
+    </section>`;
+  document.body.appendChild(modal);
+  const $=s=>modal.querySelector(s);
+  const fmt=n=>Math.floor(n||0).toLocaleString('en-US');
+  const refresh=()=>{
+    const lv=level(),within=C.xp%250;
+    $('#careerLevel').textContent=lv;
+    $('#careerRank').textContent=rank();
+    $('#careerXpText').textContent=fmt(C.xp)+' XP · LEVEL '+lv;
+    $('#careerXpNow').textContent=fmt(within)+' XP';
+    $('#careerXpNext').textContent=fmt(250-within)+' XP to next level';
+    $('#careerXpBar').style.width=(within/250*100)+'%';
+    $('#csHands').textContent=fmt(C.handsPlayed);
+    $('#csWon').textContent=fmt(C.handsWon);
+    $('#csTournaments').textContent=fmt(C.tournaments);
+    $('#csTitles').textContent=fmt(C.tournamentWins);
+    $('#csPot').textContent=fmt(C.biggestPot);
+    $('#csChips').textContent=fmt(C.totalChipsWon);
+    $('#csRaises').textContent=fmt(C.raises);
+    $('#csAllins').textContent=fmt(C.allIns);
+    $('#careerAchievements').innerHTML=ACH.map(a=>{
+      const on=C.unlocked.includes(a[0]);
+      return `<div class="career-ach${on?' unlocked':''}"><span class="career-ach-icon">${a[1]}</span><div><b>${a[2]}</b><small>${a[4]}</small></div></div>`;
+    }).join('');
+  };
+  const open=()=>{refresh();modal.classList.add('open')};
+  const close=()=>modal.classList.remove('open');
+  btn.addEventListener('click',open);
+  $('.career-close').addEventListener('click',close);
+  modal.addEventListener('pointerdown',e=>{if(e.target===modal)close()});
+  addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+  $('#careerReset').addEventListener('click',()=>{
+    if(!confirm('Reset all career stats, XP and achievements?'))return;
+    C=fresh();save();refresh();notify('CAREER RESET','A fresh poker story begins.');
+  });
+
+  /* Track tournament starts and hands without changing poker rules. */
+  const oldStart=startHand;
+  startHand=function(){
+    const isNew=!C.currentTournament||S.reset;
+    if(isNew){C.tournaments++;C.currentTournament=true;award(25,'Tournament started');}
+    C.handsPlayed++;award(10,'Hand dealt');
+    save();checkAchievements();
+    return oldStart.apply(this,arguments);
+  };
+
+  const oldAct=act;
+  act=function(p,type,to){
+    if(p===0){
+      if(type==='fold') C.folds++;
+      if(type==='raise'){C.raises++;if(to>=S.stack[p]+S.bet[p])C.allIns++;}
+      save();
+    }
+    return oldAct.apply(this,arguments);
+  };
+
+  const oldPayout=payout;
+  payout=async function(win,ev){
+    const potBefore=S.pot;
+    const won=win&&win[0]>0;
+    if(won){
+      C.handsWon++;
+      C.totalChipsWon+=win[0];
+      C.biggestPot=Math.max(C.biggestPot,potBefore);
+      award(20,'Pot collected');
+      if(ev&&ev[0]){
+        const cat=ev[0].cat;
+        C.categoryWins[cat]=(C.categoryWins[cat]||0)+1;
+        if(cat===8){C.royalFlushes++;award(500,'Royal Flush!');}
+      }
+      if(potBefore>=1000) checkAchievements();
+    }
+    await oldPayout.apply(this,arguments);
+    if(S.reset&&C.currentTournament){
+      const champion=S.stack.slice(1).every(v=>v<=0)&&S.stack[0]>0;
+      if(champion){C.tournamentWins++;award(250,'Tournament champion');}
+      else if(S.stack[0]<=0){award(10,'Tournament completed');}
+      C.currentTournament=false;
+    }
+    save();checkAchievements();
+  };
+
+  /* Refresh if the panel is open when stats change. */
+  const oldRender=render;
+  render=function(){
+    const result=oldRender.apply(this,arguments);
+    if(modal.classList.contains('open'))refresh();
+    return result;
+  };
+  refresh();
+})();
+</script>
+
+</body>
+</html>
