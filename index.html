@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Royal Flush · Premium Poker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 @property --a { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
@@ -266,13 +268,284 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border:0;border-radiu
   .drop{left:74%;top:79%;width:110px;height:76px}
   .tok{width:46px;height:46px}.tok b{font-size:12px}
 }
+
+/* ===== ROYAL FLUSH · BLACKJACK MODE ===== */
+.mode-toggle{padding:9px 15px;border-radius:99px;font-size:10px;letter-spacing:.1em;color:#1b1608;background:linear-gradient(180deg,#fff1bf,#e9c46a 62%,#b8860b);border:1px solid rgba(255,244,199,.8);white-space:nowrap;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.hud{flex-wrap:wrap}
+.bj-shell{width:min(1060px,96vw);padding:10px 0 34px;z-index:2;display:none}
+body.bj-mode .table,body.bj-mode>.controls{display:none}
+body.bj-mode .bj-shell{display:block}
+body.bj-mode .mode-toggle{color:#fff;background:linear-gradient(180deg,#315c49,#123b2b);border-color:rgba(233,196,106,.55)}
+.bj-hero{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:13px 10px 20px}
+.bj-kicker{font-size:10px;letter-spacing:.24em;color:var(--gold);font-weight:700;opacity:.85}
+.bj-kicker span{padding:0 6px;opacity:.5}
+.bj-hero h1{font-family:'Cinzel',serif;font-size:clamp(30px,5vw,49px);letter-spacing:.13em;line-height:1.15;margin:7px 0 3px;color:#fff4d2}
+.bj-hero h1 em{font-style:normal;color:var(--gold)}
+.bj-hero p{font-size:12px;opacity:.62;letter-spacing:.04em}
+.bj-bank-card{min-width:170px;padding:12px 18px;border-radius:17px;background:linear-gradient(145deg,rgba(233,196,106,.16),rgba(255,255,255,.035));border:1px solid rgba(233,196,106,.32);display:flex;flex-direction:column;align-items:flex-end;box-shadow:0 12px 35px rgba(0,0,0,.23)}
+.bj-bank-card span,.bj-bank-card small{font-size:9px;letter-spacing:.17em;opacity:.6}
+.bj-bank-card strong{font-family:'Cinzel',serif;font-size:28px;color:var(--gold);font-variant-numeric:tabular-nums;line-height:1.25}
+.bj-table{position:relative;overflow:hidden;border-radius:34px;border:9px solid #5b3b0c;padding:22px clamp(14px,4vw,48px) 20px;min-height:450px;background:radial-gradient(ellipse at 50% 32%,rgba(255,255,255,.13),transparent 55%),radial-gradient(ellipse at 50% 45%,#11734d 0%,#075035 58%,#032d20 100%);box-shadow:inset 0 0 0 2px rgba(255,224,145,.65),inset 0 0 65px rgba(0,0,0,.5),0 25px 55px rgba(0,0,0,.5)}
+.bj-table:before{content:'21';position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);font-family:'Cinzel',serif;font-size:clamp(110px,22vw,230px);font-weight:900;color:rgba(233,196,106,.045);pointer-events:none}
+.bj-table-topline{position:relative;z-index:1;display:flex;justify-content:space-between;gap:12px;font-size:9px;letter-spacing:.19em;color:rgba(255,238,193,.68);padding:0 4px 14px;border-bottom:1px solid rgba(255,255,255,.1)}
+.bj-dealer-zone,.bj-player-zone{position:relative;z-index:1;display:flex;align-items:center;gap:18px;min-height:126px}
+.bj-dealer-zone{padding:17px 0 13px}
+.bj-player-zone{padding:13px 0 8px;align-items:flex-start}
+.bj-seat-label{display:flex;align-items:center;gap:10px;min-width:155px;flex:none}
+.bj-avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-size:21px;color:#332300;background:radial-gradient(circle at 30% 25%,#fff3c4,#d6a53c 65%,#8c5e0b);box-shadow:0 5px 16px rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.4)}
+.bj-you{background:radial-gradient(circle at 30% 25%,#fff,#a9c5d6 65%,#365b78);color:#142637}
+.bj-seat-label b{display:block;font-size:10px;letter-spacing:.17em;color:#fff0c4}
+.bj-seat-label small{display:block;margin-top:5px;font-size:10px;opacity:.65;max-width:180px}
+.bj-cards{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-height:calc(var(--cw)*1.4);--cw:clamp(48px,6.1vw,68px);--ch:calc(var(--cw)*1.4)}
+.bj-cards .card{flex:none;animation:bjCardIn .35s cubic-bezier(.2,1.3,.4,1) both}
+@keyframes bjCardIn{from{transform:translateY(-13px) scale(.85);opacity:0}to{transform:none;opacity:1}}
+.bj-dealer-cards{min-width:0}
+.bj-table-divider{position:relative;z-index:1;display:flex;align-items:center;gap:13px;padding:11px 0;border-top:1px solid rgba(255,255,255,.12);border-bottom:1px solid rgba(255,255,255,.12);font-size:8px;letter-spacing:.18em;color:rgba(255,236,190,.62);white-space:nowrap}
+.bj-table-divider i{height:1px;flex:1;background:linear-gradient(90deg,transparent,rgba(233,196,106,.45),transparent)}
+.bj-player-hands{display:flex;align-items:stretch;justify-content:center;gap:14px;flex:1;min-width:0;flex-wrap:wrap}
+.bj-hand{min-width:190px;max-width:100%;padding:9px 12px 11px;border:1px solid rgba(255,255,255,.12);border-radius:16px;background:rgba(0,0,0,.16);transition:.25s}
+.bj-hand.active{border-color:rgba(255,222,139,.9);background:rgba(0,0,0,.29);box-shadow:0 0 0 1px rgba(233,196,106,.22),0 0 25px rgba(233,196,106,.12)}
+.bj-hand-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.bj-hand-top b{font-size:9px;letter-spacing:.13em;color:#ffe8b0}
+.bj-hand-top strong{font-family:'Cinzel',serif;color:#fff;font-size:13px}
+.bj-hand .bj-cards{--cw:clamp(43px,5.1vw,57px);gap:5px}
+.bj-hand-state{font-size:8px;letter-spacing:.12em;opacity:.6;text-transform:uppercase}
+.bj-empty-hand{align-self:center;opacity:.35;font-size:12px;letter-spacing:.07em;padding:22px}
+.bj-result{position:relative;z-index:1;min-height:34px;margin-top:8px;text-align:center;padding:9px 12px;border-radius:99px;background:rgba(0,0,0,.21);border:1px solid rgba(255,255,255,.1);font-size:11px;letter-spacing:.09em;color:rgba(255,255,255,.82)}
+.bj-result.win{color:#ffe7a3;border-color:rgba(233,196,106,.55);background:rgba(233,196,106,.12)}
+.bj-result.lose{color:#ffc0c0;border-color:rgba(215,38,61,.38);background:rgba(90,8,20,.23)}
+.bj-result.push{color:#c8e7ff;border-color:rgba(140,195,230,.38);background:rgba(20,65,90,.2)}
+.bj-console{margin-top:14px;padding:16px 18px;border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.025));border:1px solid rgba(255,255,255,.1);box-shadow:0 14px 35px rgba(0,0,0,.25)}
+.bj-console-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.bj-console-heading b{display:block;font-size:11px;letter-spacing:.17em;color:#fff1c8}
+.bj-console-heading small{display:block;margin-top:4px;font-size:10px;opacity:.55}
+.bj-bet-value{text-align:right}.bj-bet-value span{font-size:8px;letter-spacing:.15em;opacity:.55;display:block}.bj-bet-value strong{font-family:'Cinzel',serif;font-size:20px;color:var(--gold)}
+.bj-bet-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.bj-step{padding:8px 13px;border-radius:11px;font-size:18px;line-height:1;color:var(--gold);background:rgba(233,196,106,.11);border-color:rgba(233,196,106,.25)}
+#bjBetInput{width:110px;padding:10px 9px;border-radius:11px;color:#fff1ce;background:rgba(0,0,0,.3);border:1px solid rgba(233,196,106,.3);font:700 15px 'Inter';text-align:center;outline:none}
+#bjBetInput:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(233,196,106,.1)}
+.bj-chip{padding:9px 13px;border-radius:99px;font-size:10px;background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.13)}
+.bj-chip:hover:not(:disabled){background:rgba(233,196,106,.16)}
+.bj-bet-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px}
+.bj-bet-footer>span{font-size:10px;opacity:.55}
+.bj-primary{color:#201704;background:linear-gradient(180deg,#fff0b7,#e9c46a 65%,#b8860b);border:1px solid #fff0b7;min-width:150px}
+.bj-primary span{margin-left:10px;font-size:17px}
+.bj-action-panel[hidden]{display:none}
+.bj-turn-label{display:flex;align-items:center;gap:9px;margin-bottom:12px}
+.bj-turn-dot{width:8px;height:8px;border-radius:50%;background:#76e0a9;box-shadow:0 0 12px #76e0a9}
+.bj-turn-label b{font-size:10px;letter-spacing:.17em;color:#fff0c4}
+.bj-turn-label small{margin-left:auto;font-size:9px;letter-spacing:.13em;opacity:.55}
+.bj-action-buttons{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.bj-action{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 8px;background:rgba(255,255,255,.065);border:1px solid rgba(255,255,255,.13);border-radius:14px}
+.bj-action b{font-size:11px;letter-spacing:.14em}.bj-action small{font-size:9px;opacity:.55;letter-spacing:0;text-transform:none;font-weight:400}
+.bj-hit{background:linear-gradient(180deg,rgba(233,196,106,.25),rgba(233,196,106,.08));border-color:rgba(233,196,106,.4);color:#ffe7a3}
+.bj-stand{background:linear-gradient(180deg,rgba(46,125,91,.3),rgba(46,125,91,.08));border-color:rgba(95,194,145,.35)}
+.bj-action:disabled{opacity:.24}
+.bj-bottom-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:13px;margin-top:14px}
+.bj-info-card{padding:16px 18px;border-radius:19px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.085)}
+.bj-info-title{font-size:10px;letter-spacing:.18em;color:#ffedc0;font-weight:700;margin-bottom:13px}.bj-info-title span{color:var(--gold);font-size:15px;margin-right:6px}
+.bj-rules{display:grid;grid-template-columns:1fr 1fr;gap:12px 15px}
+.bj-rules div{display:flex;align-items:center;gap:8px}.bj-rules b{font-family:'Cinzel',serif;color:var(--gold);font-size:17px;min-width:28px}.bj-rules span{font-size:9px;opacity:.62;line-height:1.35}
+.bj-disclaimer{margin-top:16px;font-size:9px;line-height:1.5;opacity:.4}
+.bj-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.bj-stats div{padding:9px 5px;border-radius:11px;text-align:center;background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.07)}
+.bj-stats strong{display:block;font-family:'Cinzel',serif;font-size:20px;color:var(--gold)}
+.bj-stats small{display:block;font-size:7px;letter-spacing:.1em;opacity:.55;margin-top:3px}
+.bj-history-title{margin:13px 0 7px;font-size:8px;letter-spacing:.18em;opacity:.55}
+.bj-history{display:flex;flex-direction:column;gap:5px;max-height:86px;overflow:auto}
+.bj-history span,.bj-history div{font-size:9px;opacity:.67}.bj-history div{display:flex;justify-content:space-between;gap:10px;padding:5px 7px;border-radius:7px;background:rgba(0,0,0,.13)}.bj-history .positive{color:#f4d98e}.bj-history .negative{color:#f09a9a}.bj-history .neutral{color:#b8d7e8}
+@media(max-width:720px){.bj-hero{align-items:flex-start}.bj-bank-card{min-width:135px;padding:10px 12px}.bj-table{padding:16px 12px;border-width:6px;border-radius:25px}.bj-dealer-zone,.bj-player-zone{gap:9px;flex-wrap:wrap}.bj-seat-label{min-width:100%;}.bj-player-hands{justify-content:flex-start}.bj-bottom-grid{grid-template-columns:1fr}.bj-table-divider{font-size:7px;gap:7px}.bj-table-topline{font-size:7px}.bj-cards{--cw:52px}}
+@media(max-width:480px){.hud{justify-content:center}.logo{width:100%;text-align:center}.bj-hero{flex-direction:column}.bj-bank-card{width:100%;align-items:flex-start}.bj-bet-footer{align-items:stretch;flex-direction:column}.bj-primary{width:100%}.bj-action-buttons{grid-template-columns:repeat(2,1fr)}.bj-stats{grid-template-columns:repeat(3,1fr)}.bj-table-divider span:last-child{max-width:115px;white-space:normal;text-align:right}.bj-rules{gap:9px}.bj-history{max-height:110px}}
+/* ===== BLACKJACK EXPANSION: COACH, TOKENS & TABLE CUSTOMIZATION ===== */
+.bj-wallets{display:flex;align-items:stretch;gap:9px;flex-wrap:wrap;justify-content:flex-end}
+.bj-token-card{min-width:142px;padding:11px 14px;border-radius:17px;background:linear-gradient(145deg,rgba(115,89,190,.18),rgba(255,255,255,.035));border:1px solid rgba(180,157,255,.3);display:flex;flex-direction:column;align-items:flex-end;box-shadow:0 12px 35px rgba(0,0,0,.2)}
+.bj-token-card span,.bj-token-card small{font-size:8px;letter-spacing:.15em;opacity:.62}
+.bj-token-card strong{font-family:'Cinzel',serif;font-size:25px;color:#c9b8ff;line-height:1.25}
+.bj-token-actions{display:flex;gap:6px;margin-top:5px}
+.bj-token-actions button,.bj-hero-tools button{border-radius:99px;padding:7px 10px;font-size:9px;letter-spacing:.07em;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);color:#f5edff}
+.bj-token-actions button:disabled{opacity:.35}
+.bj-hero-tools{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+.bj-hero-tools button.active{background:linear-gradient(180deg,#fff0b3,var(--gold));color:#211800;border-color:#fff1b6}
+.bj-coach{display:none;margin:0 0 14px;padding:15px 18px;border-radius:18px;background:linear-gradient(125deg,rgba(233,196,106,.14),rgba(108,83,166,.12));border:1px solid rgba(233,196,106,.3);box-shadow:0 12px 28px rgba(0,0,0,.18)}
+.bj-coach.visible{display:block}
+.bj-coach-top{display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--gold);font-size:9px;letter-spacing:.18em;font-weight:700}
+.bj-coach-top small{font-size:8px;letter-spacing:.1em;opacity:.55}
+.bj-coach-main{display:flex;align-items:center;gap:12px;margin:9px 0 5px}
+.bj-coach-badge{min-width:84px;text-align:center;padding:8px 10px;border-radius:10px;color:#231a06;background:linear-gradient(180deg,#fff0b3,var(--gold));font-size:10px;font-weight:900;letter-spacing:.08em}
+.bj-coach-main strong{font-family:'Cinzel',serif;font-size:17px;color:#fff4d2}
+.bj-coach p{font-size:11px;line-height:1.5;opacity:.78}
+.bj-bet-presets{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.bj-bet-presets button{padding:7px 11px;border-radius:10px;font-size:9px;letter-spacing:.08em;background:rgba(233,196,106,.1);border:1px solid rgba(233,196,106,.24);color:#ffe8b0}
+.bj-bet-presets button:last-child{background:linear-gradient(180deg,rgba(215,38,61,.28),rgba(110,14,24,.25));border-color:rgba(215,90,104,.45);color:#ffd1d6}
+.bj-guide-modal,.bj-shop-modal{position:fixed;inset:0;z-index:150;display:grid;place-items:center;padding:15px;background:rgba(3,5,10,.78);backdrop-filter:blur(11px);opacity:0;pointer-events:none;transition:opacity .25s}
+.bj-guide-modal.open,.bj-shop-modal.open{opacity:1;pointer-events:auto}
+.bj-pop-panel{width:min(590px,100%);max-height:88vh;overflow:auto;padding:21px;border-radius:23px;background:linear-gradient(155deg,#202334,#090b12 78%);border:1px solid rgba(233,196,106,.38);box-shadow:0 35px 100px #000b}
+.bj-pop-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+.bj-pop-head h2{font-family:'Cinzel',serif;color:var(--gold);font-size:19px;letter-spacing:.1em}
+.bj-pop-close{border-radius:99px;padding:5px 12px;font-size:20px}
+.bj-guide-list{display:grid;gap:9px}
+.bj-guide-list div{padding:11px 13px;border-radius:12px;background:rgba(255,255,255,.045);font-size:11px;line-height:1.5;opacity:.88}
+.bj-guide-list b{color:var(--gold)}
+.bj-skins{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.bj-skin{padding:12px;border-radius:15px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.1)}
+.bj-skin-preview{height:56px;border-radius:9px;margin-bottom:9px;border:4px solid #6a4b16;box-shadow:inset 0 0 0 1px #e9c46a}
+.bj-skin b{display:block;font-size:11px;margin-bottom:4px}
+.bj-skin small{display:block;font-size:9px;opacity:.55;margin-bottom:9px}
+.bj-skin button{width:100%;padding:8px 9px;border-radius:9px;font-size:9px;letter-spacing:.08em}
+.bj-skin button:disabled{opacity:.45}
+.bj-table[data-skin="obsidian"]{background:radial-gradient(ellipse at 50% 32%,rgba(255,255,255,.1),transparent 55%),radial-gradient(ellipse at 50% 45%,#48505d 0%,#242a35 58%,#10141c 100%);border-color:#555d6c}
+.bj-table[data-skin="sapphire"]{background:radial-gradient(ellipse at 50% 32%,rgba(255,255,255,.13),transparent 55%),radial-gradient(ellipse at 50% 45%,#176a9b 0%,#0b4269 58%,#06253f 100%);border-color:#204d77}
+.bj-table[data-skin="crimson"]{background:radial-gradient(ellipse at 50% 32%,rgba(255,255,255,.11),transparent 55%),radial-gradient(ellipse at 50% 45%,#9a2c39 0%,#641b29 58%,#350d18 100%);border-color:#692c1d}
+.bj-table[data-skin="amethyst"]{background:radial-gradient(ellipse at 50% 32%,rgba(255,255,255,.12),transparent 55%),radial-gradient(ellipse at 50% 45%,#66469a 0%,#39275f 58%,#1d1535 100%);border-color:#49316d}
+@media(max-width:720px){.bj-wallets{width:100%;justify-content:stretch}.bj-wallets>*{flex:1;min-width:120px}.bj-token-card{align-items:flex-start}.bj-hero-tools button{flex:1}.bj-skins{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.bj-wallets{flex-direction:row}.bj-wallets>*{min-width:0}.bj-bank-card,.bj-token-card{padding:9px 10px}.bj-bank-card strong,.bj-token-card strong{font-size:21px}.bj-coach-main{align-items:flex-start;flex-direction:column}.bj-bet-presets button{flex:1}.bj-skins{grid-template-columns:1fr}}
+
+
 </style>
+
+<style>
+/* ===== ROYAL FLUSH · TOURNAMENTS ===== */
+.rf-tour-open{padding:9px 14px;border-radius:99px;font-size:10px;letter-spacing:.1em;color:#f8edc9;background:linear-gradient(180deg,#27364a,#111b2b);border:1px solid rgba(233,196,106,.52);white-space:nowrap;box-shadow:0 6px 18px rgba(0,0,0,.25);cursor:pointer;transition:.2s}
+.rf-tour-open:hover{transform:translateY(-1px);border-color:#f5d98b;box-shadow:0 8px 26px rgba(233,196,106,.18)}
+body.bj-mode .rf-tour-open{background:linear-gradient(180deg,#315c49,#123b2b)}
+.rf-tour-modal{position:fixed;inset:0;z-index:10020;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(3,5,8,.82);backdrop-filter:blur(13px)}
+.rf-tour-modal.open{display:flex;animation:rfTourFade .22s ease-out}
+@keyframes rfTourFade{from{opacity:0}to{opacity:1}}
+.rf-tour-dialog{width:min(980px,96vw);max-height:min(90vh,900px);overflow:auto;border-radius:25px;padding:clamp(16px,3vw,28px);background:radial-gradient(ellipse at 12% 0%,rgba(233,196,106,.13),transparent 42%),linear-gradient(145deg,#17211f,#0c1016 62%,#151221);border:1px solid rgba(233,196,106,.42);box-shadow:0 30px 100px rgba(0,0,0,.75),inset 0 1px 0 rgba(255,255,255,.08);color:#f4efe2}
+.rf-tour-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:19px}
+.rf-tour-kicker{font-size:9px;letter-spacing:.25em;color:#d9bd71;font-weight:800;text-transform:uppercase;margin-bottom:7px}
+.rf-tour-title{font:900 clamp(22px,4vw,34px)/1.1 'Cinzel',serif;letter-spacing:.045em;color:#fff4d2}
+.rf-tour-sub{font-size:11px;opacity:.62;margin-top:8px;line-height:1.55}
+.rf-tour-close{width:37px;height:37px;flex:none;border-radius:50%;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:#fff;font-size:22px;cursor:pointer}
+.rf-tour-wallet{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:17px 0 22px}
+.rf-tour-stat{padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09);min-width:0}
+.rf-tour-stat span{display:block;color:#bfae81;font-size:8px;letter-spacing:.16em;font-weight:800;text-transform:uppercase}
+.rf-tour-stat strong{display:block;font:700 21px 'Cinzel',serif;color:#f4d98e;margin-top:6px;overflow-wrap:anywhere}
+.rf-tour-section-title{font:700 15px 'Cinzel',serif;color:#f3dd9f;margin:18px 0 10px;letter-spacing:.08em}
+.rf-tour-events{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.rf-tour-event{position:relative;overflow:hidden;padding:18px;border-radius:18px;background:linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.025));border:1px solid rgba(233,196,106,.25)}
+.rf-tour-event::after{content:attr(data-symbol);position:absolute;right:13px;top:3px;font-size:76px;opacity:.055;pointer-events:none}
+.rf-tour-event h3{font:700 17px 'Cinzel',serif;color:#fff0c6;margin-bottom:6px}
+.rf-tour-event p{font-size:10px;line-height:1.5;opacity:.68;max-width:90%;min-height:31px}
+.rf-tour-event-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:15px 0}
+.rf-tour-event-meta div{padding:8px;border-radius:10px;background:rgba(0,0,0,.22)}
+.rf-tour-event-meta small{display:block;font-size:8px;color:#baa978;text-transform:uppercase;letter-spacing:.1em}
+.rf-tour-event-meta b{display:block;font-size:13px;color:#f4e4b7;margin-top:3px}
+.rf-tour-primary,.rf-tour-secondary{border:0;border-radius:11px;padding:11px 15px;font-size:10px;letter-spacing:.12em;font-weight:900;cursor:pointer;transition:.18s}
+.rf-tour-primary{color:#211906;background:linear-gradient(180deg,#fff0bd,#e9c46a 60%,#b8860b);box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.rf-tour-primary:hover{filter:brightness(1.09);transform:translateY(-1px)}
+.rf-tour-primary:disabled{opacity:.42;cursor:not-allowed;transform:none}
+.rf-tour-secondary{color:#f3dfaa;background:rgba(255,255,255,.07);border:1px solid rgba(233,196,106,.28)}
+.rf-tour-note{font-size:10px;line-height:1.6;opacity:.55;margin-top:13px}
+.rf-tour-live{padding:17px;border-radius:18px;background:linear-gradient(120deg,rgba(32,85,62,.32),rgba(233,196,106,.08));border:1px solid rgba(233,196,106,.36);margin-bottom:15px}
+.rf-tour-live-top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center}
+.rf-tour-live h3{font:700 17px 'Cinzel',serif;color:#ffe9a8}
+.rf-tour-pill{font-size:8px;letter-spacing:.12em;border-radius:99px;padding:6px 9px;color:#e8d18c;background:rgba(233,196,106,.12);border:1px solid rgba(233,196,106,.3);font-weight:900}
+.rf-tour-matchup{display:flex;align-items:center;justify-content:center;gap:16px;margin:18px 0 12px;text-align:center}
+.rf-tour-player{flex:1;min-width:0;padding:13px 10px;border-radius:13px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.09)}
+.rf-tour-player.you{border-color:rgba(233,196,106,.5);background:rgba(233,196,106,.08)}
+.rf-tour-player small{display:block;font-size:8px;letter-spacing:.14em;opacity:.55;text-transform:uppercase}
+.rf-tour-player b{display:block;font:700 14px 'Cinzel',serif;color:#f6e7bf;margin-top:5px;overflow-wrap:anywhere}
+.rf-tour-vs{font:900 12px 'Cinzel',serif;color:#bda76d}
+.rf-tour-score{font:700 12px 'Cinzel',serif;color:#e9c46a;text-align:center}
+.rf-tour-progress{height:7px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;margin:12px 0 8px}
+.rf-tour-progress i{height:100%;display:block;background:linear-gradient(90deg,#9a7021,#f5dc8e);border-radius:99px;transition:width .25s}
+.rf-tour-bracket{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}
+.rf-tour-round{padding:12px;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);min-width:0}
+.rf-tour-round h4{font-size:9px;letter-spacing:.17em;text-transform:uppercase;color:#cdb875;margin-bottom:10px}
+.rf-tour-match{padding:9px;border-radius:10px;background:rgba(0,0,0,.2);margin-top:7px;border:1px solid rgba(255,255,255,.055);font-size:9px;line-height:1.5;overflow-wrap:anywhere}
+.rf-tour-match.current{border-color:rgba(233,196,106,.5);background:rgba(233,196,106,.09)}
+.rf-tour-match.done{opacity:.7}
+.rf-tour-match b{display:block;color:#f1e2bd;font-size:9px}
+.rf-tour-match small{display:block;opacity:.5;margin-top:3px}
+.rf-tour-match em{font-style:normal;color:#e9c46a;font-size:8px;display:block;margin-top:4px}
+.rf-tour-history{display:grid;gap:7px;margin-top:10px}
+.rf-tour-history-row{display:flex;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.035);font-size:10px}
+.rf-tour-history-row span{opacity:.65}.rf-tour-history-row b{color:#e9d18c;text-align:right}
+.rf-tour-footer{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:16px}
+.rf-tour-result{padding:17px;border-radius:16px;border:1px solid rgba(233,196,106,.35);background:rgba(233,196,106,.08);margin-bottom:14px}
+.rf-tour-result strong{display:block;font:700 20px 'Cinzel',serif;color:#ffe6a1;margin-bottom:6px}
+.rf-tour-result p{font-size:11px;line-height:1.6;opacity:.78}
+@media(max-width:680px){.hud{gap:7px;flex-wrap:wrap}.rf-tour-open,.mode-toggle{padding:8px 10px;font-size:9px}.rf-tour-wallet{grid-template-columns:1fr 1fr}.rf-tour-events{grid-template-columns:1fr}.rf-tour-event p{min-height:0}.rf-tour-bracket{grid-template-columns:1fr}.rf-tour-round{display:grid;grid-template-columns:1fr 1fr;gap:5px}.rf-tour-round h4{grid-column:1/-1}.rf-tour-round .rf-tour-match{margin:0}.rf-tour-matchup{gap:7px}.rf-tour-player{padding:10px 7px}.rf-tour-player b{font-size:11px}}
+</style>
+
+<style id="rf-mobile-performance">
+/* Royal Flush mobile performance profile.
+   Keeps game logic and card interactions intact while disabling costly decoration. */
+@media (max-width: 900px), (pointer: coarse) {
+  html, body { background-attachment: scroll !important; }
+  body::before,
+  .rim,
+  .logo,
+  .seat.active .avatar::after,
+  .seat.win .plate,
+  .drop.live,
+  .cp-body,
+  .eye {
+    animation: none !important;
+  }
+  body::before { display: none !important; }
+
+  /* Blur/backdrop layers are especially expensive on mid-range mobile GPUs. */
+  *, *::before, *::after {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  .rf-modal, .rf-tour-modal,
+  .bj-guide-modal, .bj-shop-modal {
+    background: rgba(3, 5, 10, .94) !important;
+  }
+  .plate { background: rgba(5, 8, 10, .88); }
+
+  /* Replace large, layered shadows with one lighter shadow. */
+  .rim { box-shadow: 0 14px 26px rgba(0,0,0,.42) !important; }
+  .felt { box-shadow: inset 0 0 34px rgba(0,0,0,.52), inset 0 0 0 2px rgba(0,0,0,.3) !important; }
+  .plate, .rf-panel, .rf-welcome, .bj-console,
+  .bj-pop-panel, .rf-tour-dialog, .career-toast {
+    box-shadow: 0 8px 20px rgba(0,0,0,.42) !important;
+  }
+  .seat.folded .hand, .seat.out, .career-ach,
+  .mc.x { filter: none !important; }
+  .felt::before { display: none !important; }
+
+  /* Keep cards responsive; shorten decorative entrance effects, not card flips. */
+  .bj-cards .card, .tk.fresh, .pop .tk, .rk,
+  .coach, .hs-lines.play > * {
+    animation-duration: .16s !important;
+    animation-delay: 0s !important;
+  }
+  .card .face { box-shadow: 0 3px 8px rgba(0,0,0,.34) !important; }
+  .card.hl .front { box-shadow: 0 0 0 2px var(--gold) !important; }
+  .chip, .tk { box-shadow: 0 1px 2px rgba(0,0,0,.38) !important; }
+  .chip::after, .tk::after { box-shadow: none !important; }
+  .drop.live { box-shadow: none !important; }
+}
+
+/* Touchscreens do not need hover lift/shadow work. */
+@media (hover: none) {
+  button:hover:not(:disabled) { transform: none !important; filter: none !important; }
+  button:hover:not(:disabled), .st-card:hover { box-shadow: none !important; }
+}
+
+/* Respect OS accessibility preference and save battery on low-power sessions. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
+}
+</style>
+
 </head>
 <body>
 
 <header class="hud">
   <div class="logo">ROYAL FLUSH</div>
   <div class="blinds">5-Max · Blinds 10 / 20</div>
+  <button class="mode-toggle" id="modeToggle" type="button">♣ Blackjack 21</button>
+  <button class="rf-tour-open" id="rfTourOpen" type="button">♛ Tournaments</button>
 </header>
 
 <section class="table">
@@ -328,6 +601,134 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border:0;border-radiu
   </div>
   <button class="primary" id="bDeal">Deal</button>
 </section>
+
+<section class="bj-shell" id="bjShell" aria-label="Blackjack table">
+  <div class="bj-hero">
+    <div>
+      <div class="bj-kicker">ROYAL FLUSH CASINO <span>•</span> TABLE 21</div>
+      <h1>BLACKJACK <em>21</em></h1>
+      <p>Beat the dealer. Get closer to 21 without going over.</p>
+      <div class="bj-hero-tools">
+        <button id="bjCoachToggle" type="button">✦ COACH: ON</button>
+        <button id="bjGuideOpen" type="button">? QUICK RULES</button>
+        <button id="bjShopOpen" type="button">♛ TOKEN VAULT</button>
+      </div>
+    </div>
+    <div class="bj-wallets">
+      <div class="bj-bank-card">
+        <span>YOUR BANKROLL</span>
+        <strong id="bjBalance">5,000</strong>
+        <small>VIRTUAL CHIPS</small>
+      </div>
+      <div class="bj-token-card">
+        <span>ROYAL TOKENS</span>
+        <strong id="bjTokens">25</strong>
+        <small>PLAY & EARN REWARDS</small>
+        <div class="bj-token-actions"><button id="bjDailyClaim" type="button">DAILY +10</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bj-coach visible" id="bjCoachPanel">
+    <div class="bj-coach-top"><span>✦ ROYAL TABLE COACH</span><small>STRATEGY HELPER · NOT A GUARANTEE</small></div>
+    <div class="bj-coach-main"><span class="bj-coach-badge" id="bjCoachAction">READY</span><strong id="bjCoachTitle">Your blackjack guide is ready</strong></div>
+    <p id="bjCoachTip">Place a bet and deal. The coach will explain your options and the dealer visible card.</p>
+  </div>
+
+  <div class="bj-table" id="bjTable" data-skin="emerald">
+    <div class="bj-table-topline"><span>♠ &nbsp; THE ROYAL TABLE &nbsp; ♠</span><span id="bjShoeInfo">6-DECK SHOE · 312 CARDS</span></div>
+    <div class="bj-dealer-zone">
+      <div class="bj-seat-label"><span class="bj-avatar">♛</span><div><b>THE DEALER</b><small id="bjDealerScore">Waiting for the next hand</small></div></div>
+      <div class="bj-cards bj-dealer-cards" id="bjDealerCards"></div>
+    </div>
+    <div class="bj-table-divider"><span>BLACKJACK PAYS 3:2</span><i></i><span>DEALER STANDS ON SOFT 17</span></div>
+    <div class="bj-player-zone">
+      <div class="bj-seat-label"><span class="bj-avatar bj-you">♞</span><div><b>YOUR HAND</b><small id="bjPlayerHint">Place your bet to begin</small></div></div>
+      <div class="bj-player-hands" id="bjPlayerHands"><div class="bj-empty-hand">Your cards will appear here</div></div>
+    </div>
+    <div class="bj-result" id="bjResult">Welcome to the table. Set your bet and deal.</div>
+  </div>
+
+  <div class="bj-console">
+    <div class="bj-bet-panel" id="bjBetPanel">
+      <div class="bj-console-heading"><div><b>PLACE YOUR BET</b><small>Minimum 10 chips · Virtual chips only</small></div><div class="bj-bet-value"><span>BET</span><strong id="bjBetReadout">100</strong></div></div>
+      <div class="bj-bet-row">
+        <button class="bj-step" id="bjBetMinus" type="button" aria-label="Decrease bet">−</button>
+        <input id="bjBetInput" type="number" min="10" step="10" value="100" inputmode="numeric" aria-label="Bet amount">
+        <button class="bj-step" id="bjBetPlus" type="button" aria-label="Increase bet">+</button>
+        <button class="bj-chip" data-add="10" type="button">+10</button>
+        <button class="bj-chip" data-add="50" type="button">+50</button>
+        <button class="bj-chip" data-add="100" type="button">+100</button>
+        <button class="bj-chip" data-add="500" type="button">+500</button>
+        <button class="bj-chip" data-add="1000" type="button">+1,000</button>
+      </div>
+      <div class="bj-bet-presets">
+        <button id="bjBetMin" type="button">MIN BET</button>
+        <button id="bjBetQuarter" type="button">¼ BANKROLL</button>
+        <button id="bjBetHalf" type="button">½ BANKROLL</button>
+        <button id="bjBetAll" type="button">ALL IN</button>
+      </div>
+      <div class="bj-bet-footer"><span id="bjBetNote">Choose your wager, then deal.</span><button class="bj-primary" id="bjDeal" type="button">DEAL HAND <span>↗</span></button></div>
+    </div>
+    <div class="bj-action-panel" id="bjActionPanel" hidden>
+      <div class="bj-turn-label"><span class="bj-turn-dot"></span><b id="bjTurnText">YOUR TURN</b><small id="bjActiveHandLabel">MAIN HAND</small></div>
+      <div class="bj-action-buttons">
+        <button class="bj-action bj-hit" id="bjHit" type="button"><b>HIT</b><small>Take a card</small></button>
+        <button class="bj-action bj-stand" id="bjStand" type="button"><b>STAND</b><small>Keep your total</small></button>
+        <button class="bj-action" id="bjDouble" type="button"><b>DOUBLE</b><small>Double bet, one card</small></button>
+        <button class="bj-action" id="bjSplit" type="button"><b>SPLIT</b><small>Play two hands</small></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="bj-bottom-grid">
+    <div class="bj-info-card">
+      <div class="bj-info-title"><span>♜</span> TABLE RULES</div>
+      <div class="bj-rules">
+        <div><b>3:2</b><span>Natural blackjack</span></div>
+        <div><b>6</b><span>Decks in the shoe</span></div>
+        <div><b>17</b><span>Dealer stands on soft 17</span></div>
+        <div><b>1×</b><span>Double on first two cards</span></div>
+      </div>
+      <p class="bj-disclaimer">Practice table. Chips have no real-world value and cannot be purchased or withdrawn.</p>
+    </div>
+    <div class="bj-info-card">
+      <div class="bj-info-title"><span>✦</span> YOUR BLACKJACK RECORD</div>
+      <div class="bj-stats">
+        <div><strong id="bjStatHands">0</strong><small>HANDS</small></div>
+        <div><strong id="bjStatWins">0</strong><small>WINS</small></div>
+        <div><strong id="bjStatLosses">0</strong><small>LOSSES</small></div>
+        <div><strong id="bjStatBlackjacks">0</strong><small>BLACKJACKS</small></div>
+        <div><strong id="bjStatStreak">0</strong><small>BEST STREAK</small></div>
+      </div>
+      <div class="bj-history-title">RECENT RESULTS</div>
+      <div class="bj-history" id="bjHistory"><span>No hands played yet.</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="bj-guide-modal" id="bjGuideModal" aria-hidden="true">
+  <div class="bj-pop-panel" role="dialog" aria-modal="true" aria-label="Blackjack quick rules">
+    <div class="bj-pop-head"><h2>BLACKJACK · QUICK GUIDE</h2><button class="bj-pop-close" id="bjGuideClose" type="button" aria-label="Close">×</button></div>
+    <div class="bj-guide-list">
+      <div><b>THE GOAL</b><br>Finish closer to 21 than the dealer without going over. Number cards count as shown, face cards count as 10, and Aces count as 1 or 11.</div>
+      <div><b>HIT</b><br>Take another card. If your total goes above 21, the hand busts and loses.</div>
+      <div><b>STAND</b><br>Keep your current total. The dealer then reveals the hidden card and plays.</div>
+      <div><b>DOUBLE</b><br>Double your wager, receive exactly one more card, then stand. Only available on the first two cards.</div>
+      <div><b>SPLIT</b><br>When your first two cards have the same value, split them into two hands with a second equal wager.</div>
+      <div><b>ALL IN</b><br>Sets the next hand's bet to your available virtual chip balance. It is a wager preset, not an extra action after the deal.</div>
+      <div><b>ROYAL TOKENS</b><br>Earn tokens from wins and daily rewards. Spend them on table designs. Tokens are virtual, have no cash value, and cannot be purchased.</div>
+    </div>
+  </div>
+</div>
+
+<div class="bj-shop-modal" id="bjShopModal" aria-hidden="true">
+  <div class="bj-pop-panel" role="dialog" aria-modal="true" aria-label="Royal token vault">
+    <div class="bj-pop-head"><h2>ROYAL TOKEN VAULT</h2><button class="bj-pop-close" id="bjShopClose" type="button" aria-label="Close">×</button></div>
+    <p style="font-size:11px;opacity:.65;line-height:1.5;margin-bottom:14px">Unlock table finishes with tokens earned in play. Your unlocks are saved on this browser.</p>
+    <div class="bj-skins" id="bjSkinGrid"></div>
+  </div>
+</div>
 
 <div class="toast" id="toast"></div>
 
@@ -651,6 +1052,10 @@ async function payout(win,ev){
   else if(S.stack.slice(1).every(s=>s<=0)){ S.reset=true; d.textContent='Champion! New Game'; await sleep(1800); toast('CHAMPION'); status('You cleared the table!') }
   else d.textContent='Deal Next Hand';
   d.classList.remove('hidden');
+  if(typeof window.rfTournamentPokerResult==='function'){
+    const resultForTournament=winners.includes(0)?(winners.length===1?'win':'draw'):'loss';
+    window.rfTournamentPokerResult(resultForTournament);
+  }
 }
 
 /* ============ bots ============ */
@@ -1321,7 +1726,7 @@ const sfx=(()=>{
   };
   const checkAchievements=()=>{
     for(const a of ACH){
-      if(!C.unlocked.includes(a[0])&&a[3]()){
+      if(!C.unlocked.includes(a[0])&&a[4]()){
         C.unlocked.push(a[0]);notify('ACHIEVEMENT UNLOCKED',a[2]+' · '+a[1]);
       }
     }
@@ -1388,7 +1793,7 @@ const sfx=(()=>{
     $('#csAllins').textContent=fmt(C.allIns);
     $('#careerAchievements').innerHTML=ACH.map(a=>{
       const on=C.unlocked.includes(a[0]);
-      return `<div class="career-ach${on?' unlocked':''}"><span class="career-ach-icon">${a[1]}</span><div><b>${a[2]}</b><small>${a[4]}</small></div></div>`;
+      return `<div class="career-ach${on?' unlocked':''}"><span class="career-ach-icon">${a[1]}</span><div><b>${a[2]}</b><small>${a[3]}</small></div></div>`;
     }).join('');
   };
   const open=()=>{refresh();modal.classList.add('open')};
@@ -1841,6 +2246,529 @@ const Studio=(()=>{
     }
     if(e.target.closest('.hs-row')) it.classList.toggle('open');
   });
+})();
+</script>
+
+
+<script>
+/* ===== FINAL DEAL BUTTON SAFETY BINDING =====
+   Bind after every add-on has wrapped startHand, so the latest game
+   function is always called. Surface runtime errors instead of silently
+   leaving the table stuck. */
+(function(){
+  const dealButton=document.getElementById('bDeal');
+  if(!dealButton || typeof startHand!=='function') return;
+  let dealing=false;
+  dealButton.onclick=async function(){
+    if(dealing) return;
+    dealing=true;
+    dealButton.disabled=true;
+    try{
+      await startHand();
+    }catch(err){
+      console.error('Royal Flush: could not start hand',err);
+      const msg=err && err.message ? err.message : String(err);
+      const statusEl=document.getElementById('status');
+      if(statusEl) statusEl.textContent='Game error: '+msg+' (open F12 → Console for details)';
+      dealButton.classList.remove('hidden');
+    }finally{
+      dealing=false;
+      dealButton.disabled=false;
+    }
+  };
+})();
+</script>
+
+<script>
+/* ===== ROYAL FLUSH · BLACKJACK ENGINE ===== */
+(()=>{
+  const $bj=id=>document.getElementById(id);
+  const STORE='rf_blackjack_v1';
+  const SUITS_BJ=['♠','♥','♦','♣'];
+  const RANKS_BJ=['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
+  const freshStats=()=>({hands:0,wins:0,losses:0,pushes:0,blackjacks:0,streak:0,bestStreak:0,history:[]});
+  const load=()=>{try{const x=JSON.parse(localStorage.getItem(STORE)||'null');return x&&typeof x==='object'?x:null}catch(e){return null}};
+  const saved=load();
+  let balance=saved&&Number.isFinite(saved.balance)?Math.max(0,saved.balance):5000;
+  let tokens=saved&&Number.isFinite(saved.tokens)?Math.max(0,Math.floor(saved.tokens)):25;
+  let lastDaily=saved&&typeof saved.lastDaily==='string'?saved.lastDaily:'';
+  const SKINS=[
+    {id:'emerald',name:'Royal Emerald',cost:0,desc:'The classic Royal Flush felt.',preview:'linear-gradient(135deg,#11734d,#032d20)'},
+    {id:'obsidian',name:'Obsidian',cost:35,desc:'A dark graphite private table.',preview:'linear-gradient(135deg,#48505d,#10141c)'},
+    {id:'sapphire',name:'Sapphire',cost:60,desc:'Deep blue midnight felt.',preview:'linear-gradient(135deg,#176a9b,#06253f)'},
+    {id:'crimson',name:'Crimson Club',cost:90,desc:'A bold red velvet table.',preview:'linear-gradient(135deg,#9a2c39,#350d18)'},
+    {id:'amethyst',name:'Amethyst',cost:125,desc:'A royal violet finish.',preview:'linear-gradient(135deg,#66469a,#1d1535)'}
+  ];
+  let unlockedSkins=saved&&Array.isArray(saved.unlockedSkins)?saved.unlockedSkins.filter(x=>SKINS.some(y=>y.id===x)):['emerald'];
+  if(!unlockedSkins.includes('emerald'))unlockedSkins.unshift('emerald');
+  let skin=saved&&unlockedSkins.includes(saved.skin)?saved.skin:'emerald';
+  let stats={...freshStats(),...(saved&&saved.stats||{})};
+  stats.history=Array.isArray(stats.history)?stats.history.slice(0,8):[];
+  let coachEnabled=(()=>{try{return localStorage.getItem('rf_bj_coach')!=='off'}catch(e){return true}})();
+  let shoe=[];
+  let round=null;
+  let bet=100;
+  let busy=false;
+  const wait=ms=>new Promise(r=>setTimeout(r,ms));
+  const money=n=>Math.floor(n).toLocaleString('en-US');
+  const cardValue=c=>c.v===14?11:Math.min(c.v,10);
+  const handValue=cards=>{
+    let total=cards.reduce((n,c)=>n+cardValue(c),0),aces=cards.filter(c=>c.v===14).length;
+    while(total>21&&aces>0){total-=10;aces--}
+    return {total,soft:aces>0};
+  };
+  const isNatural=cards=>cards.length===2&&handValue(cards).total===21;
+  const rankName=v=>v===14?'A':v===13?'K':v===12?'Q':v===11?'J':String(v);
+  const buildShoe=()=>{
+    const d=[];
+    for(let pack=0;pack<6;pack++)for(let s=0;s<4;s++)for(let i=0;i<13;i++){
+      const v=i+2;d.push({s:SUITS_BJ[s],v,r:RANKS_BJ[i]});
+    }
+    for(let i=d.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[d[i],d[j]]=[d[j],d[i]]}
+    shoe=d;
+  };
+  const draw=()=>{if(!shoe.length)buildShoe();return shoe.pop()};
+  const persist=()=>{try{localStorage.setItem(STORE,JSON.stringify({balance,tokens,lastDaily,unlockedSkins,skin,stats}))}catch(e){}}
+  const sound=(name)=>{try{if(typeof sfx!=='undefined'&&sfx&&typeof sfx[name]==='function')sfx[name]()}catch(e){}};
+  const localDay=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+  const applySkin=()=>{$bj('bjTable')?.setAttribute('data-skin',skin)};
+  const active=()=>round&&!round.done;
+  const playerHand=()=>round&&round.hands[round.active];
+  const setResult=(msg,type='')=>{const el=$bj('bjResult');el.textContent=msg;el.className='bj-result'+(type?' '+type:'')};
+  const setStatus=(msg)=>{$bj('bjBetNote').textContent=msg};
+  const updateWallet=()=>{
+    $bj('bjTokens').textContent=money(tokens);
+    const claimed=lastDaily===localDay();
+    $bj('bjDailyClaim').disabled=claimed;
+    $bj('bjDailyClaim').textContent=claimed?'CLAIMED TODAY':'DAILY +10';
+  };
+  const updateBet=()=>{
+    bet=Math.max(10,Math.min(1000000,Math.floor((Number($bj('bjBetInput').value)||10)/10)*10));
+    $bj('bjBetInput').value=bet;$bj('bjBetReadout').textContent=money(bet);
+    $bj('bjDeal').disabled=active()||(balance>0&&balance<bet);
+    $bj('bjBetNote').textContent=balance<bet?'Not enough chips. Lower your bet or reload practice chips.':'Choose your wager, then deal.';
+    $bj('bjBetAll').disabled=balance<10;
+    $bj('bjBetHalf').disabled=balance<20;
+    $bj('bjBetQuarter').disabled=balance<40;
+  };
+  const createCard=(c,up=true)=>{
+    const el=cardEl(c);el.classList.add('bj-card');if(up)el.classList.add('up');return el;
+  };
+  const renderCards=(host,cards,hideIndex=-1)=>{
+    host.innerHTML='';
+    cards.forEach((c,i)=>host.appendChild(createCard(c,i!==hideIndex)));
+  };
+  const dealerTotal=()=>handValue(round.dealer);
+  const record=(result,amount,label)=>{
+    let earned= result==='win'?2:result==='push'?1:0;
+    if(label==='NATURAL BLACKJACK')earned=5;
+    stats.hands++;
+    if(result==='win'){stats.wins++;stats.streak++;stats.bestStreak=Math.max(stats.bestStreak,stats.streak);if(stats.streak>0&&stats.streak%5===0)earned+=5}
+    else if(result==='loss'){stats.losses++;stats.streak=0}
+    else stats.pushes++;
+    if(String(label).includes('BLACKJACK'))stats.blackjacks++;
+    tokens+=earned;
+    stats.history.unshift({result,amount,label,tokens:earned});stats.history=stats.history.slice(0,8);
+  };
+  const coachAdvice=()=>{
+    if(!round)return {action:'READY',title:'Your blackjack guide is ready',tip:'Place a bet and deal. The coach will explain your options and the dealer visible card.'};
+    if(round.done)return {action:'ROUND OVER',title:'Review the result',tip:'Check the result and recent history, then choose a new wager. A tie returns your stake.'};
+    const h=playerHand(),v=handValue(h.cards),up=round.dealer[0],dealer=up?(up.v===14?11:Math.min(up.v,10)):0;
+    const canFunds=balance>=h.bet;
+    const pair=h.cards.length===2&&cardValue(h.cards[0])===cardValue(h.cards[1]);
+    let action='HIT',title=`You have ${v.total}`,tip='You are below a comfortable standing total. Taking a card is the usual basic-strategy direction here.';
+    if(pair&&round.hands.length===1){
+      const val=cardValue(h.cards[0]);
+      if((val===11||val===8)&&canSplit()) {action='SPLIT';title='A strong pair to split';tip='Aces and eights are commonly split in basic strategy. Splitting creates two hands and requires another equal wager.'}
+      else if(val===10){action='STAND';title='Keep your pair of tens';tip='A total of 20 is already very strong. Splitting tens usually gives up a powerful hand.'}
+      else if(val===9&&canSplit()&&[2,3,4,5,6,8,9].includes(dealer)){action='SPLIT';title='Consider splitting nines';tip='Against many dealer up-cards, a pair of nines can be split. Dealer 7, 10, or Ace is generally a reason to keep 18.'}
+      else if(val===7&&canSplit()&&dealer>=2&&dealer<=7){action='SPLIT';title='Sevens: consider splitting';tip='A pair of sevens is commonly split against dealer 2–7. You need enough chips to place the second wager.'}
+      else if(val===6&&canSplit()&&dealer>=2&&dealer<=6){action='SPLIT';title='Sixes: consider splitting';tip='A pair of sixes is commonly split against dealer 2–6. The dealer is showing a weaker up-card.'}
+      else if([2,3].includes(val)&&canSplit()&&dealer>=2&&dealer<=7){action='SPLIT';title='Small pair: split option';tip='A pair of twos or threes can be split against dealer 2–7. You need enough chips for the second hand.'}
+    }
+    if(action==='HIT'){
+      if(v.soft){
+        if(v.total>=19){action='STAND';title=`Soft ${v.total}: usually stand`;tip='Your Ace is still counting as 11. This is a strong soft total, so taking another card is usually unnecessary.'}
+        else if(v.total===18&&[2,7,8].includes(dealer)){action='STAND';title='Soft 18: stand';tip='Against a dealer 2, 7, or 8, soft 18 is commonly a stand. Against stronger cards, drawing may be better.'}
+        else if(v.total===18&&dealer>=3&&dealer<=6&&canFunds&&h.cards.length===2){action='DOUBLE';title='Soft 18: consider doubling';tip='Against dealer 3–6, doubling soft 18 can be a strong option. You receive exactly one more card.'}
+      } else if(v.total>=17){action='STAND';title=`${v.total}: stand`;tip='A hard total of 17 or more is usually a stand. Hitting carries a high risk of going over 21.'}
+      else if(v.total>=13&&v.total<=16&&dealer>=2&&dealer<=6){action='STAND';title=`${v.total} against ${dealer}`;tip='The dealer is showing a weaker card. Basic strategy generally stands on hard 13–16 against 2–6.'}
+      else if(v.total===12&&dealer>=4&&dealer<=6){action='STAND';title='12 against a dealer 4–6';tip='This is a common stand in basic strategy because the dealer has a greater chance of busting.'}
+      else if(v.total===11&&canFunds&&h.cards.length===2){action='DOUBLE';title='11 is a strong double';tip='With 11, one card is likely to make a strong total. Double only if you can add the same amount to the bet.'}
+      else if(v.total===10&&dealer<=9&&canFunds&&h.cards.length===2){action='DOUBLE';title='10: double is worth considering';tip='Your 10 has good potential against a dealer 2–9. Doubling means you receive one final card.'}
+      else if(v.total===9&&dealer>=3&&dealer<=6&&canFunds&&h.cards.length===2){action='DOUBLE';title='9 against a weaker dealer';tip='A double can be considered with 9 against dealer 3–6. Otherwise, taking a card is the simpler play.'}
+    }
+    if(action==='DOUBLE'&&!canFunds){action='HIT';tip+=' You do not have enough chips to double, so hit is the available alternative.'}
+    if(action==='SPLIT'&&!canSplit()){action='HIT';title=`You have ${v.total}`;tip='Splitting is not available in this position, so consider taking a card or standing.'}
+    const dealerLabel=dealer===11?'Ace':String(dealer||'?');
+    return {action,title,tip:`Dealer shows ${dealerLabel}. ${tip}`};
+  };
+  const updateCoach=()=>{
+    const panel=$bj('bjCoachPanel'),toggle=$bj('bjCoachToggle'),a=coachAdvice();
+    panel.classList.toggle('visible',coachEnabled);
+    toggle.classList.toggle('active',coachEnabled);
+    toggle.textContent=coachEnabled?'✦ COACH: ON':'✦ COACH: OFF';
+    $bj('bjCoachAction').textContent=a.action;
+    $bj('bjCoachTitle').textContent=a.title;
+    $bj('bjCoachTip').textContent=a.tip;
+  };
+  const renderSkinShop=()=>{
+    const host=$bj('bjSkinGrid');
+    host.innerHTML=SKINS.map(x=>{
+      const owned=unlockedSkins.includes(x.id),selected=skin===x.id;
+      const label=selected?'EQUIPPED':owned?'EQUIP':`UNLOCK · ${money(x.cost)} TOKENS`;
+      return `<div class="bj-skin"><div class="bj-skin-preview" style="background:${x.preview}"></div><b>${x.name}</b><small>${x.desc}</small><button type="button" data-skin="${x.id}" ${selected?'disabled':''}>${label}</button></div>`;
+    }).join('');
+    host.querySelectorAll('button[data-skin]').forEach(btn=>btn.addEventListener('click',()=>{
+      const id=btn.dataset.skin,item=SKINS.find(x=>x.id===id);if(!item)return;
+      if(!unlockedSkins.includes(id)){if(tokens<item.cost){setResult('Not enough Royal Tokens for that table finish.');return}tokens-=item.cost;unlockedSkins.push(id)}
+      skin=id;applySkin();updateWallet();persist();renderSkinShop();sound('chip');
+    }));
+  };
+  const openModal=id=>{$bj(id).classList.add('open');$bj(id).setAttribute('aria-hidden','false')};
+  const closeModal=id=>{$bj(id).classList.remove('open');$bj(id).setAttribute('aria-hidden','true')};
+  const render=()=>{
+    $bj('bjBalance').textContent=money(balance);
+    updateWallet();updateCoach();
+    $bj('bjShoeInfo').textContent=`6-DECK SHOE · ${shoe.length} CARDS LEFT`;
+    $bj('bjStatHands').textContent=money(stats.hands);
+    $bj('bjStatWins').textContent=money(stats.wins);
+    $bj('bjStatLosses').textContent=money(stats.losses);
+    $bj('bjStatBlackjacks').textContent=money(stats.blackjacks);
+    $bj('bjStatStreak').textContent=money(stats.bestStreak);
+    $bj('bjHistory').innerHTML=stats.history.length?stats.history.map(h=>`<div class="${h.result==='win'?'positive':h.result==='loss'?'negative':'neutral'}"><span>${h.label}${h.tokens?` · +${money(h.tokens)} TOKENS`:''}</span><b>${h.result==='win'?'+':h.result==='loss'?'−':'±'}${money(h.amount)}</b></div>`).join(''):'<span>No hands played yet.</span>';
+    const dealerHost=$bj('bjDealerCards');
+    if(round){renderCards(dealerHost,round.dealer,round.done?-1:(round.hideHole?1:-1));
+      const up=round.hideHole?handValue(round.dealer.slice(0,1)).total:dealerTotal().total;
+      $bj('bjDealerScore').textContent=round.hideHole?`Showing ${up} · hole card hidden`:`Dealer total: ${dealerTotal().total}${dealerTotal().soft&&dealerTotal().total<=21?' (soft)':''}`;
+    }else{
+      dealerHost.innerHTML='';$bj('bjDealerScore').textContent='Waiting for the next hand';
+    }
+    const playerHost=$bj('bjPlayerHands');playerHost.innerHTML='';
+    if(round){
+      round.hands.forEach((h,i)=>{
+        const box=document.createElement('div');box.className='bj-hand'+(!round.done&&i===round.active&&h.status==='playing'?' active':'');
+        const val=handValue(h.cards);
+        let state=h.status==='bust'?'BUST':h.status==='stand'?'STAND':h.status==='blackjack'?'BLACKJACK':h.status==='win'?'WIN':h.status==='loss'?'LOSS':h.status==='push'?'PUSH':h.status==='playing'?'YOUR TURN':'';
+        box.innerHTML=`<div class="bj-hand-top"><b>${round.hands.length>1?(i===0?'HAND 1':'HAND 2'):'PLAYER HAND'}</b><div><strong>${val.total}</strong><span class="bj-hand-state"> · ${state}</span></div></div><div class="bj-cards"></div>`;
+        renderCards(box.querySelector('.bj-cards'),h.cards);
+        playerHost.appendChild(box);
+      });
+    }else playerHost.innerHTML='<div class="bj-empty-hand">Your cards will appear here</div>';
+    const playing=active();
+    $bj('bjBetPanel').hidden=playing;
+    $bj('bjActionPanel').hidden=!playing;
+    if(playing){
+      const h=playerHand(),v=handValue(h.cards);
+      $bj('bjActiveHandLabel').textContent=round.hands.length>1?`HAND ${round.active+1} OF ${round.hands.length}`:'MAIN HAND';
+      $bj('bjTurnText').textContent='YOUR TURN';
+      $bj('bjHit').disabled=busy||v.total>=21;
+      $bj('bjStand').disabled=busy;
+      $bj('bjDouble').disabled=busy||h.cards.length!==2||balance<h.bet||h.doubled;
+      $bj('bjSplit').disabled=busy||!canSplit();
+    }else{
+      updateBet();
+      $bj('bjDeal').textContent=balance===0?'RELOAD CHIPS':'DEAL HAND';
+    }
+  };
+  const canSplit=()=>{
+    if(!active()||round.hands.length!==1||balance<playerHand().bet)return false;
+    const c=playerHand().cards;
+    return c.length===2&&cardValue(c[0])===cardValue(c[1]);
+  };
+  const showFinal=(msg,type)=>{round.done=true;round.hideHole=false;busy=false;setResult(msg,type);sound(type==='win'?'win':type==='loss'?'lose':'chip');render();persist();if(typeof window.rfTournamentBJResult==='function'&&round&&!round.tournamentReported){round.tournamentReported=true;window.rfTournamentBJResult(type==='win'?'win':type==='lose'?'loss':'draw')}};
+  const startHand=async()=>{
+    if(busy||active())return;
+    if(balance===0){balance=5000;persist();setResult('5,000 practice chips added. These are virtual chips.','push');render();return}
+    updateBet();if(balance<bet)return;
+    if(shoe.length<65)buildShoe();
+    busy=true;
+    const startBalance=balance;
+    balance-=bet;
+    round={hands:[{cards:[],bet,doubled:false,status:'playing',natural:false}],dealer:[],active:0,hideHole:true,done:false,startBalance};
+    round.hands[0].cards.push(draw());round.dealer.push(draw());round.hands[0].cards.push(draw());round.dealer.push(draw());
+    sound('shuffle');render();await wait(180);sound('deal');
+    const pBJ=isNatural(round.hands[0].cards),dBJ=isNatural(round.dealer);
+    if(pBJ||dBJ){
+      round.hideHole=false;
+      if(pBJ&&dBJ){balance+=bet;record('push',0,'PUSH · BOTH BLACKJACK');showFinal('Push! Both you and the dealer have blackjack.','push')}
+      else if(pBJ){const profit=bet*1.5;balance+=bet+profit;record('win',profit,'NATURAL BLACKJACK');showFinal(`BLACKJACK! You win ${money(profit)} chips. Payout 3:2.`,'win')}
+      else{record('loss',bet,'DEALER BLACKJACK');showFinal('Dealer has blackjack. This hand goes to the house.','lose')}
+      return;
+    }
+    busy=false;setResult('Your move. Hit, stand, double, or split.');render();persist();
+  };
+  const advance=async()=>{
+    const next=round.hands.findIndex((h,i)=>i>round.active&&h.status==='playing');
+    if(next>=0){round.active=next;setResult(`Hand ${next+1}: your turn.`);render();return}
+    await dealerPlay();
+  };
+  const dealerPlay=async()=>{
+    busy=true;round.hideHole=false;setResult('Dealer reveals the hole card…');render();sound('flip');await wait(550);
+    const playerCanWin=round.hands.some(h=>h.status!=='bust');
+    while(playerCanWin&&handValue(round.dealer).total<17){round.dealer.push(draw());render();sound('deal');await wait(500)}
+    const dv=handValue(round.dealer).total;
+    let wins=0,losses=0,pushes=0,totalNet=0;
+    round.hands.forEach(h=>{
+      const pv=handValue(h.cards).total;
+      if(pv>21){h.status='bust';losses++;totalNet-=h.bet;record('loss',h.bet,'BUST')}
+      else if(dv>21||pv>dv){h.status='win';wins++;const profit=h.bet;balance+=h.bet*2;totalNet+=profit;record('win',profit,dv>21?'DEALER BUST':'YOU WIN')}
+      else if(pv===dv){h.status='push';pushes++;balance+=h.bet;record('push',0,'PUSH')}
+      else{h.status='loss';losses++;totalNet-=h.bet;record('loss',h.bet,'DEALER WINS')}
+    });
+    const summary=[];
+    if(wins)summary.push(`${wins} ${wins===1?'hand won':'hands won'}`);
+    if(losses)summary.push(`${losses} ${losses===1?'hand lost':'hands lost'}`);
+    if(pushes)summary.push(`${pushes} push${pushes===1?'':'es'}`);
+    const msg=`Dealer: ${dv}. ${summary.join(' · ')}. ${totalNet>0?'Net +'+money(totalNet)+' chips.':totalNet<0?'Net −'+money(-totalNet)+' chips.':'No net change.'}`;
+    showFinal(msg,wins>losses?'win':losses>wins?'lose':'push');
+  };
+  const hit=async()=>{
+    if(!active()||busy)return;busy=true;
+    const h=playerHand();h.cards.push(draw());sound('deal');
+    const val=handValue(h.cards).total;
+    if(val>21){h.status='bust';render();setResult('Bust! That hand is over.','lose');await wait(350);busy=false;await advance();return}
+    if(val===21){h.status='stand';render();setResult('21! Standing automatically.','win');await wait(350);busy=false;await advance();return}
+    busy=false;setResult(`You have ${val}. Hit or stand?`);render();
+  };
+  const stand=async()=>{if(!active()||busy)return;busy=true;playerHand().status='stand';render();await wait(220);busy=false;await advance()};
+  const double=async()=>{
+    if(!active()||busy)return;const h=playerHand();if(h.cards.length!==2||balance<h.bet||h.doubled)return;
+    busy=true;balance-=h.bet;h.bet*=2;h.doubled=true;h.cards.push(draw());sound('deal');
+    const v=handValue(h.cards).total;h.status=v>21?'bust':'stand';render();setResult(v>21?'Double down: bust.':'Double down: one card received, hand stands.');await wait(350);busy=false;await advance();persist();
+  };
+  const split=async()=>{
+    if(!canSplit()||busy)return;busy=true;
+    const first=playerHand(),secondCard=first.cards.pop();
+    balance-=first.bet;
+    const second={cards:[secondCard],bet:first.bet,doubled:false,status:'playing',natural:false};
+    round.hands.push(second);
+    first.cards.push(draw());second.cards.push(draw());sound('deal');
+    const aces=first.cards[0].v===14&&second.cards[0].v===14;
+    if(aces){first.status='stand';second.status='stand';setResult('Aces split. One card dealt to each hand.');render();await wait(350);busy=false;await dealerPlay();}
+    else{
+      round.hands.forEach(h=>{if(handValue(h.cards).total===21)h.status='stand'});
+      const next=round.hands.findIndex(h=>h.status==='playing');
+      if(next<0){setResult('Both split hands are standing.');render();await wait(300);busy=false;await dealerPlay();}
+      else{round.active=next;setResult('Cards split. Play each hand in turn.');render();busy=false;}
+    }
+    persist();
+  };
+  const modeButton=$bj('modeToggle');
+  const pokerLabel=document.querySelector('.blinds').textContent;
+  modeButton.addEventListener('click',()=>{
+    const goingBJ=!document.body.classList.contains('bj-mode');
+    if(goingBJ&&!S.over){toast('Finish the current poker hand first.');return}
+    if(!goingBJ&&active()){setResult('Finish this blackjack hand before switching tables.');return}
+    document.body.classList.toggle('bj-mode',goingBJ);
+    modeButton.textContent=goingBJ?'♠ Poker mode':'♣ Blackjack 21';
+    document.querySelector('.blinds').textContent=goingBJ?'Blackjack · 6-Deck Shoe':pokerLabel;
+    if(goingBJ){render();setResult('Welcome to Blackjack 21. Place your bet when ready.');showWelcome();}
+  });
+  const setBetPreset=value=>{$bj('bjBetInput').value=Math.max(10,Math.min(1000000,Math.floor(value/10)*10));updateBet()};
+  const showWelcome=()=>{
+    try{if(localStorage.getItem('rf_bj_seen')==='1')return}catch(e){}
+    const w=document.createElement('div');w.className='rf-welcome';w.id='bjWelcome';
+    w.innerHTML='<h4>New to Blackjack?</h4><p>Learn the basics with the Royal Table Coach. It explains your hand, the dealer visible card, and the usual strategic options as you play.</p><div class="btns"><button class="primary" id="bjTeach">Teach me</button><button id="bjWelcomeRules">Quick rules</button><button id="bjKnow">I know Blackjack</button></div>';
+    document.body.appendChild(w);requestAnimationFrame(()=>w.classList.add('show'));
+    const done=()=>{try{localStorage.setItem('rf_bj_seen','1')}catch(e){}w.classList.remove('show');setTimeout(()=>w.remove(),650)};
+    w.querySelector('#bjTeach').onclick=()=>{coachEnabled=true;try{localStorage.setItem('rf_bj_coach','on')}catch(e){}updateCoach();done()};
+    w.querySelector('#bjWelcomeRules').onclick=()=>{coachEnabled=true;try{localStorage.setItem('rf_bj_coach','on')}catch(e){}updateCoach();done();openModal('bjGuideModal')};
+    w.querySelector('#bjKnow').onclick=done;
+  };
+  $bj('bjBetInput').addEventListener('input',updateBet);
+  $bj('bjBetMinus').addEventListener('click',()=>{$bj('bjBetInput').value=Math.max(10,bet-10);updateBet()});
+  $bj('bjBetPlus').addEventListener('click',()=>{$bj('bjBetInput').value=Math.min(1000000,bet+10);updateBet()});
+  document.querySelectorAll('.bj-chip').forEach(b=>b.addEventListener('click',()=>setBetPreset(bet+Number(b.dataset.add))));
+  $bj('bjBetMin').addEventListener('click',()=>setBetPreset(10));
+  $bj('bjBetQuarter').addEventListener('click',()=>setBetPreset(Math.max(10,Math.floor(balance*.25))));
+  $bj('bjBetHalf').addEventListener('click',()=>setBetPreset(Math.max(10,Math.floor(balance*.5))));
+  $bj('bjBetAll').addEventListener('click',()=>setBetPreset(balance));
+  $bj('bjDailyClaim').addEventListener('click',()=>{
+    if(lastDaily===localDay())return;
+    tokens+=10;lastDaily=localDay();updateWallet();persist();sound('chip');setResult('Daily reward claimed: +10 Royal Tokens.');
+  });
+  $bj('bjCoachToggle').addEventListener('click',()=>{coachEnabled=!coachEnabled;try{localStorage.setItem('rf_bj_coach',coachEnabled?'on':'off')}catch(e){}updateCoach()});
+  $bj('bjGuideOpen').addEventListener('click',()=>openModal('bjGuideModal'));
+  $bj('bjGuideClose').addEventListener('click',()=>closeModal('bjGuideModal'));
+  $bj('bjShopOpen').addEventListener('click',()=>{renderSkinShop();openModal('bjShopModal')});
+  $bj('bjShopClose').addEventListener('click',()=>closeModal('bjShopModal'));
+  ['bjGuideModal','bjShopModal'].forEach(id=>$bj(id).addEventListener('click',e=>{if(e.target.id===id)closeModal(id)}));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal('bjGuideModal');closeModal('bjShopModal')}});
+  $bj('bjDeal').addEventListener('click',startHand);
+  $bj('bjHit').addEventListener('click',hit);
+  $bj('bjStand').addEventListener('click',stand);
+  $bj('bjDouble').addEventListener('click',double);
+  $bj('bjSplit').addEventListener('click',split);
+  $bj('bjBetInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&!active())startHand()});
+  applySkin();renderSkinShop();buildShoe();updateBet();render();persist();
+})();
+</script>
+
+
+<div class="rf-tour-modal" id="rfTourModal" aria-hidden="true">
+  <div class="rf-tour-dialog" role="dialog" aria-modal="true" aria-label="Royal Flush tournaments">
+    <div class="rf-tour-head">
+      <div><div class="rf-tour-kicker">ROYAL FLUSH CASINO · COMPETITIVE SERIES</div><h2 class="rf-tour-title">ROYAL TOURNAMENTS</h2><p class="rf-tour-sub">Enter an eight-player bracket, play real hands at the table, and fight your way to the final.</p></div>
+      <button class="rf-tour-close" id="rfTourClose" type="button" aria-label="Close tournaments">×</button>
+    </div>
+    <div id="rfTourContent"></div>
+  </div>
+</div>
+
+
+<script>
+/* ===== ROYAL FLUSH · TOURNAMENT MANAGER ===== */
+(()=>{
+  const $=id=>document.getElementById(id);
+  const STORE='rf_tournament_career_v1';
+  const money=n=>Math.max(0,Math.floor(Number(n)||0)).toLocaleString('en-US');
+  const ordinal=n=>n===1?'1st':n===2?'2nd':n===3?'3rd':`${n}th`;
+  const ROUND_NAMES=['QUARTER-FINAL','SEMI-FINAL','GRAND FINAL'];
+  const NAMES=['Viktor “The Shark”','Maya “Queen”','Ace Dalton','The Professor','Ruby Blaze','Noah “River”','Silk'];
+  const EVENTS={
+    poker:{id:'poker',name:'Royal Hold’em Open',game:'poker',entry:500,desc:'A five-max poker table challenge. Win three hands before you lose three to advance.',symbol:'♠'},
+    blackjack:{id:'blackjack',name:'Blackjack Masters',game:'blackjack',entry:300,desc:'A blackjack head-to-head series. Every completed hand counts toward your match score.',symbol:'♣'}
+  };
+  const fresh=()=>({credits:5000,played:0,titles:0,finals:0,semis:0,history:[],active:null,lastResult:null});
+  const load=()=>{try{const x=JSON.parse(localStorage.getItem(STORE)||'null');if(!x||typeof x!=='object')return fresh();return {...fresh(),...x}}catch(e){return fresh()}};
+  let D=load();
+  const save=()=>{try{localStorage.setItem(STORE,JSON.stringify(D))}catch(e){}};
+  const active=()=>D.active&&D.active.status==='active'?D.active:null;
+  const currentRound=t=>t.rounds[t.rounds.length-1];
+  const currentOpponent=t=>{const r=currentRound(t);return r.players[t.slot^1]||'Unknown rival'};
+  const isBusy=()=>{
+    const inBJ=document.body.classList.contains('bj-mode');
+    if(inBJ)return !$('bjActionPanel').hidden;
+    return $('bDeal').classList.contains('hidden');
+  };
+  const setMode=game=>{
+    const wantsBJ=game==='blackjack';
+    const isBJ=document.body.classList.contains('bj-mode');
+    if(wantsBJ!==isBJ)$('modeToggle').click();
+  };
+  const open=()=>{$('rfTourModal').classList.add('open');$('rfTourModal').setAttribute('aria-hidden','false');render()};
+  const close=()=>{$('rfTourModal').classList.remove('open');$('rfTourModal').setAttribute('aria-hidden','true')};
+  const currentName=t=>ROUND_NAMES[t.roundIndex]||'TOURNAMENT';
+  const setButton=()=>{
+    const t=active(),b=$('rfTourOpen');
+    if(!t){b.textContent='♛ Tournaments';return}
+    const r=currentRound(t),s=t.score;
+    const short=t.roundIndex===0?'QF':t.roundIndex===1?'SF':'FINAL';
+    b.textContent=`♛ LIVE · ${short} ${s.wins}-${s.losses}`;
+  };
+  const buildRound=(t,players,slot)=>{
+    const matches=Math.ceil(players.length/2),winners=Array(matches).fill(null);
+    const matchIndex=Math.floor(slot/2);
+    for(let i=0;i<matches;i++){
+      if(i===matchIndex)continue;
+      const a=players[i*2],b=players[i*2+1];
+      winners[i]=Math.random()<.5?a:b;
+    }
+    t.rounds.push({label:ROUND_NAMES[t.roundIndex],players:[...players],winners,userMatchIndex:matchIndex});
+    t.slot=slot;t.score={wins:0,losses:0,draws:0,hands:0};
+  };
+  const join=eventId=>{
+    const event=EVENTS[eventId];if(!event)return;
+    if(active()){render();return}
+    if(isBusy()){const node=$('rfTourNotice');if(node)node.textContent='Finish the current hand before joining a tournament.';return}
+    if(D.credits<event.entry){const node=$('rfTourNotice');if(node)node.textContent='Not enough Tournament Credits for this entry fee.';return}
+    D.credits-=event.entry;
+    const players=['You',...NAMES].sort(()=>Math.random()-.5);
+    const slot=players.indexOf('You');
+    const t={id:Date.now(),eventId,game:event.game,name:event.name,entry:event.entry,prizePool:event.entry*8,status:'active',roundIndex:0,slot,rounds:[],score:{wins:0,losses:0,draws:0,hands:0},startedAt:new Date().toISOString(),prize:0,place:null};
+    D.active=t;D.played++;buildRound(t,players,slot);save();setButton();
+    setMode(event.game);close();
+    const first=$('bDeal');
+    if(event.game==='poker'&&first&&!first.classList.contains('hidden'))first.click();
+    else if(event.game==='blackjack'){$('bjResult').textContent='Tournament match ready. Set your bet and deal your first hand.'}
+    toastMsg(`TOURNAMENT STARTED · ${event.name.toUpperCase()}`);
+  };
+  const toastMsg=msg=>{const e=$('toast');if(e){e.textContent=msg;e.classList.remove('go');void e.offsetWidth;e.classList.add('go')}else{const s=$('status');if(s)s.textContent=msg}};
+  const finish=(won)=>{
+    const t=active();if(!t)return;
+    const r=currentRound(t),idx=r.userMatchIndex,opponent=r.players[t.slot^1];
+    r.winners[idx]=won?'You':opponent;
+    r.userWon=!!won;
+    if(won){
+      if(t.roundIndex===2){
+        t.status='champion';t.place=1;t.prize=Math.floor(t.prizePool*.60);D.credits+=t.prize;D.titles++;D.finals++;
+        D.lastResult={name:t.name,place:1,prize:t.prize,date:new Date().toLocaleDateString()};
+        D.history.unshift(D.lastResult);D.history=D.history.slice(0,8);D.active=null;save();setButton();open();return;
+      }
+      const nextPlayers=r.winners.slice();
+      t.roundIndex++;const nextSlot=idx;
+      buildRound(t,nextPlayers,nextSlot);save();setButton();open();return;
+    }
+    const completedRound=t.roundIndex;
+    if(completedRound===0){t.place=Math.floor(Math.random()*4)+5;t.prize=0}
+    else if(completedRound===1){t.place=Math.random()<.5?3:4;t.prize=Math.floor(t.prizePool*(t.place===3?.10:.05));D.credits+=t.prize;D.semis++}
+    else{t.place=2;t.prize=Math.floor(t.prizePool*.25);D.credits+=t.prize;D.finals++}
+    t.status='eliminated';
+    D.lastResult={name:t.name,place:t.place,prize:t.prize,date:new Date().toLocaleDateString()};
+    D.history.unshift(D.lastResult);D.history=D.history.slice(0,8);D.active=null;save();setButton();open();
+  };
+  const addResult=result=>{
+    const t=active();if(!t)return;
+    if(t.game!==(result.game||t.game))return;
+    if(t.game==='blackjack'&&result.source!=='blackjack')return;
+    if(t.game==='poker'&&result.source!=='poker')return;
+    if(!['win','loss','draw'].includes(result.outcome))return;
+    const suddenDeath=!!t.score.suddenDeath;
+    t.score.hands++;
+    if(result.outcome==='win')t.score.wins++;
+    else if(result.outcome==='loss')t.score.losses++;
+    else t.score.draws++;
+    save();setButton();
+    if(suddenDeath){if(result.outcome!=='draw')finish(result.outcome==='win');else if($('rfTourModal').classList.contains('open'))render();return}
+    if(t.score.wins>=3||t.score.losses>=3){finish(t.score.wins>t.score.losses)}
+    else if(t.score.hands>=9){
+      if(t.score.wins===t.score.losses){t.score.suddenDeath=true;save();setButton();if($('rfTourModal').classList.contains('open'))render()}
+      else finish(t.score.wins>t.score.losses);
+    }else if($('rfTourModal').classList.contains('open'))render();
+  };
+  window.rfTournamentPokerResult=outcome=>addResult({source:'poker',game:'poker',outcome});
+  window.rfTournamentBJResult=outcome=>addResult({source:'blackjack',game:'blackjack',outcome});
+  const bracketHTML=t=>{
+    return t.rounds.map((r,ri)=>{
+      const matches=[];
+      for(let i=0;i<r.players.length;i+=2){
+        const mi=i/2,one=r.players[i],two=r.players[i+1],winner=r.winners[mi];
+        const current=ri===t.rounds.length-1&&mi===r.userMatchIndex;
+        const label=winner?`Winner: ${winner}`:current?`LIVE · ${t.score.wins}-${t.score.losses}`:'Awaiting result';
+        matches.push(`<div class="rf-tour-match ${current?'current':''} ${winner?'done':''}"><b>${one}</b><small>vs ${two}</small><em>${label}</em></div>`);
+      }
+      return `<div class="rf-tour-round"><h4>${r.label}</h4>${matches.join('')}</div>`;
+    }).join('');
+  };
+  const resultHTML=()=>{
+    const x=D.lastResult;if(!x)return '';
+    const title=x.place===1?'CHAMPION':x.place===2?'RUNNER-UP':x.place<=4?'SEMI-FINALIST':'TOURNAMENT FINISHED';
+    return `<div class="rf-tour-result"><strong>${title}</strong><p>${x.name} · ${ordinal(x.place)} place · ${x.prize?`Prize: ${money(x.prize)} Tournament Credits`:'No prize this time'}</p></div>`;
+  };
+  const renderActive=t=>{
+    const r=currentRound(t),op=currentOpponent(t),score=t.score,need=3;
+    const progress=Math.min(100,Math.max(score.wins,score.losses)/need*100);
+    const desc=t.game==='poker'?'Play hands at the Poker table. A sole pot win scores a match point; split pots count as draws.':'Play hands at the Blackjack table. A round win scores a point; split-hand rounds are judged by the combined result.';
+    return `<div class="rf-tour-live"><div class="rf-tour-live-top"><h3>${t.name}</h3><span class="rf-tour-pill">${r.label} · ${score.suddenDeath?'SUDDEN DEATH':'MATCH IN PROGRESS'}</span></div><div class="rf-tour-matchup"><div class="rf-tour-player you"><small>YOUR SEAT</small><b>You</b></div><div class="rf-tour-vs">VS</div><div class="rf-tour-player"><small>OPPONENT</small><b>${op}</b></div></div><div class="rf-tour-score">${score.wins} WINS · ${score.losses} LOSSES · ${score.draws} DRAWS</div><div class="rf-tour-progress"><i style="width:${progress}%"></i></div><p class="rf-tour-note">First to 3 wins advances. First to 3 losses is eliminated. Draws do not count; if the score is still tied after 9 hands, the next non-drawn hand is sudden death. ${desc}</p><div class="rf-tour-footer"><span class="rf-tour-note">Entry: ${money(t.entry)} · Prize pool: ${money(t.prizePool)} credits</span><button class="rf-tour-primary" id="rfTourContinue">RETURN TO TABLE</button></div></div><div class="rf-tour-section-title">THE BRACKET</div><div class="rf-tour-bracket">${bracketHTML(t)}</div>`;
+  };
+  const renderLobby=()=>{
+    const cards=Object.values(EVENTS).map(e=>`<article class="rf-tour-event" data-symbol="${e.symbol}"><h3>${e.name}</h3><p>${e.desc}</p><div class="rf-tour-event-meta"><div><small>Entry</small><b>${money(e.entry)}</b></div><div><small>Prize pool</small><b>${money(e.entry*8)}</b></div><div><small>Players</small><b>8</b></div></div><button class="rf-tour-primary" data-join="${e.id}" ${D.credits<e.entry?'disabled':''}>ENTER EVENT · ${money(e.entry)}</button></article>`).join('');
+    const hist=D.history.length?`<div class="rf-tour-history">${D.history.slice(0,5).map(x=>`<div class="rf-tour-history-row"><span>${x.name} · ${x.date}</span><b>${x.place===1?'🏆 CHAMPION':ordinal(x.place).toUpperCase()+' PLACE'} · ${money(x.prize)} credits</b></div>`).join('')}</div>`:'<p class="rf-tour-note">No tournament finishes yet. Your first trophy is waiting.</p>';
+    return `${resultHTML()}<div class="rf-tour-wallet"><div class="rf-tour-stat"><span>TOURNAMENT CREDITS</span><strong>${money(D.credits)}</strong></div><div class="rf-tour-stat"><span>EVENTS PLAYED</span><strong>${money(D.played)}</strong></div><div class="rf-tour-stat"><span>CHAMPIONSHIPS</span><strong>${money(D.titles)}</strong></div><div class="rf-tour-stat"><span>FINAL TABLES</span><strong>${money(D.finals)}</strong></div></div><div class="rf-tour-section-title">CHOOSE YOUR EVENT</div><div class="rf-tour-events">${cards}</div><p class="rf-tour-note" id="rfTourNotice">Tournament Credits are separate from your regular poker and blackjack stacks. All credits and prizes are virtual, have no cash value, and cannot be purchased or withdrawn. The prize pool is shared: 60% champion, 25% runner-up, 10% third, 5% fourth.</p><div class="rf-tour-section-title">HALL OF FAME · RECENT FINISHES</div>${hist}`;
+  };
+  const render=()=>{
+    const t=active(),host=$('rfTourContent');
+    host.innerHTML=t?`${renderActive(t)}<div class="rf-tour-footer"><span class="rf-tour-note">Tournament progress is saved on this device.</span><button class="rf-tour-secondary" id="rfTourCloseLive">CLOSE</button></div>`:renderLobby();
+    host.querySelectorAll('[data-join]').forEach(b=>b.addEventListener('click',()=>join(b.dataset.join)));
+    const c=$('rfTourContinue');if(c)c.addEventListener('click',()=>{setMode(t.game);close()});
+    const closeLive=$('rfTourCloseLive');if(closeLive)closeLive.addEventListener('click',close);
+  };
+  $('rfTourOpen').addEventListener('click',open);
+  $('rfTourClose').addEventListener('click',close);
+  $('rfTourModal').addEventListener('click',e=>{if(e.target===$('rfTourModal'))close()});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+  setButton();save();
 })();
 </script>
 
