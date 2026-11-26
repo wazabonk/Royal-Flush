@@ -538,6 +538,140 @@ body.bj-mode .rf-tour-open{background:linear-gradient(180deg,#315c49,#123b2b)}
 }
 </style>
 
+
+<style id="royal-roulette-styles">
+/* ===== ROYAL FLUSH · ROYAL ROULETTE ===== */
+.rf-roulette-toggle{padding:9px 14px;border-radius:99px;font-size:10px;letter-spacing:.1em;color:#f8edc9;background:linear-gradient(180deg,#4b2638,#24111f);border:1px solid rgba(231,111,143,.55);white-space:nowrap;box-shadow:0 6px 18px rgba(0,0,0,.23);cursor:pointer}
+.rf-roulette-toggle:hover{border-color:#ffb2c7;filter:brightness(1.1)}
+body.roulette-mode .rf-roulette-toggle{background:linear-gradient(180deg,#f5d88d,#ae7d28);color:#211906;border-color:#fff0bd}
+body.roulette-mode .table,body.roulette-mode>.controls,body.roulette-mode .bj-shell{display:none!important}
+body.roulette-mode .rr-shell{display:block}
+.rr-shell{display:none;width:min(1120px,96vw);padding:12px 0 38px;z-index:2;color:#f4efe2}
+.rr-hero{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 10px 20px}
+.rr-kicker{font-size:9px;letter-spacing:.23em;color:#e9c46a;font-weight:800}.rr-kicker span{padding:0 5px;opacity:.5}
+.rr-hero h1{font:900 clamp(28px,5vw,48px)/1.1 'Cinzel',serif;letter-spacing:.08em;color:#fff0d3;margin:8px 0 5px}.rr-hero h1 em{font-style:normal;color:#e9c46a}
+.rr-hero p{font-size:11px;opacity:.62;line-height:1.5}
+.rr-bank-card{min-width:190px;padding:12px 16px;border-radius:16px;text-align:right;background:linear-gradient(145deg,rgba(233,196,106,.16),rgba(255,255,255,.035));border:1px solid rgba(233,196,106,.33)}
+.rr-bank-card span,.rr-bank-card small{display:block;font-size:8px;letter-spacing:.15em;opacity:.6}.rr-bank-card strong{display:block;font:700 27px 'Cinzel',serif;color:#f5d88d;margin:3px 0;font-variant-numeric:tabular-nums}
+.rr-main{display:grid;grid-template-columns:minmax(270px,.84fr) minmax(0,1.35fr);gap:14px;align-items:start}
+.rr-wheel-card,.rr-play-card,.rr-info-card{border-radius:21px;border:1px solid rgba(233,196,106,.2);background:linear-gradient(145deg,rgba(255,255,255,.065),rgba(255,255,255,.018));box-shadow:0 14px 38px rgba(0,0,0,.26);min-width:0}
+.rr-wheel-card{padding:17px 15px}.rr-wheel-top{display:flex;justify-content:space-between;gap:8px;color:#d8c38e;font-size:8px;letter-spacing:.14em;font-weight:800}.rr-wheel-top span:last-child{opacity:.52}
+.rr-wheel-stage{width:min(100%,310px);aspect-ratio:1;margin:16px auto 13px;position:relative;display:grid;place-items:center}
+.rr-wheel-disc{width:88%;height:88%;border-radius:50%;position:relative;border:8px solid #7c5518;background:repeating-conic-gradient(from -4.86deg,#0d6a43 0deg 9.7297deg,#ad1e32 9.7297deg 19.4594deg,#171a20 19.4594deg 29.1891deg);box-shadow:0 0 0 3px #d6b35c,0 10px 27px rgba(0,0,0,.55),inset 0 0 0 3px rgba(255,237,180,.3);transition:transform 3.15s cubic-bezier(.08,.72,.08,1);will-change:transform}
+.rr-wheel-disc:before{content:"";position:absolute;inset:10%;border-radius:50%;border:2px solid rgba(255,229,160,.65);box-shadow:inset 0 0 0 3px rgba(0,0,0,.25)}
+.rr-wheel-numbers{position:absolute;inset:0;border-radius:50%}
+.rr-wheel-number{position:absolute;left:50%;top:50%;width:19px;height:19px;display:grid;place-items:center;border-radius:50%;font-size:8px;font-weight:900;color:#fff7dc;text-shadow:0 1px 2px #000;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.18)}
+.rr-wheel-number.red{background:#a91b2e}.rr-wheel-number.black{background:#101217}.rr-wheel-number.green{background:#087449}
+.rr-wheel-hub{position:absolute;inset:34%;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 35% 28%,#fff0b9,#b8860b 55%,#4c3008);border:4px solid #f7dfa0;box-shadow:0 5px 15px rgba(0,0,0,.6),inset 0 0 0 2px rgba(70,41,0,.55);color:#2c1c06;z-index:2}
+.rr-wheel-hub small{font-size:7px;letter-spacing:.2em;font-weight:900}.rr-wheel-hub b{font:900 clamp(24px,5vw,36px) 'Cinzel',serif;line-height:1.1}.rr-wheel-hub span{font-size:6px;letter-spacing:.16em;font-weight:900}
+.rr-pointer{position:absolute;top:-1px;left:50%;transform:translateX(-50%);z-index:4;width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:22px solid #ffe7a2;filter:drop-shadow(0 2px 3px #000)}
+.rr-last-result{display:flex;align-items:center;gap:11px;border-radius:13px;padding:10px;background:rgba(0,0,0,.24);border:1px solid rgba(255,255,255,.07)}
+.rr-result-number{width:42px;height:42px;flex:none;display:grid;place-items:center;border-radius:10px;font:800 20px 'Cinzel',serif;color:#fff}.rr-result-number.red{background:#aa1c31}.rr-result-number.black{background:#11151c;border:1px solid #50545b}.rr-result-number.green{background:#087449}
+.rr-last-result b{display:block;font-size:9px;letter-spacing:.14em;color:#f6df9d}.rr-last-result small{display:block;font-size:9px;opacity:.59;margin-top:4px;line-height:1.4}
+.rr-history-wrap{margin-top:13px}.rr-history-wrap>span{font-size:8px;letter-spacing:.16em;color:#c8b47e;font-weight:800}.rr-history{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px;min-height:25px}.rr-history-pill{min-width:25px;height:25px;border-radius:6px;display:grid;place-items:center;font-size:9px;font-weight:800;color:#fff}.rr-history-pill.red{background:#a91b2e}.rr-history-pill.black{background:#151920;border:1px solid #4a4e55}.rr-history-pill.green{background:#087449}
+.rr-play-card{padding:16px}.rr-play-head{display:flex;align-items:center;justify-content:space-between;gap:9px;margin-bottom:13px}.rr-play-head b{display:block;font:700 15px 'Cinzel',serif;color:#f5dfa2}.rr-play-head small{display:block;font-size:9px;opacity:.56;margin-top:4px}.rr-round-tag{font-size:8px;letter-spacing:.12em;padding:6px 9px;border-radius:99px;background:rgba(233,196,106,.1);border:1px solid rgba(233,196,106,.25);color:#e9c46a;white-space:nowrap}
+.rr-chip-picker{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:13px}.rr-chip-choice{min-width:58px;display:flex;align-items:center;justify-content:center;gap:6px;padding:7px 9px;border-radius:10px;color:#f5e8c5;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.09);cursor:pointer;font-size:10px}.rr-chip-choice.selected{border-color:#e9c46a;background:rgba(233,196,106,.14);box-shadow:0 0 0 1px rgba(233,196,106,.2)}
+.rr-chip-icon{width:17px;height:17px;border-radius:50%;border:2px dashed rgba(255,255,255,.82);box-shadow:inset 0 0 0 2px rgba(0,0,0,.2);display:block}.rr-chip-icon.blue{background:#2a6fdb}.rr-chip-icon.red{background:#c1121f}.rr-chip-icon.black{background:#222}.rr-chip-icon.purple{background:#7b2cbf}.rr-chip-icon.gold{background:#d5a92e}
+.rr-betting-layout{padding:10px;border-radius:13px;background:linear-gradient(145deg,#0b573b,#06311f);border:1px solid rgba(233,196,106,.22)}
+.rr-zero-row{display:flex;justify-content:center;margin-bottom:6px}.rr-bet-spot{min-width:0;min-height:36px;padding:5px 4px;border:1px solid rgba(255,255,255,.22);border-radius:5px;color:#fff8e8;background:rgba(11,28,23,.75);font-size:10px;font-weight:900;letter-spacing:.04em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;position:relative;transition:background .12s,border-color .12s}
+.rr-bet-spot small{font-size:7px;opacity:.6;font-weight:600}.rr-bet-spot:active{transform:scale(.97)}.rr-bet-spot.has-bet{border-color:#ffdf82;box-shadow:inset 0 0 0 1px rgba(255,223,130,.3);background:rgba(129,95,24,.55)}
+.rr-zero{width:100%;max-width:100%;min-height:31px;background:#087449;border-color:#45b58a}
+.rr-number-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}.rr-number{height:34px;display:flex;flex-direction:column;gap:0}.rr-number.red{background:#a51c30}.rr-number.black{background:#171a20}.rr-number.green{background:#087449}.rr-number small{font-size:7px;opacity:.68}.rr-dozens{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;margin-top:6px}.rr-outside{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;margin-top:6px}.rr-outside .rr-bet-spot{min-height:42px;flex-direction:column;gap:1px;font-size:8px}.rr-red-bet{background:#9f2031}.rr-black-bet{background:#141820}
+.rr-slip{margin-top:13px;padding:12px;border-radius:13px;background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.075)}.rr-slip-head{display:flex;align-items:center;gap:9px}.rr-slip-head b{font-size:9px;letter-spacing:.13em;color:#dec98f}.rr-slip-head span{font-size:8px;opacity:.55;margin-left:auto}.rr-slip-head button{padding:5px 7px;border-radius:6px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#e6cc8c;font-size:7px;letter-spacing:.08em;cursor:pointer}
+.rr-slip-list{display:grid;gap:5px;max-height:128px;overflow:auto;margin:9px 0}.rr-slip-list>p{font-size:9px;opacity:.48;padding:8px 2px}.rr-slip-row{display:flex;align-items:center;gap:7px;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,.035);font-size:9px}.rr-slip-row span{opacity:.75;flex:1}.rr-slip-row b{color:#f2d98e;font-variant-numeric:tabular-nums}.rr-slip-row button{border:0;background:transparent;color:#ff9c9c;font-size:13px;padding:0 3px;cursor:pointer}
+.rr-slip-total{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-top:1px solid rgba(255,255,255,.08);color:#c7b98f;font-size:8px;letter-spacing:.14em}.rr-slip-total strong{font:700 18px 'Cinzel',serif;color:#f3d98f}
+.rr-slip-actions{display:grid;grid-template-columns:1fr 1.3fr;gap:7px}.rr-all-in,.rr-spin-btn{border:0;border-radius:9px;padding:12px 8px;font-size:8px;letter-spacing:.1em;font-weight:900;cursor:pointer}.rr-all-in{color:#eedda9;background:rgba(255,255,255,.06);border:1px solid rgba(233,196,106,.25)}.rr-spin-btn{color:#1d1607;background:linear-gradient(180deg,#fff0bd,#e9c46a 62%,#b8860b);box-shadow:0 5px 14px rgba(0,0,0,.24)}.rr-spin-btn:disabled{opacity:.34;cursor:not-allowed}.rr-spin-btn span{font-size:13px;margin-left:5px}.rr-feedback{font-size:8px;opacity:.56;line-height:1.5;margin-top:9px;min-height:13px}
+.rr-bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:14px}.rr-info-card{padding:15px}.rr-info-title{font:700 13px 'Cinzel',serif;color:#f0d99b;margin-bottom:12px}.rr-payout-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.rr-payout-grid>div{padding:10px;border-radius:9px;background:rgba(0,0,0,.2)}.rr-payout-grid b{display:block;color:#f3d78c;font:700 17px 'Cinzel',serif}.rr-payout-grid span{display:block;font-size:8px;opacity:.55;margin-top:4px;line-height:1.4}.rr-info-card>p{font-size:8px;opacity:.5;line-height:1.55;margin-top:11px}.rr-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.rr-stats>div{padding:9px 5px;border-radius:9px;text-align:center;background:rgba(0,0,0,.2)}.rr-stats strong{display:block;font:700 17px 'Cinzel',serif;color:#f2d88f;overflow-wrap:anywhere}.rr-stats small{display:block;font-size:7px;letter-spacing:.1em;opacity:.55;margin-top:4px}.rr-refill{margin-top:11px;padding:8px 10px;border-radius:8px;border:1px solid rgba(233,196,106,.35);background:rgba(233,196,106,.09);color:#f1dda6;font-size:8px;font-weight:800;letter-spacing:.08em;cursor:pointer}
+@media(max-width:820px){.rr-main{grid-template-columns:1fr}.rr-wheel-card{display:grid;grid-template-columns:minmax(210px,.85fr) minmax(0,1.15fr);gap:0 12px;align-items:center}.rr-wheel-top{grid-column:1/-1}.rr-wheel-stage{grid-row:2/4;margin:10px auto;width:min(100%,255px)}.rr-last-result{margin-top:8px}.rr-history-wrap{align-self:start}.rr-play-card{padding:13px}}
+@media(max-width:560px){.hud{gap:6px}.rf-roulette-toggle{padding:8px 9px;font-size:8px}.rr-hero{align-items:flex-start;flex-direction:column}.rr-bank-card{width:100%;text-align:left;min-width:0}.rr-wheel-card{display:block}.rr-wheel-stage{width:min(75vw,265px);margin:14px auto}.rr-main{gap:10px}.rr-outside{grid-template-columns:repeat(3,minmax(0,1fr))}.rr-outside .rr-bet-spot{min-height:36px;font-size:9px}.rr-number{height:35px}.rr-slip-actions{grid-template-columns:1fr 1.2fr}.rr-bottom-grid{grid-template-columns:1fr}.rr-stats{grid-template-columns:repeat(4,1fr)}.rr-stats strong{font-size:15px}.rr-wheel-number{width:17px;height:17px;font-size:7px}}
+@media(prefers-reduced-motion:reduce){.rr-wheel-disc{transition-duration:.01ms!important}.rr-bet-spot{transition:none!important}}
+body.roulette-mode .rf-tour-open{background:linear-gradient(180deg,#452b3d,#201522)}
+</style>
+
+
+<style id="rf-ultimate-styles">
+/* ===== ROYAL FLUSH · ULTIMATE EXPANSION ===== */
+.hud{flex-wrap:wrap;gap:7px}
+.rf-baccarat-toggle,.rf-dice-toggle{padding:9px 13px;border-radius:99px;font-size:10px;letter-spacing:.08em;white-space:nowrap;cursor:pointer;color:#f7edcf;border:1px solid rgba(233,196,106,.42);box-shadow:0 5px 16px rgba(0,0,0,.2);transition:filter .18s,border-color .18s}
+.rf-baccarat-toggle{background:linear-gradient(180deg,#285c58,#12302f)}
+.rf-dice-toggle{background:linear-gradient(180deg,#4e3d70,#211a38)}
+.rf-baccarat-toggle:hover,.rf-dice-toggle:hover{filter:brightness(1.14);border-color:#f4d98c}
+body.baccarat-mode .rf-baccarat-toggle{background:linear-gradient(180deg,#f2d78d,#a98037);color:#211b0c}
+body.dice-mode .rf-dice-toggle{background:linear-gradient(180deg,#f2d78d,#a98037);color:#211b0c}
+body.baccarat-mode .table,body.baccarat-mode>.controls,body.baccarat-mode .bj-shell,body.baccarat-mode .rr-shell,
+body.dice-mode .table,body.dice-mode>.controls,body.dice-mode .bj-shell,body.dice-mode .rr-shell{display:none!important}
+body.baccarat-mode .rf-baccarat-shell,body.dice-mode .rf-dice-shell{display:block}
+.rf-baccarat-shell,.rf-dice-shell{display:none;width:min(1120px,96vw);padding:12px 0 42px;z-index:2;color:#f4efe2}
+.rfu-hero{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:12px 10px 20px}
+.rfu-kicker{font-size:9px;letter-spacing:.24em;font-weight:800;color:#e9c46a;text-transform:uppercase}
+.rfu-hero h1{font:900 clamp(28px,5vw,47px)/1.1 'Cinzel',serif;letter-spacing:.075em;color:#fff2d4;margin:8px 0 5px}
+.rfu-hero h1 em{font-style:normal;color:#e9c46a}
+.rfu-hero p{font-size:11px;line-height:1.6;opacity:.65;max-width:590px}
+.rfu-wallet{min-width:178px;padding:13px 16px;border-radius:17px;text-align:right;background:linear-gradient(145deg,rgba(233,196,106,.16),rgba(255,255,255,.035));border:1px solid rgba(233,196,106,.34)}
+.rfu-wallet span,.rfu-wallet small{display:block;font-size:8px;letter-spacing:.16em;opacity:.62}.rfu-wallet strong{display:block;font:700 27px 'Cinzel',serif;color:#f5d88d;margin:3px 0;font-variant-numeric:tabular-nums}
+.rfu-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:0 10px 14px}
+.rfu-stat{padding:11px 13px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.035);border-radius:13px;min-width:0}
+.rfu-stat span{display:block;font-size:8px;letter-spacing:.14em;opacity:.58;text-transform:uppercase}.rfu-stat b{display:block;font:700 19px 'Cinzel',serif;color:#f5d98e;margin-top:5px;overflow-wrap:anywhere}
+.rfu-panel{border:1px solid rgba(233,196,106,.2);background:linear-gradient(145deg,rgba(23,35,34,.96),rgba(10,15,20,.98));border-radius:21px;box-shadow:0 15px 45px rgba(0,0,0,.26);overflow:hidden}
+.rfu-panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 17px;border-bottom:1px solid rgba(255,255,255,.08);font-size:9px;letter-spacing:.17em;color:#e9d69e;font-weight:800}
+.rfu-back{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:#f5eacb;border-radius:99px;padding:8px 12px;font-size:9px;cursor:pointer}
+.rfu-bac-layout{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);gap:14px;margin:0 10px;align-items:start}
+.rfu-bac-table{padding:20px;background:radial-gradient(ellipse at 50% 48%,rgba(26,104,83,.5),rgba(7,41,34,.92) 65%,#081b19);border:1px solid rgba(210,184,110,.28);border-radius:20px;min-height:390px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
+.rfu-bac-zone{padding:13px;border:1px solid rgba(255,255,255,.1);background:rgba(0,0,0,.13);border-radius:15px;min-height:116px}
+.rfu-bac-zone-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;font-size:9px;letter-spacing:.14em;color:#e9d69e;font-weight:800}
+.rfu-bac-zone-top small{font-size:9px;opacity:.62;letter-spacing:.05em}
+.rfu-cards{display:flex;gap:9px;align-items:center;min-height:76px;flex-wrap:wrap}
+.rfu-card{width:53px;height:76px;border-radius:8px;background:linear-gradient(145deg,#fffdf5,#e9e3d5);color:#161820;box-shadow:0 5px 12px rgba(0,0,0,.25);display:flex;flex-direction:column;justify-content:space-between;padding:6px 7px;font:700 16px Georgia,serif;animation:rfuCardIn .22s ease-out}
+.rfu-card.red{color:#c52c3b}.rfu-card .suit{font-size:20px;align-self:flex-end;line-height:1}
+@keyframes rfuCardIn{from{opacity:0;transform:translateY(8px) rotate(2deg)}to{opacity:1;transform:translateY(0) rotate(0)}}
+.rfu-bac-mid{text-align:center;color:#f4d98d;font:700 13px 'Cinzel',serif;letter-spacing:.16em;padding:4px}
+.rfu-bac-score{font:700 20px 'Cinzel',serif;color:#fff3d4}
+.rfu-result{padding:13px 15px;border:1px solid rgba(233,196,106,.22);background:rgba(233,196,106,.07);border-radius:13px;color:#f4e7c4;font-size:11px;line-height:1.55;min-height:48px}
+.rfu-controls{padding:16px;display:flex;flex-direction:column;gap:13px}
+.rfu-label{font-size:8px;letter-spacing:.16em;color:#cbbd95;font-weight:800;text-transform:uppercase}
+.rfu-side-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.rfu-side{min-height:72px;border-radius:13px;border:1px solid rgba(255,255,255,.11);background:rgba(255,255,255,.045);color:#f8f0dc;padding:9px 5px;cursor:pointer;font-weight:800;font-size:10px;letter-spacing:.08em}
+.rfu-side small{display:block;font-size:8px;opacity:.6;margin-top:6px;font-weight:500;letter-spacing:0}
+.rfu-side.selected{border-color:#e9c46a;background:linear-gradient(145deg,rgba(233,196,106,.2),rgba(233,196,106,.06));box-shadow:inset 0 0 0 1px rgba(233,196,106,.2)}
+.rfu-bet-input{display:flex;align-items:center;gap:7px}
+.rfu-bet-input input{width:100%;min-width:0;border:1px solid rgba(255,255,255,.13);border-radius:10px;background:#080d12;color:#f9e9c0;padding:12px;font:700 17px 'Cinzel',serif;text-align:center}
+.rfu-chip-row{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.rfu-chip{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);color:#f5e9ca;border-radius:9px;padding:9px 2px;font-size:9px;font-weight:800;cursor:pointer}
+.rfu-chip:active,.rfu-primary:active{transform:scale(.98)}
+.rfu-checks{display:flex;flex-wrap:wrap;gap:9px;color:#d7cba9;font-size:9px}
+.rfu-checks label{display:flex;gap:6px;align-items:center}
+.rfu-primary{border:1px solid rgba(255,241,191,.7);border-radius:12px;background:linear-gradient(180deg,#f3d98c,#b88631);color:#211907;font-weight:900;letter-spacing:.11em;padding:13px 15px;cursor:pointer;box-shadow:0 7px 18px rgba(0,0,0,.2)}
+.rfu-secondary{border:1px solid rgba(255,255,255,.13);border-radius:11px;background:rgba(255,255,255,.06);color:#f2e8ce;padding:10px 12px;font-size:9px;cursor:pointer}
+.rfu-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.rfu-footnote{font-size:9px;line-height:1.5;opacity:.48}
+.rfu-history{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
+.rfu-history-pill{font-size:8px;padding:6px 8px;border-radius:99px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.08);color:#e7ddc3}
+.rfu-dice-layout{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr);gap:14px;margin:0 10px;align-items:start}
+.rfu-dice-arena{padding:22px;border-radius:20px;border:1px solid rgba(233,196,106,.25);background:radial-gradient(ellipse at 50% 45%,rgba(79,59,124,.5),rgba(24,19,43,.96) 65%,#100e1c);min-height:390px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:17px}
+.rfu-dice-label{font-size:9px;letter-spacing:.2em;color:#e9d69e;font-weight:800}
+.rfu-dice-pair{display:flex;gap:clamp(12px,4vw,27px);justify-content:center;align-items:center;min-height:135px}
+.rfu-die{width:clamp(75px,12vw,106px);height:clamp(75px,12vw,106px);border-radius:18px;background:linear-gradient(145deg,#fffef7,#d9d2c4);box-shadow:0 12px 24px rgba(0,0,0,.34),inset 0 2px 3px rgba(255,255,255,.9);display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);padding:13px;gap:3px;transform:rotate(-3deg)}
+.rfu-die:nth-child(2){transform:rotate(4deg)}.rfu-die.rolling{animation:rfuDiceRoll .4s ease-in-out 2}
+@keyframes rfuDiceRoll{0%{transform:rotate(-8deg) translateY(0)}35%{transform:rotate(12deg) translateY(-12px)}70%{transform:rotate(-14deg) translateY(3px)}100%{transform:rotate(0) translateY(0)}}
+.rfu-pip{width:100%;height:100%;border-radius:50%;background:transparent}.rfu-pip.on{background:#171923;box-shadow:inset 0 1px 2px rgba(0,0,0,.4)}
+.rfu-dice-total{font:900 clamp(32px,6vw,50px) 'Cinzel',serif;color:#f6d98d;text-shadow:0 4px 14px rgba(0,0,0,.3)}
+.rfu-predictions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.rfu-prediction{border:1px solid rgba(255,255,255,.12);border-radius:13px;background:rgba(255,255,255,.045);color:#f6efd9;padding:13px 10px;text-align:left;cursor:pointer;min-height:76px}
+.rfu-prediction b{display:block;font-size:11px;letter-spacing:.12em}.rfu-prediction small{display:block;font-size:9px;opacity:.58;margin-top:6px}.rfu-prediction.selected{border-color:#c8a4ff;background:linear-gradient(145deg,rgba(164,124,222,.23),rgba(164,124,222,.07));box-shadow:inset 0 0 0 1px rgba(164,124,222,.18)}
+.rfu-odds{font-size:9px;line-height:1.55;opacity:.55}
+.rfu-empty{font-size:10px;opacity:.45;padding:8px 0}
+.rfu-shell-bottom{margin:13px 10px 0;padding:14px 16px;border:1px solid rgba(255,255,255,.08);border-radius:15px;background:rgba(255,255,255,.025)}
+.rfu-shell-bottom h3{font:700 12px 'Cinzel',serif;color:#efd99a;margin-bottom:6px}
+.rfu-shell-bottom p{font-size:9px;line-height:1.6;opacity:.55}
+@media(max-width:760px){
+ .rfu-hero{align-items:flex-start;flex-direction:column}.rfu-wallet{width:100%;text-align:left}.rfu-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .rfu-bac-layout,.rfu-dice-layout{grid-template-columns:1fr}.rfu-bac-table,.rfu-dice-arena{min-height:0;padding:14px}.rfu-side{min-height:65px}.rfu-bac-zone{min-height:105px}.rfu-card{width:47px;height:67px}
+ .rfu-controls{padding:13px}.rfu-bac-layout,.rfu-dice-layout{margin:0 6px}.rfu-stats,.rfu-hero,.rfu-shell-bottom{margin-left:6px;margin-right:6px}
+}
+@media(max-width:420px){.rfu-chip-row{grid-template-columns:repeat(5,minmax(0,1fr))}.rfu-chip{font-size:8px}.rfu-wallet strong{font-size:23px}.rfu-panel-head{padding:12px}.rfu-die{padding:10px;gap:2px}}
+@media(hover:none){.rf-baccarat-toggle:hover,.rf-dice-toggle:hover{filter:none}}
+</style>
+
 </head>
 <body>
 
@@ -545,6 +679,9 @@ body.bj-mode .rf-tour-open{background:linear-gradient(180deg,#315c49,#123b2b)}
   <div class="logo">ROYAL FLUSH</div>
   <div class="blinds">5-Max · Blinds 10 / 20</div>
   <button class="mode-toggle" id="modeToggle" type="button">♣ Blackjack 21</button>
+  <button class="rf-roulette-toggle" id="rfRouletteToggle" type="button">◉ Royal Roulette</button>
+  <button class="rf-baccarat-toggle" id="rfBaccaratToggle" type="button">✦ Baccarat Royale</button>
+  <button class="rf-dice-toggle" id="rfDiceToggle" type="button">⚄ Crown Dice</button>
   <button class="rf-tour-open" id="rfTourOpen" type="button">♛ Tournaments</button>
 </header>
 
@@ -703,6 +840,90 @@ body.bj-mode .rf-tour-open{background:linear-gradient(180deg,#315c49,#123b2b)}
       </div>
       <div class="bj-history-title">RECENT RESULTS</div>
       <div class="bj-history" id="bjHistory"><span>No hands played yet.</span></div>
+    </div>
+  </div>
+</section>
+
+
+<section class="rr-shell" id="rrShell" aria-label="Royal Roulette table">
+  <div class="rr-hero">
+    <div>
+      <div class="rr-kicker">ROYAL FLUSH CASINO <span>•</span> EUROPEAN WHEEL</div>
+      <h1>ROYAL <em>ROULETTE</em></h1>
+      <p>Place your virtual chips, call your bets, and let the wheel decide.</p>
+    </div>
+    <div class="rr-bank-card">
+      <span>ROULETTE BANKROLL</span>
+      <strong id="rrBalance">5,000</strong>
+      <small>VIRTUAL CHIPS · NO CASH VALUE</small>
+    </div>
+  </div>
+
+  <div class="rr-main">
+    <div class="rr-wheel-card">
+      <div class="rr-wheel-top"><span>♛ THE GRAND WHEEL</span><span>37 NUMBERS · SINGLE ZERO</span></div>
+      <div class="rr-wheel-stage">
+        <div class="rr-pointer"></div>
+        <div class="rr-wheel-disc" id="rrWheelDisc" aria-label="European roulette wheel">
+          <div class="rr-wheel-numbers" id="rrWheelNumbers"></div>
+          <div class="rr-wheel-hub"><small>ROYAL</small><b id="rrHubNumber">0</b><span id="rrHubColor">GREEN</span></div>
+        </div>
+      </div>
+      <div class="rr-last-result" id="rrLastResult"><span class="rr-result-number green" id="rrResultNumber">0</span><div><b id="rrResultTitle">THE WHEEL IS READY</b><small id="rrResultDetail">Choose your chips and place a bet.</small></div></div>
+      <div class="rr-history-wrap"><span>RECENT NUMBERS</span><div class="rr-history" id="rrHistory"><small>No spins yet</small></div></div>
+    </div>
+
+    <div class="rr-play-card">
+      <div class="rr-play-head"><div><b>PLACE YOUR BETS</b><small>Tap a betting spot to add the selected chip.</small></div><span class="rr-round-tag" id="rrRoundTag">ROUND 01</span></div>
+      <div class="rr-chip-picker" id="rrChipPicker">
+        <button class="rr-chip-choice selected" data-chip="10" type="button"><i class="rr-chip-icon blue"></i><b>10</b></button>
+        <button class="rr-chip-choice" data-chip="50" type="button"><i class="rr-chip-icon red"></i><b>50</b></button>
+        <button class="rr-chip-choice" data-chip="100" type="button"><i class="rr-chip-icon black"></i><b>100</b></button>
+        <button class="rr-chip-choice" data-chip="500" type="button"><i class="rr-chip-icon purple"></i><b>500</b></button>
+        <button class="rr-chip-choice" data-chip="1000" type="button"><i class="rr-chip-icon gold"></i><b>1K</b></button>
+      </div>
+
+      <div class="rr-betting-layout">
+        <div class="rr-zero-row">
+          <button class="rr-bet-spot rr-zero" data-rr-type="number" data-rr-value="0" type="button"><b>0</b><small>35:1</small></button>
+        </div>
+        <div class="rr-number-grid" id="rrNumberGrid"></div>
+        <div class="rr-dozens">
+          <button class="rr-bet-spot" data-rr-type="dozen" data-rr-value="1" type="button">1ST 12 <small>2:1</small></button>
+          <button class="rr-bet-spot" data-rr-type="dozen" data-rr-value="2" type="button">2ND 12 <small>2:1</small></button>
+          <button class="rr-bet-spot" data-rr-type="dozen" data-rr-value="3" type="button">3RD 12 <small>2:1</small></button>
+        </div>
+        <div class="rr-outside">
+          <button class="rr-bet-spot rr-red-bet" data-rr-type="color" data-rr-value="red" type="button">RED <small>1:1</small></button>
+          <button class="rr-bet-spot rr-black-bet" data-rr-type="color" data-rr-value="black" type="button">BLACK <small>1:1</small></button>
+          <button class="rr-bet-spot" data-rr-type="parity" data-rr-value="even" type="button">EVEN <small>1:1</small></button>
+          <button class="rr-bet-spot" data-rr-type="parity" data-rr-value="odd" type="button">ODD <small>1:1</small></button>
+          <button class="rr-bet-spot" data-rr-type="range" data-rr-value="low" type="button">1–18 <small>1:1</small></button>
+          <button class="rr-bet-spot" data-rr-type="range" data-rr-value="high" type="button">19–36 <small>1:1</small></button>
+        </div>
+      </div>
+
+      <div class="rr-slip">
+        <div class="rr-slip-head"><b>YOUR BET SLIP</b><span id="rrBetCount">0 selections</span><button id="rrClearBets" type="button">CLEAR ALL</button></div>
+        <div class="rr-slip-list" id="rrBetList"><p>No bets placed. Tap a number or outside bet above.</p></div>
+        <div class="rr-slip-total"><span>TOTAL WAGER</span><strong id="rrTotalBet">0</strong></div>
+        <div class="rr-slip-actions">
+          <button class="rr-all-in" id="rrAllIn" type="button">ALL IN ON LAST SPOT</button>
+          <button class="rr-spin-btn" id="rrSpin" type="button" disabled>SPIN THE WHEEL <span>↗</span></button>
+        </div>
+        <p class="rr-feedback" id="rrFeedback" aria-live="polite">Select a chip, then tap one or more betting spots.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="rr-bottom-grid">
+    <div class="rr-info-card"><div class="rr-info-title">♜ PAYOUT GUIDE</div>
+      <div class="rr-payout-grid"><div><b>35:1</b><span>Straight number</span></div><div><b>2:1</b><span>Dozen</span></div><div><b>1:1</b><span>Red, black, odd, even, 1–18, 19–36</span></div></div>
+      <p>European roulette has one green zero. Payout figures show profit odds; winning bets also receive their original stake back. All chips are virtual and have no real-world value.</p>
+    </div>
+    <div class="rr-info-card"><div class="rr-info-title">✦ YOUR ROULETTE RECORD</div>
+      <div class="rr-stats"><div><strong id="rrStatSpins">0</strong><small>SPINS</small></div><div><strong id="rrStatWins">0</strong><small>WINNING ROUNDS</small></div><div><strong id="rrStatNet">0</strong><small>NET RESULT</small></div><div><strong id="rrStatBest">0</strong><small>BEST WIN</small></div></div>
+      <button class="rr-refill" id="rrRefill" type="button" hidden>RESTORE PRACTICE BANKROLL · +5,000</button>
     </div>
   </div>
 </section>
@@ -1354,7 +1575,36 @@ const sfx=(()=>{
     lose(){const t=now();
       tone(t,311,.5,{type:'triangle',f2:262,v:.1,w:.5});
       tone(t+.22,233,.7,{type:'triangle',f2:196,v:.1,w:.5})},
-    click(){const t=now();noise(t,.02,{f:5200,q:1.5,v:.08,w:0})}
+    click(){const t=now();noise(t,.02,{f:5200,q:1.5,v:.08,w:0})},
+    /* Roulette wheel: a soft mechanical roll with ticks that slow down with the wheel. */
+    rouletteSpin(ms=3000){
+      const t=now(),d=Math.min(4.2,Math.max(1.5,(Number(ms)||3000)/1000));
+      const osc=ctx.createOscillator(),filter=ctx.createBiquadFilter(),gain=ctx.createGain();
+      osc.type='sawtooth';filter.type='lowpass';
+      osc.frequency.setValueAtTime(108,t);osc.frequency.exponentialRampToValueAtTime(34,t+d);
+      filter.frequency.setValueAtTime(560,t);filter.frequency.exponentialRampToValueAtTime(145,t+d);
+      gain.gain.setValueAtTime(.0001,t);gain.gain.exponentialRampToValueAtTime(.075,t+.12);gain.gain.exponentialRampToValueAtTime(.0001,t+d);
+      osc.connect(filter);filter.connect(gain);send(gain,.12);osc.start(t);osc.stop(t+d+.05);
+      let elapsed=.035,i=0;
+      while(elapsed<d-.07&&i<90){
+        const p=elapsed/d,at=t+elapsed;
+        tone(at,1900-p*720,.022,{type:'triangle',v:.052*(1-p*.42),w:.04});
+        noise(at,.012,{type:'highpass',f:4500-p*1300,q:2,v:.052*(1-p*.38),w:.025});
+        elapsed+=.048+.17*p*p;i++;
+      }
+    },
+    rouletteStop(won=false){
+      const t=now();
+      tone(t,won?740:390,.11,{type:'triangle',f2:won?1040:280,v:.14,w:.22});
+      noise(t,.055,{type:'lowpass',f:1050,f2:260,v:.13,w:.12});
+      if(won){
+        [1046.5,1318.5,1568].forEach((f,i)=>tone(t+.12+i*.105,f,.32,{type:'triangle',v:.105,w:.4}));
+        for(let i=0;i<4;i++)clack(t+.18+i*.075,R(.45,.75));
+      }else{
+        tone(t+.13,294,.22,{type:'sine',f2:220,v:.09,w:.2});
+        tone(t+.24,196,.28,{type:'triangle',f2:155,v:.075,w:.16});
+      }
+    }
   };
 
   const api={};
@@ -2558,6 +2808,10 @@ const Studio=(()=>{
   const pokerLabel=document.querySelector('.blinds').textContent;
   modeButton.addEventListener('click',()=>{
     const goingBJ=!document.body.classList.contains('bj-mode');
+    if(document.body.classList.contains('roulette-mode')){
+      document.body.classList.remove('roulette-mode');
+      const rr=document.getElementById('rfRouletteToggle');if(rr)rr.textContent='◉ Royal Roulette';
+    }
     if(goingBJ&&!S.over){toast('Finish the current poker hand first.');return}
     if(!goingBJ&&active()){setResult('Finish this blackjack hand before switching tables.');return}
     document.body.classList.toggle('bj-mode',goingBJ);
@@ -2606,6 +2860,84 @@ const Studio=(()=>{
 </script>
 
 
+
+<section class="rf-baccarat-shell" id="rfBaccaratShell" aria-label="Baccarat Royale">
+  <div class="rfu-hero">
+    <div><div class="rfu-kicker">Royal Flush Casino · Classic Card Room</div><h1>BACCARAT <em>ROYALE</em></h1><p>Choose Player, Banker or Tie. The table applies the standard third-card rules automatically. Practice chips only, with no cash value.</p></div>
+    <div class="rfu-wallet"><span>BACCARAT BANKROLL</span><strong id="rfBacBalance">5,000</strong><small>VIRTUAL CHIPS · NO CASH VALUE</small></div>
+  </div>
+  <div class="rfu-stats">
+    <div class="rfu-stat"><span>Rounds played</span><b id="rfBacPlayed">0</b></div><div class="rfu-stat"><span>Winning rounds</span><b id="rfBacWins">0</b></div><div class="rfu-stat"><span>Net result</span><b id="rfBacProfit">0</b></div><div class="rfu-stat"><span>Best streak</span><b id="rfBacBest">0</b></div>
+  </div>
+  <div class="rfu-bac-layout">
+    <div class="rfu-bac-table">
+      <div class="rfu-bac-zone"><div class="rfu-bac-zone-top"><span>♛ BANKER</span><span class="rfu-bac-score" id="rfBacBankerScore">—</span></div><div class="rfu-cards" id="rfBacBankerCards"><span class="rfu-empty">Dealer cards appear here</span></div></div>
+      <div class="rfu-bac-mid">ROYAL BACCARAT <span style="opacity:.5">·</span> FIRST TO NINE
+        <div id="rfBacRoundResult" style="font:700 10px Inter,sans-serif;letter-spacing:.08em;margin-top:7px;opacity:.7">TABLE READY</div>
+      </div>
+      <div class="rfu-bac-zone"><div class="rfu-bac-zone-top"><span>♠ PLAYER</span><span class="rfu-bac-score" id="rfBacPlayerScore">—</span></div><div class="rfu-cards" id="rfBacPlayerCards"><span class="rfu-empty">Your cards appear here</span></div></div>
+      <div class="rfu-result" id="rfBacMessage">Choose a side, set your virtual wager and deal the first round.</div>
+      <div><div class="rfu-label">RECENT RESULTS</div><div class="rfu-history" id="rfBacHistory"><span class="rfu-empty">No rounds yet</span></div></div>
+    </div>
+    <div class="rfu-panel">
+      <div class="rfu-panel-head"><span>PLACE YOUR WAGER</span><button class="rfu-back" id="rfBacBack" type="button">↩ POKER LOBBY</button></div>
+      <div class="rfu-controls">
+        <div class="rfu-label">MAIN BET · CHOOSE ONE</div>
+        <div class="rfu-side-grid" id="rfBacSides">
+          <button class="rfu-side selected" data-bac-side="player" type="button">PLAYER<small>1 : 1</small></button>
+          <button class="rfu-side" data-bac-side="banker" type="button">BANKER<small>0.95 : 1</small></button>
+          <button class="rfu-side" data-bac-side="tie" type="button">TIE<small>8 : 1</small></button>
+        </div>
+        <div class="rfu-label">BET AMOUNT</div><div class="rfu-bet-input"><input id="rfBacBet" type="number" min="10" step="10" value="100" inputmode="numeric" aria-label="Baccarat bet amount"></div>
+        <div class="rfu-chip-row"><button class="rfu-chip" data-bac-add="10" type="button">+10</button><button class="rfu-chip" data-bac-add="50" type="button">+50</button><button class="rfu-chip" data-bac-add="100" type="button">+100</button><button class="rfu-chip" data-bac-add="500" type="button">+500</button><button class="rfu-chip" data-bac-add="1000" type="button">+1K</button></div>
+        <div class="rfu-checks"><label><input id="rfBacPlayerPair" type="checkbox"> Player Pair (+11:1)</label><label><input id="rfBacBankerPair" type="checkbox"> Banker Pair (+11:1)</label></div>
+        <div class="rfu-actions"><button class="rfu-secondary" id="rfBacQuarter" type="button">¼ BANKROLL</button><button class="rfu-secondary" id="rfBacAll" type="button">ALL IN</button></div>
+        <button class="rfu-primary" id="rfBacDeal" type="button">DEAL BACCARAT ↗</button>
+        <button class="rfu-secondary" id="rfBacRefill" type="button">RESTORE PRACTICE BANKROLL +5,000</button>
+        <p class="rfu-footnote">Payouts include the original stake. Banker wins pay 0.95:1 after a simulated 5% commission. Pair side bets pay 11:1. All chips are fictional and stay in this browser.</p>
+      </div>
+    </div>
+  </div>
+  <div class="rfu-shell-bottom"><h3>HOW BACCARAT WORKS</h3><p>Card values: A = 1, 2–9 = face value, 10/J/Q/K = 0. Only the last digit of the hand total counts. Player draws on 0–5 and stands on 6–7. Banker follows the standard third-card table. A natural 8 or 9 ends the draw.</p></div>
+</section>
+
+<section class="rf-dice-shell" id="rfDiceShell" aria-label="Crown Dice">
+  <div class="rfu-hero">
+    <div><div class="rfu-kicker">Royal Flush Casino · The Dice Lounge</div><h1>CROWN <em>DICE</em></h1><p>Two dice, four calls and one roll. Read the odds, pick a prediction and see whether the Crown is yours. Practice chips only, with no cash value.</p></div>
+    <div class="rfu-wallet"><span>DICE BANKROLL</span><strong id="rfDiceBalance">5,000</strong><small>VIRTUAL CHIPS · NO CASH VALUE</small></div>
+  </div>
+  <div class="rfu-stats">
+    <div class="rfu-stat"><span>Rolls played</span><b id="rfDicePlayed">0</b></div><div class="rfu-stat"><span>Winning calls</span><b id="rfDiceWins">0</b></div><div class="rfu-stat"><span>Net result</span><b id="rfDiceProfit">0</b></div><div class="rfu-stat"><span>Best streak</span><b id="rfDiceBest">0</b></div>
+  </div>
+  <div class="rfu-dice-layout">
+    <div class="rfu-dice-arena">
+      <div class="rfu-dice-label">THE CROWN DICE TABLE</div>
+      <div class="rfu-dice-pair"><div class="rfu-die" id="rfDieOne" aria-label="Die one"><span class="rfu-pip"></span><span class="rfu-pip"></span><span class="rfu-pip"></span><span class="rfu-pip"></span><span class="rfu-pip"></span><span class="rfu-pip"></span><span class="rfu-pip"></span><span class="rfu-pip"></span><span class="rfu-pip"></span></div><div class="rfu-die" id="rfDieTwo" aria-label="Die two"><span class="rfu-pip"></span><span class="rfu-pip"></span><span class="rfu-pip"></span><span class="rfu-pip"></span><span class="rfu-pip"></span><span class="rfu-pip"></span><span class="rfu-pip"></span><span class="rfu-pip"></span><span class="rfu-pip"></span></div></div>
+      <div class="rfu-dice-total" id="rfDiceTotal">?</div><div class="rfu-result" id="rfDiceMessage" style="width:100%;text-align:center">Pick a call and roll the dice to begin.</div>
+      <div style="width:100%"><div class="rfu-label">LAST 10 ROLLS</div><div class="rfu-history" id="rfDiceHistory"><span class="rfu-empty">No rolls yet</span></div></div>
+    </div>
+    <div class="rfu-panel">
+      <div class="rfu-panel-head"><span>MAKE YOUR CALL</span><button class="rfu-back" id="rfDiceBack" type="button">↩ POKER LOBBY</button></div>
+      <div class="rfu-controls">
+        <div class="rfu-label">PREDICTION · SELECT ONE</div>
+        <div class="rfu-predictions" id="rfDicePredictions">
+          <button class="rfu-prediction selected" data-dice-call="low" type="button"><b>LOW · 2–6</b><small>Even-money payout</small></button>
+          <button class="rfu-prediction" data-dice-call="high" type="button"><b>HIGH · 8–12</b><small>Even-money payout</small></button>
+          <button class="rfu-prediction" data-dice-call="seven" type="button"><b>LUCKY SEVEN</b><small>5:1 payout</small></button>
+          <button class="rfu-prediction" data-dice-call="doubles" type="button"><b>DOUBLE TROUBLE</b><small>5:1 payout</small></button>
+        </div>
+        <div class="rfu-label">VIRTUAL WAGER</div><div class="rfu-bet-input"><input id="rfDiceBet" type="number" min="10" step="10" value="100" inputmode="numeric" aria-label="Dice bet amount"></div>
+        <div class="rfu-chip-row"><button class="rfu-chip" data-dice-add="10" type="button">+10</button><button class="rfu-chip" data-dice-add="50" type="button">+50</button><button class="rfu-chip" data-dice-add="100" type="button">+100</button><button class="rfu-chip" data-dice-add="500" type="button">+500</button><button class="rfu-chip" data-dice-add="1000" type="button">+1K</button></div>
+        <div class="rfu-actions"><button class="rfu-secondary" id="rfDiceQuarter" type="button">¼ BANKROLL</button><button class="rfu-secondary" id="rfDiceAll" type="button">ALL IN</button></div>
+        <button class="rfu-primary" id="rfDiceRoll" type="button">ROLL THE DICE ↗</button>
+        <button class="rfu-secondary" id="rfDiceRefill" type="button">RESTORE PRACTICE BANKROLL +5,000</button>
+        <p class="rfu-odds">LOW and HIGH each cover 15 of 36 combinations. Seven has 6 of 36 combinations. Doubles has 6 of 36 combinations. Published practice payouts are fixed game rules, not a promise of profit.</p>
+      </div>
+    </div>
+  </div>
+  <div class="rfu-shell-bottom"><h3>CROWN DICE · TABLE RULES</h3><p>LOW wins on totals 2–6. HIGH wins on totals 8–12. A total of 7 wins the Lucky Seven call. Double Trouble wins when both dice show the same face. A winning even-money call returns 2× the stake; the two special calls return 6× including the stake.</p></div>
+</section>
+
 <div class="rf-tour-modal" id="rfTourModal" aria-hidden="true">
   <div class="rf-tour-dialog" role="dialog" aria-modal="true" aria-label="Royal Flush tournaments">
     <div class="rf-tour-head">
@@ -2638,11 +2970,16 @@ const Studio=(()=>{
   const currentRound=t=>t.rounds[t.rounds.length-1];
   const currentOpponent=t=>{const r=currentRound(t);return r.players[t.slot^1]||'Unknown rival'};
   const isBusy=()=>{
+    if(document.body.classList.contains('roulette-mode')&&window.rfRouletteBusy&&window.rfRouletteBusy())return true;
     const inBJ=document.body.classList.contains('bj-mode');
     if(inBJ)return !$('bjActionPanel').hidden;
     return $('bDeal').classList.contains('hidden');
   };
   const setMode=game=>{
+    document.body.classList.remove('baccarat-mode','dice-mode');
+    const bacButton=document.getElementById('rfBaccaratToggle');if(bacButton)bacButton.textContent='✦ Baccarat Royale';
+    const diceButton=document.getElementById('rfDiceToggle');if(diceButton)diceButton.textContent='⚄ Crown Dice';
+    if(document.body.classList.contains('roulette-mode'))$('rfRouletteToggle').click();
     const wantsBJ=game==='blackjack';
     const isBJ=document.body.classList.contains('bj-mode');
     if(wantsBJ!==isBJ)$('modeToggle').click();
@@ -2769,6 +3106,332 @@ const Studio=(()=>{
   $('rfTourModal').addEventListener('click',e=>{if(e.target===$('rfTourModal'))close()});
   document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
   setButton();save();
+})();
+</script>
+
+
+<script>
+/* ===== ROYAL FLUSH · ROYAL ROULETTE ENGINE ===== */
+(()=>{
+  const $=id=>document.getElementById(id);
+  const STORE='rf_roulette_v1';
+  const WHEEL=[0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,20,14,31,9,22,18,29,7,28,12,35,3,26];
+  const RED=new Set([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]);
+  const fresh=()=>({balance:5000,spins:0,wins:0,losses:0,net:0,bestWin:0,streak:0,bestStreak:0,history:[]});
+  const load=()=>{try{const d=JSON.parse(localStorage.getItem(STORE)||'null');return d&&typeof d==='object'?{...fresh(),...d}:fresh()}catch(e){return fresh()}};
+  let D=load(),selectedChip=10,bets=new Map(),lastTarget=null,spinning=false,rotation=0,round=1;
+  const color=n=>n===0?'green':RED.has(n)?'red':'black';
+  const money=n=>Math.max(0,Math.floor(Number(n)||0)).toLocaleString('en-US');
+  const save=()=>{try{localStorage.setItem(STORE,JSON.stringify(D))}catch(e){}}
+  const total=()=>[...bets.values()].reduce((a,b)=>a+b.amount,0);
+  const label=(type,value)=>type==='number'?`NUMBER ${value}`:type==='dozen'?`${['','1ST','2ND','3RD'][Number(value)]} DOZEN`:type==='color'?String(value).toUpperCase():type==='parity'?String(value).toUpperCase():String(value)==='low'?'LOW · 1–18':'HIGH · 19–36';
+  const key=(type,value)=>`${type}:${value}`;
+  const payoutMultiplier=type=>type==='number'?36:type==='dozen'?3:2;
+  const flash=msg=>{const el=$('rrFeedback');if(el)el.textContent=msg};
+  const renderWallet=()=>{
+    $('rrBalance').textContent=money(D.balance);
+    $('rrStatSpins').textContent=money(D.spins);
+    $('rrStatWins').textContent=money(D.wins);
+    $('rrStatNet').textContent=(D.net>0?'+':D.net<0?'-':'')+money(Math.abs(D.net));
+    $('rrStatBest').textContent=money(D.bestWin);
+    $('rrRefill').hidden=D.balance>=10;
+  };
+  const renderSlip=()=>{
+    const list=$('rrBetList'),items=[...bets.entries()];
+    $('rrBetCount').textContent=`${items.length} selection${items.length===1?'':'s'}`;
+    $('rrTotalBet').textContent=money(total());
+    if(!items.length)list.innerHTML='<p>No bets placed. Tap a number or outside bet above.</p>';
+    else list.innerHTML=items.map(([k,b])=>`<div class="rr-slip-row"><span>${label(b.type,b.value)}</span><b>${money(b.amount)}</b><button type="button" data-remove="${k}" aria-label="Remove ${label(b.type,b.value)}">×</button></div>`).join('');
+    list.querySelectorAll('[data-remove]').forEach(btn=>btn.addEventListener('click',()=>{bets.delete(btn.dataset.remove);if(typeof sfx!=='undefined')sfx.chip(1);renderSlip();markBetSpots()}));
+    $('rrSpin').disabled=spinning||!items.length||total()>D.balance;
+    $('rrAllIn').disabled=spinning||!lastTarget||D.balance-total()<=0;
+  };
+  const markBetSpots=()=>{
+    document.querySelectorAll('[data-rr-type]').forEach(btn=>btn.classList.toggle('has-bet',bets.has(key(btn.dataset.rrType,btn.dataset.rrValue))));
+  };
+  const renderHistory=()=>{
+    $('rrHistory').innerHTML=D.history.length?D.history.slice(0,12).map(n=>`<span class="rr-history-pill ${color(n)}" title="${color(n)}">${n}</span>`).join(''):'<small>No spins yet</small>';
+  };
+  const render=()=>{renderWallet();renderSlip();renderHistory();$('rrRoundTag').textContent=`ROUND ${String(round).padStart(2,'0')}`};
+  const addBet=(type,value,amount=selectedChip)=>{
+    if(spinning)return;
+    const k=key(type,String(value)),existing=bets.get(k),next=total()+amount;
+    if(amount<=0)return;
+    if(next>D.balance){flash(`Not enough chips. Available: ${money(Math.max(0,D.balance-total()))}.`);return}
+    bets.set(k,{type,value:String(value),amount:(existing?.amount||0)+amount});
+    if(typeof sfx!=='undefined')sfx.chip(2);
+    lastTarget={type,value:String(value)};
+    flash(`${label(type,value)} · ${money((existing?.amount||0)+amount)} chips on this spot.`);
+    markBetSpots();renderSlip();
+  };
+  const wheelLabels=()=>{
+    const host=$('rrWheelNumbers');host.innerHTML='';
+    const step=360/WHEEL.length;
+    WHEEL.forEach((n,i)=>{
+      const el=document.createElement('span');el.className=`rr-wheel-number ${color(n)}`;el.textContent=n;
+      const a=i*step,radius=($('rrWheelDisc').clientWidth||260)*.41;el.style.transform=`translate(-50%,-50%) rotate(${a}deg) translateY(-${radius}px) rotate(${-a}deg)`;
+      host.appendChild(el);
+    });
+  };
+  const buildGrid=()=>{
+    const host=$('rrNumberGrid');host.innerHTML='';
+    for(let n=1;n<=36;n++){
+      const b=document.createElement('button');b.type='button';b.className=`rr-bet-spot rr-number ${color(n)}`;b.dataset.rrType='number';b.dataset.rrValue=String(n);b.innerHTML=`<b>${n}</b><small>35:1</small>`;
+      host.appendChild(b);
+    }
+    document.querySelectorAll('[data-rr-type]').forEach(b=>b.addEventListener('click',()=>addBet(b.dataset.rrType,b.dataset.rrValue)));
+  };
+  const matches=(bet,n)=>{
+    if(bet.type==='number')return n===Number(bet.value);
+    if(bet.type==='color')return n!==0&&color(n)===bet.value;
+    if(bet.type==='parity')return n!==0&&(bet.value==='odd'?n%2===1:n%2===0);
+    if(bet.type==='range')return n!==0&&(bet.value==='low'?n>=1&&n<=18:n>=19&&n<=36);
+    if(bet.type==='dozen')return n!==0&&Math.ceil(n/12)===Number(bet.value);
+    return false;
+  };
+  const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+  const spin=async()=>{
+    const stake=total();if(spinning||stake<=0)return;
+    if(stake>D.balance){flash('Your total bet is higher than your available bankroll.');return}
+    spinning=true;D.balance-=stake;save();renderWallet();renderSlip();
+    $('rrSpin').textContent='WHEEL IN MOTION…';$('rrSpin').disabled=true;
+    flash('No more bets. The wheel is spinning…');
+    const index=Math.floor(Math.random()*WHEEL.length),winning=WHEEL[index],angle=360*5+(360-index*(360/WHEEL.length));
+    const duration=window.matchMedia&&window.matchMedia('(max-width: 820px), (pointer: coarse)').matches?1950:3300;
+    if(typeof sfx!=='undefined')sfx.rouletteSpin(duration);
+    rotation+=angle;$('rrWheelDisc').style.transitionDuration=`${duration}ms`;$('rrWheelDisc').style.transform=`rotate(${rotation}deg)`;
+    await wait(duration+120);
+    let payout=0,winningBets=[];
+    for(const b of bets.values())if(matches(b,winning)){const amount=b.amount*payoutMultiplier(b.type);payout+=amount;winningBets.push(b)}
+    D.balance+=payout;const net=payout-stake;
+    D.spins++;if(net>0){D.wins++;D.streak++;D.bestStreak=Math.max(D.bestStreak,D.streak);D.bestWin=Math.max(D.bestWin,net)}else if(net<0){D.losses++;D.streak=0}
+    D.net+=net;D.history.unshift(winning);D.history=D.history.slice(0,24);
+    const c=color(winning);$('rrResultNumber').textContent=winning;$('rrResultNumber').className=`rr-result-number ${c}`;$('rrHubNumber').textContent=winning;$('rrHubColor').textContent=c.toUpperCase();
+    const title=net>0?'YOU HIT A WIN':net===0?'STAKE RETURNED':'NO WIN THIS ROUND';
+    $('rrResultTitle').textContent=`${winning} · ${c.toUpperCase()} · ${title}`;
+    $('rrResultDetail').textContent=net>0?`Returned ${money(payout)} chips · net +${money(net)}${winningBets.length?` · ${winningBets.length} winning bet${winningBets.length===1?'':'s'}`:''}`:net===0?'Your winning bets returned exactly the amount wagered.':`Lost ${money(stake)} chips · try a different combination next round.`;
+    flash(net>0?`Nice hit! Net result: +${money(net)} chips.`:net===0?'Push. Your stake was returned.':`The wheel landed on ${winning}. Round over.`);
+    if(typeof sfx!=='undefined')sfx.rouletteStop(net>0);
+    bets.clear();lastTarget=null;round++;save();render();
+    spinning=false;$('rrSpin').textContent='SPIN THE WHEEL ↗';renderSlip();
+  };
+  const toggle= $('rfRouletteToggle');
+  toggle.addEventListener('click',()=>{
+    const entering=!document.body.classList.contains('roulette-mode');
+    if(entering){
+      const inBJ=document.body.classList.contains('bj-mode');
+      const busy=inBJ?!$('bjActionPanel').hidden:$('bDeal').classList.contains('hidden');
+      if(busy){if(typeof toast==='function')toast('Finish the current hand before visiting Roulette.');else flash('Finish the current hand before visiting Roulette.');return}
+      document.body.classList.add('roulette-mode');toggle.textContent='↩ BACK TO TABLE';$('rrFeedback').textContent='Place chips on the table to build your bet slip.';requestAnimationFrame(wheelLabels);
+    }else{
+      document.body.classList.remove('roulette-mode');toggle.textContent='◉ Royal Roulette';
+      document.querySelector('.blinds').textContent=document.body.classList.contains('bj-mode')?'Blackjack · 6-Deck Shoe':'5-Max · Blinds 10 / 20';
+    }
+  });
+  $('rrChipPicker').addEventListener('click',e=>{
+    const b=e.target.closest('[data-chip]');if(!b||spinning)return;selectedChip=Number(b.dataset.chip);
+    $('rrChipPicker').querySelectorAll('[data-chip]').forEach(x=>x.classList.toggle('selected',x===b));
+    flash(`Selected chip: ${money(selectedChip)}.`);
+  });
+  $('rrClearBets').addEventListener('click',()=>{if(spinning)return;bets.clear();lastTarget=null;if(typeof sfx!=='undefined')sfx.sweep();markBetSpots();renderSlip();flash('Bet slip cleared. Your bankroll has not changed.')});
+  $('rrAllIn').addEventListener('click',()=>{if(!lastTarget||spinning)return;const amount=D.balance-total();if(amount>0)addBet(lastTarget.type,lastTarget.value,amount)});
+  $('rrSpin').addEventListener('click',spin);
+  $('rrRefill').addEventListener('click',()=>{if(spinning||D.balance>=10)return;D.balance+=5000;save();render();if(typeof sfx!=='undefined')sfx.chip(5);flash('Practice bankroll restored by 5,000 virtual chips.')});
+  window.rfRouletteBusy=()=>spinning;
+  buildGrid();wheelLabels();render();
+  window.addEventListener('resize',()=>{if(!spinning&&document.body.classList.contains('roulette-mode'))wheelLabels()},{passive:true});
+})();
+</script>
+
+
+<script>
+/* ===== ROYAL FLUSH · BACCARAT ROYALE + CROWN DICE ===== */
+(()=>{
+  'use strict';
+  const $=id=>document.getElementById(id);
+  const fmt=n=>Math.floor(Number(n)||0).toLocaleString('en-US');
+  const read=(key,base)=>{try{const v=JSON.parse(localStorage.getItem(key)||'null');return v&&typeof v==='object'?{...base,...v}:base}catch(e){return base}};
+  const write=(key,value)=>{try{localStorage.setItem(key,JSON.stringify(value))}catch(e){}}
+  const sound=(freq=520,duration=.07)=>{try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const c=sound.ctx||(sound.ctx=new C());if(c.state==='suspended')c.resume();const o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.value=freq;g.gain.setValueAtTime(.0001,c.currentTime);g.gain.exponentialRampToValueAtTime(.055,c.currentTime+.008);g.gain.exponentialRampToValueAtTime(.0001,c.currentTime+duration);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+duration+.02)}catch(e){}};
+  const flash=msg=>{if(typeof window.toast==='function')window.toast(msg)};
+  const legacyBusy=()=>{
+    const body=document.body;
+    if(body.classList.contains('bj-mode'))return !!$('bjActionPanel')&&!$('bjActionPanel').hidden;
+    if(body.classList.contains('roulette-mode'))return !!(window.rfRouletteBusy&&window.rfRouletteBusy());
+    return !!$('bDeal')&&$('bDeal').classList.contains('hidden');
+  };
+  const resetModeLabels=()=>{
+    const bj=$('modeToggle'),rr=$('rfRouletteToggle'),bac=$('rfBaccaratToggle'),dice=$('rfDiceToggle'),blinds=document.querySelector('.blinds');
+    if(bj)bj.textContent='♣ Blackjack 21';if(rr)rr.textContent='◉ Royal Roulette';
+    if(bac)bac.textContent='✦ Baccarat Royale';if(dice)dice.textContent='⚄ Crown Dice';
+    if(blinds)blinds.textContent='5-Max · Blinds 10 / 20';
+  };
+  const showMode=mode=>{
+    document.body.classList.remove('bj-mode','roulette-mode','baccarat-mode','dice-mode');
+    resetModeLabels();
+    if(mode==='baccarat'){$('rfBaccaratToggle').textContent='↩ BACK TO POKER';document.body.classList.add('baccarat-mode');document.querySelector('.blinds').textContent='Baccarat Royale · 8-Deck Shoe';}
+    if(mode==='dice'){$('rfDiceToggle').textContent='↩ BACK TO POKER';document.body.classList.add('dice-mode');document.querySelector('.blinds').textContent='Crown Dice · Two Dice';}
+  };
+  const enterMode=mode=>{
+    const current=document.body.classList.contains(mode==='baccarat'?'baccarat-mode':'dice-mode');
+    if(current){showMode('poker');return}
+    const inNew=document.body.classList.contains('baccarat-mode')||document.body.classList.contains('dice-mode');
+    if(!inNew&&legacyBusy()){flash('Finish the current hand or spin before switching tables.');return}
+    showMode(mode);
+  };
+  $('rfBaccaratToggle').addEventListener('click',()=>enterMode('baccarat'));
+  $('rfDiceToggle').addEventListener('click',()=>enterMode('dice'));
+  $('rfBacBack').addEventListener('click',()=>showMode('poker'));
+  $('rfDiceBack').addEventListener('click',()=>showMode('poker'));
+  // If the player switches to one of the legacy tables, clear the expansion mode after its own handler runs.
+  $('modeToggle').addEventListener('click',()=>{if(document.body.classList.contains('bj-mode')){document.body.classList.remove('baccarat-mode','dice-mode');$('rfBaccaratToggle').textContent='✦ Baccarat Royale';$('rfDiceToggle').textContent='⚄ Crown Dice';}});
+  $('rfRouletteToggle').addEventListener('click',()=>{if(document.body.classList.contains('roulette-mode')){document.body.classList.remove('baccarat-mode','dice-mode');$('rfBaccaratToggle').textContent='✦ Baccarat Royale';$('rfDiceToggle').textContent='⚄ Crown Dice';}});
+
+  // Baccarat engine: standard baccarat third-card rules, independent practice bankroll.
+  const BAC_KEY='rf_baccarat_royale_v1';
+  const B=read(BAC_KEY,{balance:5000,played:0,wins:0,profit:0,streak:0,best:0,history:[],last:null});
+  let bacSide='player',bacBusy=false;
+  const saveB=()=>write(BAC_KEY,B);
+  const cardValue=c=>c.rank==='A'?1:['10','J','Q','K'].includes(c.rank)?0:Number(c.rank);
+  const total=cards=>cards.reduce((n,c)=>n+cardValue(c),0)%10;
+  const newShoe=()=>{const suits=['♠','♥','♦','♣'],ranks=['A','2','3','4','5','6','7','8','9','10','J','Q','K'],d=[];for(let deck=0;deck<8;deck++)for(const suit of suits)for(const rank of ranks)d.push({suit,rank});for(let i=d.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[d[i],d[j]]=[d[j],d[i]]}return d};
+  let shoe=newShoe();
+  const draw=()=>{if(shoe.length<20)shoe=newShoe();return shoe.pop()};
+  const isPair=cards=>cards.length>=2&&cards[0].rank===cards[1].rank;
+  const renderCards=(id,cards)=>{
+    const el=$(id);if(!cards.length){el.innerHTML='<span class="rfu-empty">Cards appear here</span>';return}
+    el.innerHTML=cards.map(c=>`<div class="rfu-card ${['♥','♦'].includes(c.suit)?'red':''}" aria-label="${c.rank} ${c.suit}"><span>${c.rank}</span><span class="suit">${c.suit}</span></div>`).join('');
+  };
+  const renderB=()=>{
+    $('rfBacBalance').textContent=fmt(B.balance);$('rfBacPlayed').textContent=fmt(B.played);$('rfBacWins').textContent=fmt(B.wins);$('rfBacProfit').textContent=(B.profit>0?'+':'')+fmt(B.profit);$('rfBacBest').textContent=fmt(B.best);
+    $('rfBacHistory').innerHTML=B.history.length?B.history.slice(0,10).map(x=>`<span class="rfu-history-pill">${x}</span>`).join(''):'<span class="rfu-empty">No rounds yet</span>';
+    $('rfBacRefill').disabled=B.balance>=10||bacBusy;
+  };
+  const setBacSide=side=>{bacSide=side;document.querySelectorAll('[data-bac-side]').forEach(b=>b.classList.toggle('selected',b.dataset.bacSide===side))};
+  $('rfBacSides').addEventListener('click',e=>{const b=e.target.closest('[data-bac-side]');if(b&&!bacBusy){setBacSide(b.dataset.bacSide);sound(420,.04)}});
+  document.querySelectorAll('[data-bac-add]').forEach(b=>b.addEventListener('click',()=>{if(bacBusy)return;const i=$('rfBacBet');i.value=Math.min(B.balance,Math.max(10,(Number(i.value)||0)+Number(b.dataset.bacAdd)));sound(560,.04)}));
+  $('rfBacQuarter').addEventListener('click',()=>{$('rfBacBet').value=Math.max(10,Math.floor(B.balance/4/10)*10)});
+  $('rfBacAll').addEventListener('click',()=>{$('rfBacBet').value=B.balance});
+  $('rfBacRefill').addEventListener('click',()=>{if(bacBusy||B.balance>=10)return;B.balance+=5000;saveB();renderB();$('rfBacMessage').textContent='Practice bankroll restored by 5,000 virtual chips.';sound(690,.1)});
+  const bankerDraws=(banker,playerThird)=>{
+    if(playerThird===null)return banker<=5;
+    if(banker<=2)return true;if(banker===3)return playerThird!==8;
+    if(banker===4)return playerThird>=2&&playerThird<=7;
+    if(banker===5)return playerThird>=4&&playerThird<=7;
+    if(banker===6)return playerThird===6||playerThird===7;
+    return false;
+  };
+  const playBaccarat=()=>{
+    if(bacBusy)return;
+    const amount=Math.floor(Number($('rfBacBet').value));
+    if(!Number.isFinite(amount)||amount<10||amount%10!==0){$('rfBacMessage').textContent='Enter a wager of at least 10 chips, in steps of 10.';return}
+    const pp=$('rfBacPlayerPair').checked,bp=$('rfBacBankerPair').checked;
+    const totalStake=amount*(1+(pp?1:0)+(bp?1:0));
+    if(totalStake>B.balance){$('rfBacMessage').textContent='Your Baccarat bankroll is too small for this wager.';return}
+    bacBusy=true;B.balance-=totalStake;renderB();$('rfBacDeal').disabled=true;
+    const player=[draw(),draw()],banker=[draw(),draw()];
+    let p=total(player),b=total(banker),p3=null;
+    const natural=p>=8||b>=8;
+    if(!natural&&p<=5){const c=draw();player.push(c);p3=cardValue(c);p=total(player)}
+    if(!natural&&bankerDraws(b,p3))banker.push(draw());
+    b=total(banker);
+    const winner=p>b?'player':b>p?'banker':'tie';
+    let returned=0;
+    if(winner==='tie'){if(bacSide==='tie')returned+=amount*9;else returned+=amount}
+    else if(winner===bacSide){returned+=winner==='banker'?amount+Math.floor(amount*.95):amount*2}
+    const playerPair= isPair(player), bankerPair=isPair(banker);
+    if(pp&&playerPair)returned+=amount*12;
+    if(bp&&bankerPair)returned+=amount*12;
+    B.balance+=returned;const net=returned-totalStake;B.played++;if(net>0){B.wins++;B.streak++;B.best=Math.max(B.best,B.streak)}else if(net<0)B.streak=0;
+    B.profit+=net;B.last={winner,p,b,net};B.history.unshift(`${winner.toUpperCase()} ${p}-${b} · ${net>=0?'+':''}${fmt(net)}`);B.history=B.history.slice(0,10);
+    renderCards('rfBacPlayerCards',player);renderCards('rfBacBankerCards',banker);
+    $('rfBacPlayerScore').textContent=String(p);$('rfBacBankerScore').textContent=String(b);
+    $('rfBacRoundResult').textContent=winner.toUpperCase()+' WINS';
+    const pairText=[pp&&playerPair?'Player Pair hit':null,bp&&bankerPair?'Banker Pair hit':null].filter(Boolean).join(' · ');
+    $('rfBacMessage').textContent=`${winner.toUpperCase()} wins ${p} to ${b}. ${net>0?'You are up '+fmt(net)+' chips.':net<0?'You are down '+fmt(-net)+' chips.':'Your wager pushed.'}${pairText?' '+pairText+'.':''}`;
+    $('rfBacDeal').textContent='DEAL NEXT ROUND ↗';
+    bacBusy=false;$('rfBacDeal').disabled=false;renderB();saveB();sound(net>0?760:net===0?520:250,.13);
+  };
+  $('rfBacDeal').addEventListener('click',playBaccarat);
+
+  // Crown Dice engine: two dice, four calls, independent practice bankroll.
+  const DICE_KEY='rf_crown_dice_v1';
+  const D=read(DICE_KEY,{balance:5000,played:0,wins:0,profit:0,streak:0,best:0,history:[],last:null});
+  let diceCall='low',diceBusy=false;
+  const saveD=()=>write(DICE_KEY,D);
+  const renderD=()=>{$('rfDiceBalance').textContent=fmt(D.balance);$('rfDicePlayed').textContent=fmt(D.played);$('rfDiceWins').textContent=fmt(D.wins);$('rfDiceProfit').textContent=(D.profit>0?'+':'')+fmt(D.profit);$('rfDiceBest').textContent=fmt(D.best);$('rfDiceHistory').innerHTML=D.history.length?D.history.map(x=>`<span class="rfu-history-pill">${x}</span>`).join(''):'<span class="rfu-empty">No rolls yet</span>';$('rfDiceRefill').disabled=D.balance>=10||diceBusy};
+  const setDiceCall=call=>{diceCall=call;document.querySelectorAll('[data-dice-call]').forEach(b=>b.classList.toggle('selected',b.dataset.diceCall===call))};
+  $('rfDicePredictions').addEventListener('click',e=>{const b=e.target.closest('[data-dice-call]');if(b&&!diceBusy){setDiceCall(b.dataset.diceCall);sound(430,.04)}});
+  document.querySelectorAll('[data-dice-add]').forEach(b=>b.addEventListener('click',()=>{if(diceBusy)return;const i=$('rfDiceBet');i.value=Math.min(D.balance,Math.max(10,(Number(i.value)||0)+Number(b.dataset.diceAdd)));sound(550,.04)}));
+  $('rfDiceQuarter').addEventListener('click',()=>{$('rfDiceBet').value=Math.max(10,Math.floor(D.balance/4/10)*10)});
+  $('rfDiceAll').addEventListener('click',()=>{$('rfDiceBet').value=D.balance});
+  $('rfDiceRefill').addEventListener('click',()=>{if(diceBusy||D.balance>=10)return;D.balance+=5000;saveD();renderD();$('rfDiceMessage').textContent='Practice bankroll restored by 5,000 virtual chips.';sound(690,.1)});
+  const pips={1:[5],2:[1,9],3:[1,5,9],4:[1,3,7,9],5:[1,3,5,7,9],6:[1,3,4,6,7,9]};
+  const drawDie=(id,n)=>{$(id).innerHTML=Array.from({length:9},(_,i)=>`<span class="rfu-pip ${pips[n].includes(i+1)?'on':''}"></span>`).join('');$(id).setAttribute('aria-label','Die shows '+n)};
+  const rollDice=()=>{
+    if(diceBusy)return;
+    const amount=Math.floor(Number($('rfDiceBet').value));
+    if(!Number.isFinite(amount)||amount<10||amount%10!==0){$('rfDiceMessage').textContent='Enter a wager of at least 10 chips, in steps of 10.';return}
+    if(amount>D.balance){$('rfDiceMessage').textContent='Your Dice bankroll is too small for this wager.';return}
+    diceBusy=true;D.balance-=amount;renderD();$('rfDiceRoll').disabled=true;$('rfDieOne').classList.add('rolling');$('rfDieTwo').classList.add('rolling');
+    const a=1+Math.floor(Math.random()*6),b=1+Math.floor(Math.random()*6),sum=a+b;
+    window.setTimeout(()=>{
+      $('rfDieOne').classList.remove('rolling');$('rfDieTwo').classList.remove('rolling');drawDie('rfDieOne',a);drawDie('rfDieTwo',b);$('rfDiceTotal').textContent=String(sum);
+      const won=diceCall==='low'?sum>=2&&sum<=6:diceCall==='high'?sum>=8&&sum<=12:diceCall==='seven'?sum===7:a===b;
+      const multiplier=(diceCall==='seven'||diceCall==='doubles')?6:2;
+      const returned=won?amount*multiplier:0;D.balance+=returned;const net=returned-amount;D.played++;if(won){D.wins++;D.streak++;D.best=Math.max(D.best,D.streak)}else D.streak=0;
+      D.profit+=net;D.last={a,b,sum,call:diceCall,won,net};D.history.unshift(`${a}+${b}=${sum} · ${won?'WIN':'LOSS'}`);D.history=D.history.slice(0,10);
+      $('rfDiceMessage').textContent=won?`Your ${diceCall.toUpperCase()} call hits. +${fmt(net)} virtual chips.`:`The dice show ${sum}. Your ${diceCall.toUpperCase()} call misses (${fmt(-net)} chips).`;
+      $('rfDiceRoll').disabled=false;$('rfDiceRoll').textContent='ROLL AGAIN ↗';diceBusy=false;renderD();saveD();sound(won?820:270,.16);
+    },420);
+  };
+  $('rfDiceRoll').addEventListener('click',rollDice);
+  renderB();renderD();setBacSide('player');setDiceCall('low');drawDie('rfDieOne',1);drawDie('rfDieTwo',1);
+})();
+</script>
+
+
+<style id="rfEmpireStyles">
+#rfEmpireOpen{position:fixed;right:16px;bottom:16px;z-index:9998;border:1px solid #d9b963;background:linear-gradient(135deg,#30230b,#9a7426);color:#fff4ce;border-radius:999px;padding:13px 18px;font:800 12px system-ui;letter-spacing:.12em;box-shadow:0 8px 28px #0009;cursor:pointer}
+#rfEmpireModal{position:fixed;inset:0;z-index:9999;display:none;place-items:center;padding:14px;background:#030605dc;backdrop-filter:blur(8px)}
+#rfEmpireModal.open{display:grid}.rfE-panel{width:min(760px,100%);max-height:90dvh;overflow:auto;border:1px solid #a88742;border-radius:22px;background:radial-gradient(ellipse at top,#203b30,#09130f 65%);color:#f5edda;padding:20px;box-shadow:0 24px 90px #000b;font-family:system-ui}
+.rfE-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.rfE-kicker{color:#d8b65f;font-size:10px;letter-spacing:.22em;font-weight:900}.rfE-title{font:900 clamp(24px,5vw,36px) Georgia,serif;margin:4px 0}.rfE-close{background:#ffffff12;border:1px solid #ffffff25;color:white;border-radius:12px;padding:9px 13px;cursor:pointer}
+.rfE-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:16px}.rfE-card{background:#ffffff0b;border:1px solid #ffffff18;border-radius:16px;padding:14px;min-width:0}.rfE-card h3{font-size:13px;margin:0 0 8px;color:#e5c878}.rfE-muted{color:#b8c1b9;font-size:12px}.rfE-big{font-size:25px;font-weight:900}.rfE-bar{height:9px;background:#ffffff18;border-radius:99px;overflow:hidden;margin:9px 0}.rfE-bar span{display:block;height:100%;background:linear-gradient(90deg,#b28a35,#f3df91);border-radius:99px}.rfE-pill{display:inline-block;padding:5px 9px;border-radius:99px;background:#d7b65a20;border:1px solid #d7b65a55;color:#f0d98e;font-size:10px;font-weight:800}.rfE-action{border:1px solid #d7b65a88;background:linear-gradient(135deg,#806022,#b28a35);color:#fff8e4;border-radius:11px;padding:10px 12px;font-weight:800;cursor:pointer}.rfE-action:disabled{opacity:.4;cursor:default}.rfE-mission{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 0;border-top:1px solid #ffffff15;font-size:12px}.rfE-mission strong{color:#f2d98c}.rfE-token{color:#f2d98c;font-weight:900}@media(max-width:560px){.rfE-grid{grid-template-columns:1fr}.rfE-panel{padding:15px}#rfEmpireOpen{right:10px;bottom:10px;padding:11px 13px}}
+</style>
+<button id="rfEmpireOpen" type="button">♛ EMPIRE</button>
+<div id="rfEmpireModal" role="dialog" aria-modal="true" aria-label="Royal Flush Empire">
+ <section class="rfE-panel">
+  <div class="rfE-head"><div><div class="rfE-kicker">THE ROYAL FLUSH CLUB</div><div class="rfE-title">Empire Lounge</div><div class="rfE-muted">Your profile. Your progress. Your casino.</div></div><button class="rfE-close" id="rfEmpireClose">✕</button></div>
+  <div class="rfE-grid">
+   <div class="rfE-card"><h3>PLAYER STATUS</h3><div class="rfE-big" id="rfELevel">Level 1</div><div class="rfE-pill" id="rfERank">BRONZE MEMBER</div><div class="rfE-bar"><span id="rfEXPBar" style="width:0%"></span></div><div class="rfE-muted" id="rfEXPText">0 / 250 XP to next level</div></div>
+   <div class="rfE-card"><h3>EMPIRE WALLET</h3><div class="rfE-big"><span id="rfETokens">0</span> <span class="rfE-token">✦</span></div><div class="rfE-muted">Empire Tokens · virtual rewards only</div><div style="margin-top:12px"><button class="rfE-action" id="rfEDaily">CLAIM DAILY GIFT · +25 ✦</button></div><div class="rfE-muted" id="rfEDailyMsg" style="margin-top:7px"></div></div>
+   <div class="rfE-card"><h3>DAILY QUESTS</h3><div class="rfE-muted">Try different tables to earn club XP.</div><div id="rfEMissions"></div></div>
+   <div class="rfE-card"><h3>UNLOCKED CLUB PERKS</h3><div id="rfEPerks" class="rfE-muted"></div></div>
+   <div class="rfE-card"><h3>CASINO ACTIVITY</h3><div class="rfE-big" id="rfEGames">0</div><div class="rfE-muted">Different games played today</div><div class="rfE-muted" id="rfEPlayed" style="margin-top:8px">No tables visited today.</div></div>
+   <div class="rfE-card"><h3>HOW TO EARN XP</h3><div class="rfE-muted">Visit a table once per day to earn 35 XP. Play three different game modes in one day for a 100 XP quest bonus. Daily gift grants 25 Empire Tokens.</div></div>
+  </div>
+ </section>
+</div>
+<script id="rfEmpireEngine">
+(()=>{
+ const $=id=>document.getElementById(id),KEY='rf_empire_progress_v1';
+ const today=()=>new Date().toLocaleDateString('en-CA');
+ const fresh=()=>({xp:0,tokens:0,day:today(),visited:[],giftDay:'',questDay:'',questPaid:false,totalVisits:0});
+ let D;try{D={...fresh(),...(JSON.parse(localStorage.getItem(KEY)||'{}')||{})}}catch(e){D=fresh()}
+ const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(D))}catch(e){}};
+ const rollover=()=>{if(D.day!==today()){D.day=today();D.visited=[];D.questPaid=false}D.visited=Array.isArray(D.visited)?D.visited:[]};
+ const level=()=>Math.floor(Math.sqrt(D.xp/250))+1;
+ const rank=l=>l>=25?'ROYAL LEGEND':l>=15?'DIAMOND VIP':l>=10?'PLATINUM VIP':l>=6?'GOLD MEMBER':l>=3?'SILVER MEMBER':'BRONZE MEMBER';
+ const render=()=>{if(!$('rfEXPBar')||!$('rfEmpireOpen')||!$('rfEmpireModal'))return;rollover();const l=level(),floor=(l-1)*(l-1)*250,next=l*l*250,inside=D.xp-floor,span=next-floor;$('rfELevel').textContent='Level '+l;$('rfERank').textContent=rank(l);$('rfEXPBar').style.width=Math.min(100,inside/span*100)+'%';$('rfEXPText').textContent=inside+' / '+span+' XP to next level';$('rfETokens').textContent=D.tokens.toLocaleString();$('rfEGames').textContent=D.visited.length;$('rfEPlayed').textContent=D.visited.length?D.visited.join(' · '):'No tables visited today.';$('rfEDaily').disabled=D.giftDay===today();$('rfEDailyMsg').textContent=D.giftDay===today()?'Daily gift already collected.':'Your daily gift is ready.';
+ const missions=[['Visit 1 table',Math.min(1,D.visited.length),1,35],['Visit 3 different tables',Math.min(3,D.visited.length),3,100]];
+ $('rfEMissions').innerHTML=missions.map((m,i)=>`<div class="rfE-mission"><span>${m[0]}<br><strong>${m[1]}/${m[2]}</strong> · +${m[3]} XP</span><button class="rfE-action" data-rf-claim="${i}" ${i===0?(D.visited.length>=1&&D.claim1!==today()?'':'disabled'):(D.visited.length>=3&&!D.questPaid?'':'disabled')}>${i===0?(D.claim1===today()?'CLAIMED':'CLAIM'):(D.questPaid?'CLAIMED':'CLAIM')}</button></div>`).join('');
+ const perks=[`Level 3 · Silver member ${l>=3?'✓':'🔒'}`,`Level 6 · Gold member ${l>=6?'✓':'🔒'}`,`Level 10 · Platinum VIP ${l>=10?'✓':'🔒'}`,`Level 15 · Diamond VIP ${l>=15?'✓':'🔒'}`,`Level 25 · Royal Legend ${l>=25?'✓':'🔒'}`];$('rfEPerks').innerHTML=perks.join('<br>');save()};
+ const award=(xp,why)=>{D.xp+=xp;save();render();};
+ const modes=[['bDeal','Poker'],['bjDeal','Blackjack'],['rrSpin','Roulette'],['rfBacDeal','Baccarat'],['rfDiceRoll','Crown Dice']];
+ modes.forEach(([id,name])=>{const el=$(id);if(el)el.addEventListener('click',()=>{rollover();if(!D.visited.includes(name)){D.visited.push(name);D.totalVisits++;award(35,name+' visit')}},{capture:false})});
+ $('rfEDaily').addEventListener('click',()=>{if(D.giftDay===today())return;D.giftDay=today();D.tokens+=25;save();render()});
+ $('rfEMissions').addEventListener('click',e=>{const b=e.target.closest('[data-rf-claim]');if(!b)return;const i=Number(b.dataset.rfClaim);if(i===0&&D.visited.length>=1&&D.claim1!==today()){D.claim1=today();award(35,'First table quest')}if(i===1&&D.visited.length>=3&&!D.questPaid){D.questPaid=true;award(100,'Variety quest')}});
+ $('rfEmpireOpen').addEventListener('click',()=>{$('rfEmpireModal').classList.add('open');render()});$('rfEmpireClose').addEventListener('click',()=>$('rfEmpireModal').classList.remove('open'));$('rfEmpireModal').addEventListener('click',e=>{if(e.target===$('rfEmpireModal'))$('rfEmpireModal').classList.remove('open')});document.addEventListener('keydown',e=>{if(e.key==='Escape')$('rfEmpireModal').classList.remove('open')});render();
 })();
 </script>
 
